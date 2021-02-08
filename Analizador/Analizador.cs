@@ -9,6 +9,7 @@ namespace _OLC2_Proyecto1.Analizador
 {
     class Analizador
     {
+        public string consola = "";
         public void Analizar(String cadena)
         {
             Gramatica gramatica = new Gramatica();
@@ -24,10 +25,10 @@ namespace _OLC2_Proyecto1.Analizador
 
             if (raiz == null)
             {
-                Console.WriteLine(arbol.ParserMessages[0].Message);
+                consola = arbol.ParserMessages[0].Message;
                 return;
             }
-            Console.WriteLine("Exito ALV");
+            consola = "Exito ALV";
         }
         
     }

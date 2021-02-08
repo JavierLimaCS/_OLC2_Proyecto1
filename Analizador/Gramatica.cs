@@ -36,6 +36,10 @@ namespace _OLC2_Proyecto1.Analizador
             var END = ToTerm("end");
             var PROC = ToTerm("procedure");
             var FUNCT = ToTerm("function");
+            var TSTRING = ToTerm("string");
+            var TREAL = ToTerm("real");
+            var TINT = ToTerm("integer");
+            var TBOOL = ToTerm("boolean");
             var WRTLN = ToTerm("writeln");
             var WRT = ToTerm("write");
             var EXIT = ToTerm("exit");
@@ -106,6 +110,15 @@ namespace _OLC2_Proyecto1.Analizador
             Declaracion.Rule
                 = VAR + var_list + BIPUNTO + tipos;
 
+            var_list.Rule
+                = MakeListRule(var_list, COM, ID);
+
+            tipos.Rule
+                = TINT
+                | TSTRING
+                | TREAL
+                | TBOOL;
+            
             Funcion.Rule
                 = FUNCT;
 
