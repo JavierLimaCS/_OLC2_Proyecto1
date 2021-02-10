@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _OLC2_Proyecto1.TS
+namespace Proyecto1.TS
 {
     class Simbolo
     {
-        private string id;
+        private String id;
         private Tipo type;
-        private string scope;
+        private String scope;
         private int line;
         private int column;
         private Object value;
 
-        public Simbolo(string n, Tipo ty, string sc, int l, int c) {
+        public Simbolo(String n, Tipo ty, String sc, int l, int c) {
             this.id = n;
             this.type = ty;
             this.scope = sc;
@@ -23,7 +23,7 @@ namespace _OLC2_Proyecto1.TS
             this.column = c;
         }
 
-        public string getId() 
+        public String getId() 
         {
             return this.id;
         }
@@ -43,7 +43,7 @@ namespace _OLC2_Proyecto1.TS
             this.type = tipo;
         }
 
-        public string getScope()
+        public String getScope()
         {
             return this.scope;
         }
@@ -86,7 +86,7 @@ namespace _OLC2_Proyecto1.TS
 
 
         public enum Tipo { 
-            INT,
+            INT,    
             STR,
             REAL,
             BOOL,

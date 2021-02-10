@@ -39,6 +39,7 @@ namespace Proyecto1
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
             this.LineNumberTextBox = new System.Windows.Forms.RichTextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,6 +77,7 @@ namespace Proyecto1
             this.Abrir.TabIndex = 3;
             this.Abrir.Text = "Abrir";
             this.Abrir.UseVisualStyleBackColor = true;
+            this.Abrir.Click += new System.EventHandler(this.Abrir_Click);
             // 
             // button2
             // 
@@ -158,12 +160,22 @@ namespace Proyecto1
             this.LineNumberTextBox.Text = "";
             this.LineNumberTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LineNumberTextBox_MouseDown);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(705, 121);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(10, 15);
+            this.label1.TabIndex = 10;
+            this.label1.Text = ".";
+            // 
             // Interfaz
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(858, 553);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.LineNumberTextBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.richTextBox2);
@@ -174,6 +186,7 @@ namespace Proyecto1
             this.Resize += new System.EventHandler(this.Interfaz_Resize);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -188,6 +201,7 @@ namespace Proyecto1
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.RichTextBox LineNumberTextBox;
+        private System.Windows.Forms.Label label1;
     }
 }
 

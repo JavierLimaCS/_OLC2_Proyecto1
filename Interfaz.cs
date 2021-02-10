@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using _OLC2_Proyecto1.Analizador;
+using Proyecto1.Analisis;
 
 namespace Proyecto1
 {
@@ -52,11 +54,12 @@ namespace Proyecto1
             LineNumberTextBox.SelectionAlignment = HorizontalAlignment.Center;
             LineNumberTextBox.Text = "";
             LineNumberTextBox.Width = getWidth();
-            for (int i = primera_linea; i <= Last_Line + 2; i++)
+            for (int i = primera_linea; i <= Last_Line + 1; i++)
             {
                 LineNumberTextBox.Text += i + 1 + "\n";
             }
         }
+
 
         private void Interfaz_Load(object sender, EventArgs e)
         {
@@ -87,7 +90,27 @@ namespace Proyecto1
             {
                 AddLineNumbers();
             }
+            KeyWords();
         }
+
+        private void KeyWords() 
+        {
+            string tokens = "(program|;|var|function|begin|end|const|:=|switch|" +
+                              "case|repeat|for|do|if|while)";
+            Regex rex = new Regex(tokens);
+            MatchCollection mc = rex.Matches(richTextBox1.Text);
+            int StartCursorPosition = richTextBox1.SelectionStart;
+            foreach (Match m in mc)
+            {
+                int startIndex = m.Index;
+                int StopIndex = m.Length;
+                this.richTextBox1.Select(startIndex, StopIndex);
+                this.richTextBox1.SelectionColor = Color.Navy;
+                this.richTextBox1.SelectionStart = StartCursorPosition;
+                this.richTextBox1.SelectionColor = Color.Black;
+            }
+        }
+
 
         private void richTextBox1_FontChanged(object sender, EventArgs e)
         {
@@ -114,22 +137,26 @@ namespace Proyecto1
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (this.comboBox1.SelectedItem.ToString().Equals("Reporte Errores"))
+            if (this.comboBox1.SelectedItem != null) 
             {
+                if (this.comboBox1.SelectedItem.ToString().Equals("Reporte Errores"))
+                {
 
-            }
-            else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte Tabla de Simbolos"))
-            {
+                }
+                else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte Tabla de Simbolos"))
+                {
 
-            }
-            else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte AST"))
-            {
-
+                }
+                else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte AST"))
+                {
+                    System.Diagnostics.Process.Start(@"C:\compiladores2\reporte_ast.png");
+                }
             }
             else 
-            { 
-            
+            {
+                MessageBox.Show(" Advertencia: \n Seleccione una opcion de reporte", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+           
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -138,6 +165,37 @@ namespace Proyecto1
             Analizador parser = new Analizador();
             parser.Analizar(cadena);
             this.richTextBox2.Text = parser.consola;
+        }
+
+        private void Abrir_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog cuadroDialogo = new OpenFileDialog();
+            cuadroDialogo.Title = "Abrir Archivo...";
+            cuadroDialogo.Filter = "(*.pas)|*.pas";
+
+            if ((cuadroDialogo.ShowDialog()) == DialogResult.OK)
+            {
+                try
+                {
+                    StreamReader lector = new StreamReader(cuadroDialogo.FileName);
+
+                    string texto = lector.ReadToEnd();
+
+                    this.richTextBox1.Text = texto;
+                    this.label1.Text = Path.GetFileName(cuadroDialogo.FileName);
+                    lector.Close();
+
+                    MessageBox.Show("Archivo " + cuadroDialogo.FileName + " abierto Satisfactoriamente");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("¡Error! Ha habido un problema al intentar abrir el archivo" + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Error al intentar encontrar la dirección");
+            }
         }
     }
 }

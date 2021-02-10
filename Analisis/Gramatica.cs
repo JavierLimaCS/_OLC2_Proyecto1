@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Irony.Parsing;
 
-namespace _OLC2_Proyecto1.Analizador
+namespace Proyecto1.Analisis
 {
     class Gramatica : Grammar
     {
@@ -32,10 +32,13 @@ namespace _OLC2_Proyecto1.Analizador
             var PROG = ToTerm("program");
             var TYPE = ToTerm("type");
             var VAR = ToTerm("var");
+            var CONST = ToTerm("const");
             var BEGIN = ToTerm("begin");
             var END = ToTerm("end");
             var PROC = ToTerm("procedure");
             var FUNCT = ToTerm("function");
+            var TTRUE = ToTerm("true");
+            var TFALSE = ToTerm("false");
             var TSTRING = ToTerm("string");
             var TREAL = ToTerm("real");
             var TINT = ToTerm("integer");
@@ -87,9 +90,13 @@ namespace _OLC2_Proyecto1.Analizador
             NonTerminal Raiz = new NonTerminal("Raiz");
             NonTerminal Instrucciones = new NonTerminal("Instrucciones");
             NonTerminal Instruccion = new NonTerminal("Instruccion");
+            NonTerminal Instrucciones2 = new NonTerminal("Instrucciones2");
+            NonTerminal Instruccion2 = new NonTerminal("Instruccion2");
             NonTerminal Declaracion = new NonTerminal("Declaracion");
             NonTerminal Funcion = new NonTerminal("Funcion");
             NonTerminal Procedimiento = new NonTerminal("Procedimiento");
+            NonTerminal Llamada = new NonTerminal("Llamada");
+            NonTerminal Expresion = new NonTerminal("Expresion");
             NonTerminal var_list = new NonTerminal("var_list");
             NonTerminal tipos = new NonTerminal("tipos");
             #endregion
@@ -97,7 +104,10 @@ namespace _OLC2_Proyecto1.Analizador
             #region Gramatica
             this.Root = Raiz;
             Raiz.Rule
-                = PROG + ID + PTCOMA + Instrucciones + BEGIN + END + PT;
+                = PROG + ID + PTCOMA + Instrucciones + BEGIN + Instrucciones2 + END + PT;
+
+            Raiz.ErrorRule
+                = SyntaxError + PTCOMA;
 
             Instrucciones.Rule
                 = MakePlusRule(Instrucciones, Instruccion);
@@ -105,10 +115,12 @@ namespace _OLC2_Proyecto1.Analizador
             Instruccion.Rule
                 = Declaracion
                 | Funcion
-                | Procedimiento;
+                | Procedimiento
+                | Empty;
 
             Declaracion.Rule
-                = VAR + var_list + BIPUNTO + tipos;
+                = VAR + var_list + BIPUNTO + tipos + PTCOMA
+                | CONST + ID + IGUAL + Expresion + PTCOMA;
 
             var_list.Rule
                 = MakeListRule(var_list, COM, ID);
@@ -124,9 +136,40 @@ namespace _OLC2_Proyecto1.Analizador
 
             Procedimiento.Rule
                 = PROC;
+
+            Instrucciones2.Rule
+                = MakePlusRule(Instrucciones2, Instruccion2);
+
+            Instruccion2.Rule
+                = Llamada
+                | Empty;
+
+            Llamada.Rule
+                = ID + PAR1 + PAR2;
+
+            Expresion.Rule
+                = Expresion + MAS + Expresion
+                | Expresion + MENOS + Expresion
+                | Expresion + DIV + Expresion
+                | Expresion + POR + Expresion
+                | Expresion + MOD + Expresion
+                | TTRUE
+                | TFALSE
+                | ENTERO
+                | CADENA
+                | DECIMAL;
+
             #endregion
 
             #region Preferencias
+            this.RegisterOperators(1, Associativity.Left, MAS, MENOS);
+            this.RegisterOperators(2, Associativity.Left, POR, DIV);
+            this.RegisterOperators(3, Associativity.Left, MOD);
+            #endregion
+
+            #region Eliminacion
+            this.MarkPunctuation(PTCOMA, BIPUNTO, PT, IGUAL, ASIGN);
+            this.MarkTransient(Instruccion, Instruccion2);
             #endregion
 
         }

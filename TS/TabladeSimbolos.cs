@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _OLC2_Proyecto1.TS
+namespace Proyecto1.TS
 {
     class TabladeSimbolos : LinkedList<Simbolo>
     {
