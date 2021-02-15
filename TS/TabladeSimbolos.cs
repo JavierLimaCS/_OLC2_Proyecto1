@@ -17,9 +17,9 @@ namespace Proyecto1.TS
         {
             foreach (Simbolo s in this)
             {
-                if (s.getId().Equals(id))
+                if (s.Id.Equals(id))
                 {
-                    return s.getValue();
+                    return s.Value;
                 }
             }
             Console.WriteLine("La variable " + id + " no existe en este ámbito.");
@@ -30,14 +30,21 @@ namespace Proyecto1.TS
         {
             foreach (Simbolo s in this)
             {
-                if (s.getId().Equals(id))
+                if (s.Id.Equals(id))
                 {
-                    s.setValue(valor);
+                    s.Value = valor;
                     return;
                 }
             }
             Console.WriteLine("La variable " + id + " no existe en este ámbito, por lo "
                     + "que no puede asignársele un valor.");
+        }
+
+        public void generarTabladeSimbolos() {
+            foreach (var simbolo in this)
+            {
+                System.Diagnostics.Debug.Write("Simbolo: "  + simbolo.Id);
+            }
         }
 
     }

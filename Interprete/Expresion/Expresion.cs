@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Interprete.Expresion
 {
-    abstract class Expresion
+    abstract class Expresion 
     {
         public abstract Object Evaluar();
         

@@ -13,7 +13,7 @@ namespace Proyecto1.AST
         public static string getDot(ParseTreeNode raiz)
         {
             grafo = "digraph G{ \n node [shape=box, fontcolor=black fontname = \"Arial\"]\n";
-            grafo += "nodo0[label=\"" + escapar(raiz.ToString()) + "\"];\n";
+            grafo += "nodo0[label=\"" + escapar(raiz.ToString()) + "\" style=filled];\n";
             contador = 1;
             recorrerAst("nodo0", raiz);
             grafo += "}";
@@ -24,18 +24,21 @@ namespace Proyecto1.AST
         {
             foreach (ParseTreeNode hijo in raiz.ChildNodes)
             {
-                String nameHijo = "nodo" + contador.ToString();
-                if (hijo.Token == null)
+                if (!hijo.IsPunctuationOrEmptyTransient()) 
                 {
-                    grafo += nameHijo + "[label=\"" + escapar(hijo.ToString()) + "\" style=filled];\n";
-                }
-                else
-                {
-                    grafo += nameHijo + "[label=\"" + escapar(hijo.ToString()) + "\"];\n";
-                }
-                grafo += padre + "->" + nameHijo + ";\n";
-                contador++;
-                recorrerAst(nameHijo, hijo);
+                    String nameHijo = "nodo" + contador.ToString();
+                    if (hijo.Token == null)
+                    {
+                        grafo += nameHijo + "[label=\"" + escapar(hijo.ToString()) + "\" style=filled];\n";
+                    }
+                    else
+                    {
+                        grafo += nameHijo + "[label=\"" + escapar(hijo.ToString()) + "\"];\n";
+                    }
+                    grafo += padre + "->" + nameHijo + ";\n";
+                    contador++;
+                    recorrerAst(nameHijo, hijo);
+                } 
             }
         }
 

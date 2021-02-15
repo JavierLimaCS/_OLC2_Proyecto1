@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Interprete.Expresion
 {
-    class Logica
+    class Logica : Expresion
     {
         private Expresion izquierda;
         private Expresion derecha;
         private char op;
 
-        public Aritmetica(Expresion izquierda, Expresion derecha, char op)
+        public Logica(Expresion izquierda, Expresion derecha, char op)
         {
             this.izquierda = izquierda;
             this.derecha = derecha;
@@ -22,19 +22,7 @@ namespace Proyecto1.Interprete.Expresion
         {
             Object izquierda = this.izquierda.Evaluar();
             Object derecha = this.derecha.Evaluar();
-            switch (op)
-            {
-                case '<':
-                    return izquierda + derecha;
-                case '>':
-                    return izquierda - derecha;
-                case '<=':
-                    return izquierda * derecha;
-                case '/':
-                    return izquierda / derecha;
-                default:
-                    return izquierda % derecha;
-            }
+            return izquierda;
         }
     }
 }

@@ -12,12 +12,12 @@ namespace Proyecto1.Analisis
         public Gramatica() : base(caseSensitive: false)
         {
             #region Expresiones Regulares
-            IdentifierTerminal ID = TerminalFactory.CreateCSharpIdentifier("Iden");
+            IdentifierTerminal ID = TerminalFactory.CreateCSharpIdentifier("Id");
             NumberLiteral ENTERO = new NumberLiteral("Entero");
             RegexBasedTerminal DECIMAL = new RegexBasedTerminal("Decimal", "[0-9]+'.'[0-9]+");
             StringLiteral CADENA = new StringLiteral("Cadena");
             CADENA.AddStartEnd("\'", StringOptions.NoEscapes);
-             #endregion
+            #endregion
 
             #region Comentarios
             CommentTerminal COMENTARIOSIMPLE = new CommentTerminal("ComentarioSimple", "//", "\n", "\r\n");
@@ -54,6 +54,8 @@ namespace Proyecto1.Analisis
             var RDO = ToTerm("do");
             var RREPEAT = ToTerm("repeat");
             var RUNTIL = ToTerm("until");
+            var RFOR = ToTerm("for");
+            var RGRAF = ToTerm("graficat_ts");
             var RBREAK = ToTerm("break");
             var RCONTINUE = ToTerm("continue");
             #endregion
@@ -90,62 +92,129 @@ namespace Proyecto1.Analisis
             NonTerminal Raiz = new NonTerminal("Raiz");
             NonTerminal Instrucciones = new NonTerminal("Instrucciones");
             NonTerminal Instruccion = new NonTerminal("Instruccion");
-            NonTerminal Instrucciones2 = new NonTerminal("Instrucciones2");
-            NonTerminal Instruccion2 = new NonTerminal("Instruccion2");
+            NonTerminal Sentencias = new NonTerminal("Sentencias");
+            NonTerminal Sentencia = new NonTerminal("Sentencia");
+            NonTerminal Declaraciones = new NonTerminal("Declaraciones");
+            NonTerminal Constantes = new NonTerminal("Constantes");
             NonTerminal Declaracion = new NonTerminal("Declaracion");
             NonTerminal Funcion = new NonTerminal("Funcion");
             NonTerminal Procedimiento = new NonTerminal("Procedimiento");
             NonTerminal Llamada = new NonTerminal("Llamada");
+            NonTerminal Asignacion = new NonTerminal("Asignacion");
+            NonTerminal Argumento = new NonTerminal("Argumento");
             NonTerminal Expresion = new NonTerminal("Expresion");
             NonTerminal var_list = new NonTerminal("var_list");
-            NonTerminal tipos = new NonTerminal("tipos");
+            NonTerminal arguments_list = new NonTerminal("arguments_list");
+            NonTerminal Tipo = new NonTerminal("Tipo");
+            NonTerminal Value = new NonTerminal("Value");
+            NonTerminal S_If = new NonTerminal("S_If");
+            NonTerminal S_For = new NonTerminal("S_For");
+            NonTerminal S_While = new NonTerminal("S_While");
+            NonTerminal S_Write = new NonTerminal("S_Write");
+            NonTerminal S_WriteLn = new NonTerminal("S_WriteLn");
+            NonTerminal S_Graficar = new NonTerminal("S_Graficar");
+            NonTerminal S_Exit = new NonTerminal("S_Exit");
             #endregion
 
             #region Gramatica
             this.Root = Raiz;
             Raiz.Rule
-                = PROG + ID + PTCOMA + Instrucciones + BEGIN + Instrucciones2 + END + PT;
-
-            Raiz.ErrorRule
-                = SyntaxError + PTCOMA;
+                = PROG + ID + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PT;
 
             Instrucciones.Rule
                 = MakePlusRule(Instrucciones, Instruccion);
 
             Instruccion.Rule
-                = Declaracion
+                = VAR + Declaraciones
+                | Constantes
                 | Funcion
                 | Procedimiento
                 | Empty;
 
+
+            Declaraciones.Rule
+                = MakePlusRule(Declaraciones, Declaracion);
+
             Declaracion.Rule
-                = VAR + var_list + BIPUNTO + tipos + PTCOMA
-                | CONST + ID + IGUAL + Expresion + PTCOMA;
+                = var_list + BIPUNTO + Tipo + Value + PTCOMA;
+
+            Declaracion.ErrorRule
+                = SyntaxError + PTCOMA;
+
+            Value.Rule
+                = IGUAL + Expresion
+                | Empty;
+
+            Constantes.Rule
+                = CONST + ID + IGUAL + Expresion + PTCOMA;
+
+            Constantes.ErrorRule
+                = SyntaxError + PTCOMA;
 
             var_list.Rule
                 = MakeListRule(var_list, COM, ID);
 
-            tipos.Rule
+            Tipo.Rule
                 = TINT
                 | TSTRING
                 | TREAL
                 | TBOOL;
-            
+
             Funcion.Rule
-                = FUNCT;
+                = FUNCT + ID + PAR1 + arguments_list + PAR2 + Instrucciones + BEGIN + Sentencias + END + PTCOMA;
 
             Procedimiento.Rule
-                = PROC;
+                = PROC + ID + PAR1 + arguments_list + PAR2 + Instrucciones + BEGIN + Sentencias + END + PTCOMA;
 
-            Instrucciones2.Rule
-                = MakePlusRule(Instrucciones2, Instruccion2);
+            arguments_list.Rule
+                = MakeListRule(arguments_list, COM, Argumento);
 
-            Instruccion2.Rule
+            Argumento.Rule
+                = ID + BIPUNTO + Tipo
+                | ID;
+
+            Sentencias.Rule
+                = MakePlusRule(Sentencias, Sentencia);
+
+            Sentencia.Rule
                 = Llamada
+                | Asignacion
+                | S_If
+                | S_For
+                | S_While
+                | S_WriteLn
+                | S_Write
+                | S_Exit
+                | S_Graficar
                 | Empty;
 
+
             Llamada.Rule
-                = ID + PAR1 + PAR2;
+                = ID + PAR1 + PAR2 + PTCOMA;
+
+            Asignacion.Rule
+                = ID + ASIGN + Expresion + PTCOMA;
+
+            S_If.Rule
+                = RIF + PAR1 + Expresion + PAR2 + RTHEN + Sentencias;
+
+            S_For.Rule
+                = RFOR + PAR1 + Expresion + PAR2;
+
+            S_While.Rule
+                = RWHILE + PAR1 + Expresion + PAR2;
+
+            S_WriteLn.Rule
+                = WRTLN + PAR1 + Expresion + PAR2 + PTCOMA;
+
+            S_Write.Rule
+                = WRT + PAR1 + Expresion + PAR2 + PTCOMA;
+
+            S_Exit.Rule
+                = EXIT + PAR1 + PAR2 + PTCOMA;
+
+            S_Graficar.Rule
+                = RGRAF + PTCOMA;
 
             Expresion.Rule
                 = Expresion + MAS + Expresion
@@ -168,8 +237,10 @@ namespace Proyecto1.Analisis
             #endregion
 
             #region Eliminacion
-            this.MarkPunctuation(PTCOMA, BIPUNTO, PT, IGUAL, ASIGN);
-            this.MarkTransient(Instruccion, Instruccion2);
+            this.MarkPunctuation(PTCOMA, BIPUNTO, PT,PAR1, PAR2,  IGUAL, ASIGN);
+            this.MarkPunctuation(PROG, VAR, CONST, FUNCT, PROC);
+            this.MarkTransient(Instruccion, Sentencia);
+            
             #endregion
 
         }

@@ -11,8 +11,7 @@ namespace Proyecto1.TS
         private String id;
         private Tipo type;
         private String scope;
-        private int line;
-        private int column;
+        private int line, column;
         private Object value;
 
         public Simbolo(String n, Tipo ty, String sc, int l, int c) {
@@ -23,70 +22,15 @@ namespace Proyecto1.TS
             this.column = c;
         }
 
-        public String getId() 
-        {
-            return this.id;
-        }
+        public String Id { get => id; set => id = value; }
+        public Tipo Tipe { get => type; set => type = value; }
+        public String Scope { get => scope; set => scope = value; }
+        public int Linea { get => line; set => line = value; }
+        public int Columna { get => column; set => column = value; }
+        public Object Value { get => value; set => value = value; }
 
-        public void setId(string id) 
-        {
-            this.id = id;
-        }
-
-        public Tipo getType()
-        {
-            return this.type;
-        }
-
-        public void setType(Tipo tipo)
-        {
-            this.type = tipo;
-        }
-
-        public String getScope()
-        {
-            return this.scope;
-        }
-
-        public void setScope(string s)
-        {
-            this.scope = s;
-        }
-
-
-        public Object getValue()
-        {
-            return this.value;
-        }
-
-        public void setValue(Object val)
-        {
-            this.value = val;
-        }
-
-        public int getLine()
-        {
-            return this.line;
-        }
-
-        public void setLine(int line)
-        {
-            this.line = line;
-        }
-
-        public int getColumn()
-        {
-            return this.column;
-        }
-
-        public void setColumn(int col)
-        {
-            this.column = col;
-        }
-
-
-        public enum Tipo { 
-            INT,    
+        public enum Tipo {
+            INT,
             STR,
             REAL,
             BOOL,
@@ -94,7 +38,9 @@ namespace Proyecto1.TS
             FUNC,
             TYPE,
             OBJ,
-            ARR
+            ARR,
+            NULL,
+            ERROR
         }
     }
 }

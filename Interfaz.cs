@@ -90,7 +90,7 @@ namespace Proyecto1
             {
                 AddLineNumbers();
             }
-            KeyWords();
+            //KeyWords();
         }
 
         private void KeyWords() 
@@ -152,8 +152,7 @@ namespace Proyecto1
                     System.Diagnostics.Process.Start(@"C:\compiladores2\reporte_ast.png");
                 }
             }
-            else 
-            {
+            else {
                 MessageBox.Show(" Advertencia: \n Seleccione una opcion de reporte", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
            
@@ -196,6 +195,16 @@ namespace Proyecto1
             {
                 MessageBox.Show("Error al intentar encontrar la dirección");
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            String cadena = this.richTextBox1.Text;
+            String file = this.label1.Text;
+            Traductor translator = new Traductor();
+            translator.Traducir(cadena, file);
+            this.richTextBox2.Text = translator.console;
+
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Proyecto1.Interprete.Expresion
         {
             Object izquierda = this.izquierda.Evaluar();
             Object derecha = this.derecha.Evaluar();
-            switch (op)
+            /*switch (op)
             {
                 case '+':
                     return izquierda + derecha;
@@ -34,7 +34,8 @@ namespace Proyecto1.Interprete.Expresion
                     return izquierda / derecha;
                 default:
                     return izquierda % derecha;
-            }
+            }*/
+            return izquierda;
         }
 
     }
