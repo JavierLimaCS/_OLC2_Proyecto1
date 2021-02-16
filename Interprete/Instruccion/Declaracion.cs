@@ -24,10 +24,10 @@ namespace Proyecto1.Interprete.Instruccion
             switch(this.tipo)
             {
                 case "integer":
-                    tipo_variable = Simbolo.Tipo.INT;
+                    tipo_variable = Simbolo.Tipo.INTEGER;
                     break;
                 case "string":
-                    tipo_variable = Simbolo.Tipo.STR;
+                    tipo_variable = Simbolo.Tipo.STRING;
                     break;
                 case "real":
                     tipo_variable = Simbolo.Tipo.REAL;

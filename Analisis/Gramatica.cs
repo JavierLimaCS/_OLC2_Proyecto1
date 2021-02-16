@@ -55,6 +55,7 @@ namespace Proyecto1.Analisis
             var RREPEAT = ToTerm("repeat");
             var RUNTIL = ToTerm("until");
             var RFOR = ToTerm("for");
+            var RTO = ToTerm("to");
             var RGRAF = ToTerm("graficat_ts");
             var RBREAK = ToTerm("break");
             var RCONTINUE = ToTerm("continue");
@@ -68,7 +69,7 @@ namespace Proyecto1.Analisis
             var MOD = ToTerm("%", "Aritmetico");
             var MAYOR = ToTerm(">", "Relacional");
             var MENOR = ToTerm("<", "Relacional");
-            var MANIG = ToTerm(">=", "Relacional");
+            var MAYIG = ToTerm(">=", "Relacional");
             var MENIG = ToTerm("<=", "Relacional");
             var IGUAL = ToTerm("=", "Relacional");
             var DIFF = ToTerm("<>", "Relacional");
@@ -108,12 +109,14 @@ namespace Proyecto1.Analisis
             NonTerminal Tipo = new NonTerminal("Tipo");
             NonTerminal Value = new NonTerminal("Value");
             NonTerminal S_If = new NonTerminal("S_If");
+            NonTerminal S_Else = new NonTerminal("S_Else");
             NonTerminal S_For = new NonTerminal("S_For");
             NonTerminal S_While = new NonTerminal("S_While");
             NonTerminal S_Write = new NonTerminal("S_Write");
             NonTerminal S_WriteLn = new NonTerminal("S_WriteLn");
             NonTerminal S_Graficar = new NonTerminal("S_Graficar");
             NonTerminal S_Exit = new NonTerminal("S_Exit");
+            NonTerminal Cuerpo = new NonTerminal("Cuerpo");
             #endregion
 
             #region Gramatica
@@ -161,17 +164,20 @@ namespace Proyecto1.Analisis
                 | TBOOL;
 
             Funcion.Rule
-                = FUNCT + ID + PAR1 + arguments_list + PAR2 + Instrucciones + BEGIN + Sentencias + END + PTCOMA;
+                = FUNCT + ID + PAR1 + arguments_list + PAR2 + BIPUNTO + Tipo + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA
+                | FUNCT + ID + PAR1 + PAR2 + BIPUNTO + Tipo + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA
+                | FUNCT + ID + BIPUNTO + Tipo + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA;
 
             Procedimiento.Rule
-                = PROC + ID + PAR1 + arguments_list + PAR2 + Instrucciones + BEGIN + Sentencias + END + PTCOMA;
+                = PROC + ID + PAR1 + arguments_list + PAR2 + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA
+                | PROC + ID + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA;
 
             arguments_list.Rule
-                = MakeListRule(arguments_list, COM, Argumento);
+                = MakeListRule(arguments_list, PTCOMA, Argumento);
 
             Argumento.Rule
-                = ID + BIPUNTO + Tipo
-                | ID;
+                = var_list + BIPUNTO + Tipo
+                | VAR + var_list + BIPUNTO + Tipo;
 
             Sentencias.Rule
                 = MakePlusRule(Sentencias, Sentencia);
@@ -196,10 +202,14 @@ namespace Proyecto1.Analisis
                 = ID + ASIGN + Expresion + PTCOMA;
 
             S_If.Rule
-                = RIF + PAR1 + Expresion + PAR2 + RTHEN + Sentencias;
+                = RIF + PAR1 + Expresion + PAR2 + RTHEN + Sentencia  + PTCOMA;
+
+            S_Else.Rule
+                = RELSE + Sentencia
+                | Empty;
 
             S_For.Rule
-                = RFOR + PAR1 + Expresion + PAR2;
+                = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Sentencias + PTCOMA;
 
             S_While.Rule
                 = RWHILE + PAR1 + Expresion + PAR2;
@@ -222,18 +232,27 @@ namespace Proyecto1.Analisis
                 | Expresion + DIV + Expresion
                 | Expresion + POR + Expresion
                 | Expresion + MOD + Expresion
+                | Expresion + MAYOR + Expresion
+                | Expresion + MENOR + Expresion
+                | Expresion + MAYIG + Expresion
+                | Expresion + MENIG + Expresion
+                | Expresion + DIFF + Expresion
+                | Expresion + IGUAL + Expresion
+                | Expresion + AND + Expresion
+                | Expresion + OR + Expresion
                 | TTRUE
                 | TFALSE
                 | ENTERO
                 | CADENA
-                | DECIMAL;
+                | DECIMAL
+                | ID;
 
             #endregion
 
             #region Preferencias
-            this.RegisterOperators(1, Associativity.Left, MAS, MENOS);
-            this.RegisterOperators(2, Associativity.Left, POR, DIV);
-            this.RegisterOperators(3, Associativity.Left, MOD);
+            this.RegisterOperators(1, Associativity.Left, IGUAL, MAYOR, MENOR, MENIG, MAYIG, DIFF);
+            this.RegisterOperators(2, Associativity.Left, MAS, MENOS, OR);
+            this.RegisterOperators(3, Associativity.Left, POR, DIV, MOD, AND);
             #endregion
 
             #region Eliminacion

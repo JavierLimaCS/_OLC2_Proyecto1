@@ -27,13 +27,13 @@ namespace Proyecto1.TS
         public String Scope { get => scope; set => scope = value; }
         public int Linea { get => line; set => line = value; }
         public int Columna { get => column; set => column = value; }
-        public Object Value { get => value; set => value = value; }
+        public Object Value { get => value; set => this.value = value; }
 
         public enum Tipo {
-            INT,
-            STR,
-            REAL,
-            BOOL,
+            INTEGER = 0,
+            STRING = 1,
+            REAL = 2,
+            BOOL = 4,
             VOID,
             FUNC,
             TYPE,

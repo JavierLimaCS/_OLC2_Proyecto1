@@ -67,7 +67,7 @@ namespace Proyecto1.Analisis
                 switch (no_terminal)
                 {
                     case "Funcion":
-                        foreach (var funcionAnidada in nodo.ChildNodes[2].ChildNodes) 
+                        foreach (var funcionAnidada in nodo.ChildNodes[3].ChildNodes) 
                         {
                             if(funcionAnidada.Term.Name == "Funcion") return true;
                         }
