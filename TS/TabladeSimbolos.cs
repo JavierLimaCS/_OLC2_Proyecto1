@@ -6,46 +6,42 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.TS
 {
-    class TabladeSimbolos : LinkedList<Simbolo>
+    class TabladeSimbolos 
     {
-        public TabladeSimbolos() : base() 
-        { 
-            
+        TabladeSimbolos padre;
+        Dictionary<string, Simbolo> variables;
+        Dictionary<string, Simbolo_Funcion> funciones;
+        Dictionary<string, object> structs;
+        public TabladeSimbolos(TabladeSimbolos padre)
+        {
+            this.padre = padre;
+            this.variables = new Dictionary<string, Simbolo>();
+            this.funciones = new Dictionary<string, Simbolo_Funcion>();
         }
 
-        public Object getValor(String id)
+        public Simbolo getVariableValor(String id)
         {
-            foreach (Simbolo s in this)
+            TabladeSimbolos actual = this;
+            while (actual != null)
             {
-                if (s.Id.Equals(id))
-                {
-                    return s.Value;
-                }
-            }
-            Console.WriteLine("La variable " + id + " no existe en este ámbito.");
+                if (actual.variables[id] != null)
+                    return actual.variables[id];
+                actual = actual.padre;
+            };
             return null;
         }
-        
-        public void setValor(String id, Object valor)
-        {
-            foreach (Simbolo s in this)
-            {
-                if (s.Id.Equals(id))
-                {
-                    s.Value = valor;
-                    return;
-                }
-            }
-            Console.WriteLine("La variable " + id + " no existe en este ámbito, por lo "
-                    + "que no puede asignársele un valor.");
-        }
 
-        public void generarTabladeSimbolos() {
-            foreach (var simbolo in this)
+        public void declararVariable(string id, Simbolo variable)
+        {
+            if (this.variables[id] != null)
             {
-                System.Diagnostics.Debug.Write("Simbolo: "  + simbolo.Id);
+                this.variables.Add(id, variable);
             }
-        }
+            else
+            {
+                throw new Exception("La variable " + id + " ya existe en este ambito");
+            }
+        }        
 
     }
 }

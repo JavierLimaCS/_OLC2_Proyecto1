@@ -10,7 +10,7 @@ namespace Proyecto1.Interprete.Expresion
 {
     abstract class Expresion 
     {
-        public abstract Object Evaluar();
+        public abstract Simbolo Evaluar(TabladeSimbolos ts);
         
     }
 }

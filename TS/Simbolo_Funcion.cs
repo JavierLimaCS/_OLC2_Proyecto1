@@ -10,11 +10,10 @@ namespace Proyecto1.TS
         private LinkedList<Simbolo> listaParametros;
         private LinkedList<Instruccion> listaInstruccions;
         private LinkedList<Instruccion> listaSentencias;
-        public Simbolo_Funcion(string n, Tipo ty, String sc, int l, int c) : base(n, ty, sc, l, c)
+        public Simbolo_Funcion(string n, Tipo ty, String sc, int l, int c) : base(n, ty, l, c)
         {
             this.Id = n;
-            this.Tipe = ty;
-            this.Scope = sc;
+            this.Tipo = ty;
             this.Linea = l;
             this.Columna = c;
         }

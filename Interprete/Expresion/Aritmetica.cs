@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Proyecto1.TS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,33 +11,47 @@ namespace Proyecto1.Interprete.Expresion
     {
         private Expresion izquierda;
         private Expresion derecha;
-        private char op;
+        private char tipo;
 
-        public Aritmetica(Expresion izquierda, Expresion derecha, char op)
+        public Aritmetica(Expresion izquierda, Expresion derecha, char tipo)
         {
             this.izquierda = izquierda;
             this.derecha = derecha;
-            this.op = op;
+            this.tipo = tipo;
         }
-        public override Object Evaluar()
+        public override Simbolo Evaluar(TabladeSimbolos ts)
         {
-            Object izquierda = this.izquierda.Evaluar();
-            Object derecha = this.derecha.Evaluar();
-            /*switch (op)
+            Simbolo izquierda = this.izquierda.Evaluar(ts);
+            Simbolo derecha = this.derecha.Evaluar(ts);
+            Simbolo resultado;
+            Tipos tipoResultante = TablaTipos.getTipo(izquierda.Tipo, derecha.Tipo);
+
+            if (tipoResultante != Tipos.INT && tipo != '+')
+                throw new Exception();
+
+            switch (tipo)
             {
                 case '+':
-                    return izquierda + derecha;
+                    resultado = new Simbolo(null, izquierda.Tipo, 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) + int.Parse(derecha.Value.ToString());
+                    return resultado;
                 case '-':
-                    return izquierda - derecha;
+                    resultado = new Simbolo(null, izquierda.Tipo, 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) - int.Parse(derecha.Value.ToString());
+                    return resultado;
                 case '*':
-                    return izquierda * derecha;
+                    resultado = new Simbolo(null, izquierda.Tipo, 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) * int.Parse(derecha.Value.ToString());
+                    return resultado;
                 case '/':
-                    return izquierda / derecha;
+                    resultado = new Simbolo(null, izquierda.Tipo, 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) / int.Parse(derecha.Value.ToString());
+                    return resultado;
                 default:
-                    return izquierda % derecha;
-            }*/
-            return izquierda;
+                    resultado = new Simbolo(null, izquierda.Tipo, 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) % int.Parse(derecha.Value.ToString());
+                    return resultado;
+            }
         }
-
     }
 }

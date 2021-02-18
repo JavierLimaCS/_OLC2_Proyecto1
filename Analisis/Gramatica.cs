@@ -31,6 +31,8 @@ namespace Proyecto1.Analisis
             #region Terminales - PALABRAS
             var PROG = ToTerm("program");
             var TYPE = ToTerm("type");
+            var ARRAY = ToTerm("array");
+            var OBJECT = ToTerm("object");
             var VAR = ToTerm("var");
             var CONST = ToTerm("const");
             var BEGIN = ToTerm("begin");
@@ -50,6 +52,7 @@ namespace Proyecto1.Analisis
             var RTHEN = ToTerm("then");
             var RELSE = ToTerm("else");
             var RCASE = ToTerm("case");
+            var ROF = ToTerm("of");
             var RWHILE = ToTerm("while");
             var RDO = ToTerm("do");
             var RREPEAT = ToTerm("repeat");
@@ -76,14 +79,14 @@ namespace Proyecto1.Analisis
             var AND = ToTerm("and", "Logico");
             var OR = ToTerm("or", "Logico");
             var NOT = ToTerm("not", "Logico");
-            var PAR1 = ToTerm("(");
-            var PAR2 = ToTerm(")");
+            var PAR1 = ToTerm("(", "Parentesis Apertura");
+            var PAR2 = ToTerm(")", "Parentesis Cierre");
             var ASIGN = ToTerm(":=");
-            var PTCOMA = ToTerm(";");
+            var PTCOMA = ToTerm(";", "Punto y coma");
             var LLAVE1 = ToTerm("{");
             var LLAVE2 = ToTerm("}");
-            var COR1 = ToTerm("[");
-            var COR2 = ToTerm("]");
+            var COR1 = ToTerm("[", "Corchete Apertura");
+            var COR2 = ToTerm("]", "Corchete Cierre");
             var COM = ToTerm(",");
             var BIPUNTO = ToTerm(":");
             var PT = ToTerm(".");
@@ -95,28 +98,35 @@ namespace Proyecto1.Analisis
             NonTerminal Instruccion = new NonTerminal("Instruccion");
             NonTerminal Sentencias = new NonTerminal("Sentencias");
             NonTerminal Sentencia = new NonTerminal("Sentencia");
-            NonTerminal Declaraciones = new NonTerminal("Declaraciones");
-            NonTerminal Constantes = new NonTerminal("Constantes");
-            NonTerminal Declaracion = new NonTerminal("Declaracion");
+            NonTerminal Declaraciones = new NonTerminal("Declaracion");
+            NonTerminal Constantes = new NonTerminal("Const");
+            NonTerminal Declaracion = new NonTerminal("Var");
             NonTerminal Funcion = new NonTerminal("Funcion");
             NonTerminal Procedimiento = new NonTerminal("Procedimiento");
             NonTerminal Llamada = new NonTerminal("Llamada");
             NonTerminal Asignacion = new NonTerminal("Asignacion");
             NonTerminal Argumento = new NonTerminal("Argumento");
-            NonTerminal Expresion = new NonTerminal("Expresion");
+            NonTerminal Expresion = new NonTerminal("Exp");
             NonTerminal var_list = new NonTerminal("var_list");
             NonTerminal arguments_list = new NonTerminal("arguments_list");
             NonTerminal Tipo = new NonTerminal("Tipo");
             NonTerminal Value = new NonTerminal("Value");
-            NonTerminal S_If = new NonTerminal("S_If");
-            NonTerminal S_Else = new NonTerminal("S_Else");
-            NonTerminal S_For = new NonTerminal("S_For");
-            NonTerminal S_While = new NonTerminal("S_While");
-            NonTerminal S_Write = new NonTerminal("S_Write");
-            NonTerminal S_WriteLn = new NonTerminal("S_WriteLn");
-            NonTerminal S_Graficar = new NonTerminal("S_Graficar");
-            NonTerminal S_Exit = new NonTerminal("S_Exit");
-            NonTerminal Cuerpo = new NonTerminal("Cuerpo");
+            NonTerminal S_If = new NonTerminal("If");
+            NonTerminal S_Else = new NonTerminal("Else");
+            NonTerminal S_Else2 = new NonTerminal("Else");
+            NonTerminal S_For = new NonTerminal("For");
+            NonTerminal S_While = new NonTerminal("While");
+            NonTerminal S_Write = new NonTerminal("Write");
+            NonTerminal S_WriteLn = new NonTerminal("WriteLn");
+            NonTerminal S_Graficar = new NonTerminal("Graficar");
+            NonTerminal S_Exit = new NonTerminal("Exit");
+            NonTerminal S_Case = new NonTerminal("Case");
+            NonTerminal case_list = new NonTerminal("case_list");
+            NonTerminal Caso = new NonTerminal("Caso");
+            NonTerminal exp_list = new NonTerminal("exp_list");
+            NonTerminal Sentencia2 = new NonTerminal("Sentencia");
+            NonTerminal Arrays = new NonTerminal("Array");
+            NonTerminal Types = new NonTerminal("Type");
             #endregion
 
             #region Gramatica
@@ -125,14 +135,15 @@ namespace Proyecto1.Analisis
                 = PROG + ID + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PT;
 
             Instrucciones.Rule
-                = MakePlusRule(Instrucciones, Instruccion);
+                = MakeStarRule(Instrucciones, Instruccion);
 
             Instruccion.Rule
                 = VAR + Declaraciones
                 | Constantes
                 | Funcion
                 | Procedimiento
-                | Empty;
+                | TYPE + Types
+                | TYPE + Arrays;
 
 
             Declaraciones.Rule
@@ -153,6 +164,12 @@ namespace Proyecto1.Analisis
 
             Constantes.ErrorRule
                 = SyntaxError + PTCOMA;
+
+            Types.Rule
+                = ID + IGUAL + OBJECT;
+
+            Arrays.Rule
+                = ID + IGUAL + ARRAY + COR1 + COR2;
 
             var_list.Rule
                 = MakeListRule(var_list, COM, ID);
@@ -180,9 +197,21 @@ namespace Proyecto1.Analisis
                 | VAR + var_list + BIPUNTO + Tipo;
 
             Sentencias.Rule
-                = MakePlusRule(Sentencias, Sentencia);
+                = MakeStarRule(Sentencias, Sentencia);
 
             Sentencia.Rule
+                = Llamada + PTCOMA
+                | Asignacion + PTCOMA
+                | S_If + PTCOMA
+                | S_For + PTCOMA
+                | S_While + PTCOMA
+                | S_WriteLn + PTCOMA
+                | S_Write + PTCOMA
+                | S_Exit + PTCOMA
+                | S_Graficar + PTCOMA
+                | S_Case + PTCOMA;
+
+            Sentencia2.Rule
                 = Llamada
                 | Asignacion
                 | S_If
@@ -192,39 +221,50 @@ namespace Proyecto1.Analisis
                 | S_Write
                 | S_Exit
                 | S_Graficar
-                | Empty;
-
+                | S_Case;
 
             Llamada.Rule
-                = ID + PAR1 + PAR2 + PTCOMA;
+                = ID + PAR1 + PAR2 ;
 
             Asignacion.Rule
-                = ID + ASIGN + Expresion + PTCOMA;
+                = ID + ASIGN + Expresion;
 
             S_If.Rule
-                = RIF + PAR1 + Expresion + PAR2 + RTHEN + Sentencia  + PTCOMA;
+                = RIF + PAR1 + Expresion + PAR2 + RTHEN + Sentencia2 + S_Else
+                | RIF + PAR1 + Expresion + PAR2 + RTHEN +BEGIN + Sentencias + END ;
 
             S_Else.Rule
-                = RELSE + Sentencia
-                | Empty;
+                = MakeStarRule(S_Else, RELSE + Sentencia2);
 
             S_For.Rule
-                = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Sentencias + PTCOMA;
+                = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Sentencias;
+
+            S_Case.Rule 
+                = RCASE + PAR1 + Expresion + PAR2 + ROF + case_list + PTCOMA + S_Else2 + END;
+
+            case_list.Rule
+                = MakeListRule(case_list, PTCOMA ,Caso);
+
+            Caso.Rule
+                = exp_list + BIPUNTO + Sentencia2;
+
+            S_Else2.Rule
+                = RELSE + Sentencia;
 
             S_While.Rule
                 = RWHILE + PAR1 + Expresion + PAR2;
 
             S_WriteLn.Rule
-                = WRTLN + PAR1 + Expresion + PAR2 + PTCOMA;
+                = WRTLN + PAR1 + exp_list + PAR2 ;
 
             S_Write.Rule
-                = WRT + PAR1 + Expresion + PAR2 + PTCOMA;
+                = WRT + PAR1 + exp_list + PAR2;
 
             S_Exit.Rule
-                = EXIT + PAR1 + PAR2 + PTCOMA;
+                = EXIT + PAR1 + PAR2 ;
 
             S_Graficar.Rule
-                = RGRAF + PTCOMA;
+                = RGRAF;
 
             Expresion.Rule
                 = Expresion + MAS + Expresion
@@ -246,6 +286,9 @@ namespace Proyecto1.Analisis
                 | CADENA
                 | DECIMAL
                 | ID;
+
+            exp_list.Rule
+                = MakeListRule(exp_list, COM, Expresion);
 
             #endregion
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Proyecto1.TS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,10 +19,10 @@ namespace Proyecto1.Interprete.Expresion
             this.derecha = derecha;
             this.op = op;
         }
-        public override Object Evaluar()
+        public override Simbolo Evaluar()
         {
-            Object izquierda = this.izquierda.Evaluar();
-            Object derecha = this.derecha.Evaluar();
+            Simbolo izquierda = this.izquierda.Evaluar();
+            Simbolo derecha = this.derecha.Evaluar();
             return izquierda;
         }
     }

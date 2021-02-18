@@ -9,6 +9,6 @@ namespace Proyecto1.Interprete.Instruccion
 {
     abstract class Instruccion
     {
-        public abstract void Ejecutar(TabladeSimbolos TS, String ambito);
+        public abstract object Ejecutar(TabladeSimbolos ts);
     }
 }

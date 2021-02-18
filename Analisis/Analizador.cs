@@ -15,7 +15,7 @@ namespace Proyecto1.Analisis
     {
         public string consola = "";
         public LinkedList<Error> lista_errores = new LinkedList<Error>();
-        TabladeSimbolos global = new TabladeSimbolos();
+        TabladeSimbolos global = new TabladeSimbolos(null); //Entorno Global
         public void Analizar(String cadena)
         {
             Gramatica gramatica = new Gramatica();
@@ -81,7 +81,71 @@ namespace Proyecto1.Analisis
         {
             foreach (var instruccion in instrucciones)
             {
-                instruccion.Ejecutar(ts, "global");
+                instruccion.Ejecutar(ts, consola);
+            }
+        }
+        public Instruccion instruccion(ParseTreeNode actual)
+        {
+            switch (actual.ChildNodes[0].Token.Text.ToLower())
+            {
+                case "writeln":
+                    return new Writeln(expresion(actual.ChildNodes[1]));
+                case "declaracion":
+                    
+                    return new Declaracion();
+                case "if":
+                    if (actual.ChildNodes.Count == 8)
+                    {
+                        return new If(expresion(actual.ChildNodes[2]), instrucciones(actual.ChildNodes[5]), instruccion(actual.ChildNodes[7]));
+                    }
+                    else
+                    {
+                        return new If(expresion(actual.ChildNodes[2]), instrucciones(actual.ChildNodes[5]), null);
+                    }
+                case "else":
+                    if (actual.ChildNodes.Count == 2)
+                    {
+                        return new Else(instruccion(actual.ChildNodes[1]));
+                    }
+                    else
+                    {
+                        return new Else(instrucciones(actual.ChildNodes[2]));
+                    }
+            }
+            return null;
+        }
+
+        public Expresion expresion(ParseTreeNode actual)
+        {
+            if (actual.ChildNodes.Count == 3)
+            {
+                string operador = actual.ChildNodes[1].Token.Text;
+                switch (operador)
+                {
+                    case "+":
+                        return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '+');
+                    case "-":
+                        return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '-');
+                    case "*":
+                        return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '*');
+                    case "/":
+                        return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '/');
+                    case "==":
+                        return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '=');
+                    case "!=":
+                        return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '!');
+                    case ">":
+                        return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '>');
+                    case "<":
+                        return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '<');
+                    default:
+                        return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '%');
+                }
+            }
+            else
+            {
+                //TODO ver tipos
+                return new Primitivo('N', actual.ChildNodes[0].Token.Text);
             }
         }
         public LinkedList<Instruccion> instrucciones(ParseTreeNode actual)

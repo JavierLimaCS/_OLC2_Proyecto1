@@ -7,37 +7,23 @@ namespace Proyecto1.Interprete.Instruccion
 {
     class Declaracion : Instruccion
     {
-        private String tipo, id;
+        private String id;
+        private Tipo type;
         private Object value;
         private int line, col;
-        public Declaracion(String tipo, String id, Object value, int linea, int col) 
+        public Declaracion(Tipo tipo, String id, Object value, int linea, int col) 
         {
-            this.tipo = tipo;
+            this.type = tipo;
             this.id = id;
             this.value = value;
             this.line = linea;
             this.col = col;
         }
-        public override void Ejecutar(TabladeSimbolos TS, String ambito)
+        public override void Ejecutar(TabladeSimbolos TS)
         {
-            Simbolo.Tipo tipo_variable = Simbolo.Tipo.NULL;
-            switch(this.tipo)
-            {
-                case "integer":
-                    tipo_variable = Simbolo.Tipo.INTEGER;
-                    break;
-                case "string":
-                    tipo_variable = Simbolo.Tipo.STRING;
-                    break;
-                case "real":
-                    tipo_variable = Simbolo.Tipo.REAL;
-                    break;
-                case "boolean":
-                    tipo_variable = Simbolo.Tipo.BOOL;
-                    break;
-            }
-
-            Simbolo nuevo = new Simbolo(this.id, tipo_variable, ambito, this.line, this.col);
+            Tipo tipo_variable =  this.type;
+            Simbolo nuevo = new Simbolo(this.id, tipo_variable, this.line, this.col);
+            TS.declararVariable(this.id, nuevo);
         }
     }
 }
