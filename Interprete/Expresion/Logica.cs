@@ -19,10 +19,10 @@ namespace Proyecto1.Interprete.Expresion
             this.derecha = derecha;
             this.op = op;
         }
-        public override Simbolo Evaluar()
+        public override Simbolo Evaluar(TabladeSimbolos ts)
         {
-            Simbolo izquierda = this.izquierda.Evaluar();
-            Simbolo derecha = this.derecha.Evaluar();
+            Simbolo izquierda = this.izquierda.Evaluar(ts);
+            Simbolo derecha = this.derecha.Evaluar(ts);
             return izquierda;
         }
     }

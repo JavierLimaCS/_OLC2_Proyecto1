@@ -11,7 +11,8 @@ namespace Proyecto1.TS
         BOOLEAN = 2,
         STRING = 3,
         REAL = 4  ,
-        FUNCTION =5
+        FUNCTION =5,
+        PARAM = 6
     }
     class Tipo
     {

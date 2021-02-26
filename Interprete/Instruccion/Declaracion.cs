@@ -7,11 +7,11 @@ namespace Proyecto1.Interprete.Instruccion
 {
     class Declaracion : Instruccion
     {
-        private String id;
+        private List<String> id; 
         private Tipo type;
-        private Object value;
+        private Expresion.Expresion value;
         private int line, col;
-        public Declaracion(Tipo tipo, String id, Object value, int linea, int col) 
+        public Declaracion(Tipo tipo, List<String> id, Expresion.Expresion value, int linea, int col) 
         {
             this.type = tipo;
             this.id = id;
@@ -19,11 +19,25 @@ namespace Proyecto1.Interprete.Instruccion
             this.line = linea;
             this.col = col;
         }
-        public override void Ejecutar(TabladeSimbolos TS)
+        public override object Ejecutar(TabladeSimbolos TS)
         {
             Tipo tipo_variable =  this.type;
-            Simbolo nuevo = new Simbolo(this.id, tipo_variable, this.line, this.col);
-            TS.declararVariable(this.id, nuevo);
+            Simbolo nuevo = null;
+            Object valor = null;
+            String ids = "";
+            foreach (var variable in this.id) 
+            {
+                nuevo = new Simbolo(variable, tipo_variable, this.line, this.col);
+                ids += " |" + variable +"| ";
+                if (this.value != null) 
+                {
+                    valor = this.value.Evaluar(TS).Value;
+                    nuevo.Value = valor;
+                }
+                TS.declararVariable(variable, nuevo);
+            }
+            //return "Variables " + ids  + " se ha insertado en los TS\n";
+            return null;
         }
     }
 }

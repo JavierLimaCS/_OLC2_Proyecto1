@@ -15,7 +15,8 @@ namespace Proyecto1.Analisis
     {
         public string consola = "";
         public LinkedList<Error> lista_errores = new LinkedList<Error>();
-        TabladeSimbolos global = new TabladeSimbolos(null); //Entorno Global
+        private List<Object> salida = new List<Object>();
+        TabladeSimbolos global = new TabladeSimbolos(null, "Global"); //Entorno Global
         public void Analizar(String cadena)
         {
             Gramatica gramatica = new Gramatica();
@@ -54,8 +55,16 @@ namespace Proyecto1.Analisis
             }
             LinkedList<Instruccion> listaInstrucciones = instrucciones(raiz.ChildNodes[1]);
             LinkedList<Instruccion> listaSentencias = instrucciones(raiz.ChildNodes[3]);
+            //this.ejecutar(listaInstrucciones, global);
+            //this.ejecutar(listaSentencias, global);
             this.generarGrafo(raiz);
-            
+            for (int i = 0; i < salida.Count; i++) 
+            {
+                if (salida.ElementAt(i) is String) 
+                {
+                    consola += salida.ElementAt(i).ToString();
+                }
+            }
         }
 
         public Boolean BuscarAnidadas(ParseTreeNode raiz)
@@ -79,31 +88,123 @@ namespace Proyecto1.Analisis
 
         public void ejecutar(LinkedList<Instruccion> instrucciones, TabladeSimbolos ts)
         {
+            Object output;
             foreach (var instruccion in instrucciones)
             {
-                instruccion.Ejecutar(ts, consola);
+                if (instruccion != null) 
+                {
+                    output = instruccion.Ejecutar(ts);
+                    if (output is List<Object>) 
+                    {
+                        this.salida.AddRange((List<Object>)output); 
+                    }
+                    else
+                    {
+                        this.salida.Add(output);
+                    }
+                }
+                
             }
         }
         public Instruccion instruccion(ParseTreeNode actual)
         {
-            switch (actual.ChildNodes[0].Token.Text.ToLower())
+            switch (actual.Term.Name.ToLower())
             {
                 case "writeln":
-                    return new Writeln(expresion(actual.ChildNodes[1]));
-                case "declaracion":
-                    
-                    return new Declaracion();
-                case "if":
-                    if (actual.ChildNodes.Count == 8)
+                    LinkedList<Expresion> exp_list = new LinkedList<Expresion>();
+                    foreach (var exp in actual.ChildNodes[1].ChildNodes) 
                     {
-                        return new If(expresion(actual.ChildNodes[2]), instrucciones(actual.ChildNodes[5]), instruccion(actual.ChildNodes[7]));
+                            exp_list.AddLast(expresion(exp));
                     }
-                    else
+                    return new Writeln(exp_list);
+                case "write":
+                    LinkedList<Expresion> exp_list2 = new LinkedList<Expresion>();
+                    foreach (var exp in actual.ChildNodes[1].ChildNodes)
                     {
-                        return new If(expresion(actual.ChildNodes[2]), instrucciones(actual.ChildNodes[5]), null);
+                        exp_list2.AddLast(expresion(exp.ChildNodes[0]));
+                    }
+                    return new Write(exp_list2);
+                case "declaracion":
+                    LinkedList<Declaracion> lista_decla = new LinkedList<Declaracion>();
+                    foreach (var decla in actual.ChildNodes) 
+                    {
+                        String tipo = decla.ChildNodes[1].ChildNodes[0].Token.Text;
+                        String id = "";
+                        int l = decla.ChildNodes[0].ChildNodes[0].Token.Location.Line + 1;
+                        int c = decla.ChildNodes[0].ChildNodes[0].Token.Location.Column + 1;
+                        List<String> vars = new List<string>();
+                        Expresion valor = null;
+                        if (decla.ChildNodes[2].ChildNodes.Count > 0)
+                        {
+                            valor = expresion(decla.ChildNodes[2].ChildNodes[0]);
+                        }
+                        foreach (var variable in decla.ChildNodes[0].ChildNodes)
+                        {
+                            id = variable.Token.Text;
+                            vars.Add(id);
+                        }
+                        Tipos new_type = Tipos.ERROR;
+                        switch (tipo) 
+                        {
+                            case "integer":
+                                new_type = Tipos.INT;
+                                break;
+                            case "decimal":
+                                new_type = Tipos.REAL;
+                                break;
+                            case "string":
+                                new_type = Tipos.STRING;
+                                break;
+                            case "boolean":
+                                new_type = Tipos.BOOLEAN;
+                                break;
+                        }
+                        lista_decla.AddLast(new Declaracion(new Tipo(new_type, tipo), vars, valor, l, c));
+                    }
+                    return new Declaraciones(lista_decla);
+                case "asignacion":
+                    return new Asignacion(actual.ChildNodes[0].Token.Text, expresion(actual.ChildNodes[1]));
+                case "llamada":
+                    if (actual.ChildNodes.Count == 1)
+                    {
+                        return new Llamada(actual.ChildNodes[0].Token.Text, null);
+                    }
+                    else 
+                    {
+                        List<Expresion> list = new List<Expresion>();
+                        foreach (var exp in actual.ChildNodes[1].ChildNodes) 
+                        {
+                            list.Add(expresion(exp));
+                        }
+                        return new Llamada(actual.ChildNodes[0].Token.Text, list);
+                    }
+                case "while":
+                    return new While(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[4])); ; 
+                case "if":
+                    if (actual.ChildNodes.Count == 6)
+                    {
+                        if (actual.ChildNodes[4].ChildNodes.Count > 0)
+                        {
+                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[4]), instruccion(actual.ChildNodes[4]));
+                        }
+                        else
+                        {
+                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[4]), null);
+                        }
+                    }
+                    else 
+                    {
+                        if (actual.ChildNodes[4].ChildNodes.Count > 0)
+                        {
+                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[3]), instruccion(actual.ChildNodes[4]));
+                        }
+                        else
+                        {
+                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[3]), null);
+                        }
                     }
                 case "else":
-                    if (actual.ChildNodes.Count == 2)
+                    if (actual.ChildNodes.Count == 1)
                     {
                         return new Else(instruccion(actual.ChildNodes[1]));
                     }
@@ -130,41 +231,50 @@ namespace Proyecto1.Analisis
                         return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '*');
                     case "/":
                         return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '/');
-                    case "==":
+                    case "=":
                         return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '=');
-                    case "!=":
+                    case "<>":
                         return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '!');
                     case ">":
                         return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '>');
                     case "<":
                         return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '<');
+                    case ">=":
+                        return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), 'm');
+                    case "<=":
+                        return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), 'i');
                     default:
                         return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '%');
                 }
             }
             else
             {
-                //TODO ver tipos
-                return new Primitivo('N', actual.ChildNodes[0].Token.Text);
+                String tipo = actual.ChildNodes[0].Term.Name;
+                tipo = tipo.ToLower();
+                switch(tipo) 
+                {
+                    case "entero":
+                        return new Primitivo('N', actual.ChildNodes[0].Token.Text);
+                    case "cadena":
+                        return new Primitivo('S', actual.ChildNodes[0].Token.Text);
+                    case "decimal":
+                        return new Primitivo('R', actual.ChildNodes[0].Token.Text);
+                    case "id":
+                        return new Primitivo('I', actual.ChildNodes[0].Token.Text);
+                    case "true":
+                    case "false":
+                        return new Primitivo('B', actual.ChildNodes[0].Token.Text);
+                }
+                return null;
+                
             }
         }
         public LinkedList<Instruccion> instrucciones(ParseTreeNode actual)
         {
             LinkedList<Instruccion> listaInstrucciones = new LinkedList<Instruccion>();
-            String instruccion = "";
-            //int indice = 0;
             foreach (ParseTreeNode nodo in actual.ChildNodes)
             {
-                //instruccion = nodo.ChildNodes[indice].Term.Name;
-                instruccion = nodo.Term.Name;
-                switch (instruccion) 
-                {
-                    case "Declaraciones":
-                        //listaInstrucciones.AddLast(new Declaracion(nodo.ChildNodes))
-                        System.Diagnostics.Debug.WriteLine("SII");
-                        break;
-                }
-                System.Diagnostics.Debug.WriteLine(instruccion);
+                listaInstrucciones.AddLast(instruccion(nodo));
             }
             return listaInstrucciones;
         }

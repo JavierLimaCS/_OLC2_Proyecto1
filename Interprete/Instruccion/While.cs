@@ -5,32 +5,29 @@ using System.Text;
 
 namespace Proyecto1.Interprete.Instruccion
 {
-    class If : Instruccion
+    class While : Instruccion
     {
         private Expresion.Expresion valor;
         private LinkedList<Instruccion> instrucciones;
-        private Instruccion _else;
         List<Object> salida;
-        public If(Expresion.Expresion valor, LinkedList<Instruccion> instrucciones, Instruccion _else)
+        public While(Expresion.Expresion valor, LinkedList<Instruccion> instrucciones)
         {
             this.valor = valor;
             this.instrucciones = instrucciones;
-            this._else = _else;
             this.salida = new List<Object>();
         }
+
         public override object Ejecutar(TabladeSimbolos ts)
         {
             Simbolo valor = this.valor.Evaluar(ts);
-
-            //TODO verificar errores
             if (valor.Tipo.tipo != Tipos.BOOLEAN)
                 throw new Exception("El tipo no es booleano para el IF");
 
-            if (bool.Parse(valor.Value.ToString()))
+            while (bool.Parse(valor.Value.ToString())) 
             {
                 try
                 {
-                    foreach (var instruccion in instrucciones)
+                    foreach (var instruccion in this.instrucciones)
                     {
                         this.salida.Add(instruccion.Ejecutar(ts));
                     }
@@ -39,10 +36,6 @@ namespace Proyecto1.Interprete.Instruccion
                 {
                     Console.WriteLine(ex.ToString());
                 }
-            }
-            else
-            {
-                if (_else != null) this.salida.Add(_else.Ejecutar(ts));
             }
             return this.salida;
         }

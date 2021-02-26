@@ -11,7 +11,7 @@ namespace Proyecto1.Interprete.Expresion
         private char tipo;
         private object valor;
 
-        public Primitivo(char tipo, object valor)
+        public Primitivo(char tipo, Object valor)
         {
             this.tipo = tipo;
             this.valor = valor;
@@ -19,12 +19,32 @@ namespace Proyecto1.Interprete.Expresion
 
         public override Simbolo Evaluar(TabladeSimbolos ts)
         {
-            Simbolo primitivo = new Simbolo("primitivo", new Tipo(Tipos.INT, "integer"), 0, 0); ;
-            if (this.tipo == 'N')
+            Simbolo primitivo = null; 
+            switch(this.tipo)
             {
-                primitivo = new Simbolo("primitivo", new Tipo(Tipos.INT, "integer"), 0, 0);
+                case 'N':
+                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.INT, "integer"), 0, 0);
+                    primitivo.Value = this.valor;
+                    break;
+                case 'S':
+                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.STRING, "string"), 0, 0);
+                    string val = this.valor.ToString();
+                    val = val.Replace("'","");
+                    primitivo.Value = val;
+                    break;
+                case 'B':
+                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    primitivo.Value = this.valor;
+                    break;
+                case 'R':
+                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.REAL, "real"), 0, 0);
+                    primitivo.Value = this.valor;
+                    break;
+                case 'I':
+                    //primitivo = new Simbolo("primitivo", new Tipo(Tipos.VAR, "id"), 0, 0);
+                    primitivo = ts.getVariableValor(this.valor.ToString());
+                    break;
             }
-            primitivo.Value = this.valor;
             return primitivo;
         }
     }

@@ -8,7 +8,6 @@ namespace Proyecto1.Analisis
 {
     class Error
     {
-
         private String tipo;
         private String descripcion;
         private int linea;

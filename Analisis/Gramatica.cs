@@ -166,10 +166,10 @@ namespace Proyecto1.Analisis
                 = SyntaxError + PTCOMA;
 
             Types.Rule
-                = ID + IGUAL + OBJECT;
+                = ID + IGUAL + OBJECT + VAR + Declaraciones + END + PTCOMA;
 
             Arrays.Rule
-                = ID + IGUAL + ARRAY + COR1 + COR2;
+                = ID + IGUAL + ARRAY + COR1 + Expresion + PT + PT + Expresion + COR2 + ROF + Tipo + PTCOMA; 
 
             var_list.Rule
                 = MakeListRule(var_list, COM, ID);
@@ -224,7 +224,8 @@ namespace Proyecto1.Analisis
                 | S_Case;
 
             Llamada.Rule
-                = ID + PAR1 + PAR2 ;
+                = ID + PAR1 + exp_list + PAR2 
+                | ID + PAR1 + PAR2;
 
             Asignacion.Rule
                 = ID + ASIGN + Expresion;
@@ -252,7 +253,7 @@ namespace Proyecto1.Analisis
                 = RELSE + Sentencia;
 
             S_While.Rule
-                = RWHILE + PAR1 + Expresion + PAR2;
+                = RWHILE + PAR1 + Expresion + PAR2 + RDO + BEGIN + Sentencias + END ;
 
             S_WriteLn.Rule
                 = WRTLN + PAR1 + exp_list + PAR2 ;
@@ -285,7 +286,8 @@ namespace Proyecto1.Analisis
                 | ENTERO
                 | CADENA
                 | DECIMAL
-                | ID;
+                | ID
+                | Llamada;
 
             exp_list.Rule
                 = MakeListRule(exp_list, COM, Expresion);

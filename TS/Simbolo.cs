@@ -11,7 +11,6 @@ namespace Proyecto1.TS
     {
         private String id;
         private Tipo type;
-        private String scope;
         private int line, column;
         private Object value;
 

@@ -26,8 +26,8 @@ namespace Proyecto1.Interprete.Expresion
             Simbolo resultado;
             Tipos tipoResultante = TablaTipos.getTipo(izquierda.Tipo, derecha.Tipo);
 
-            if (tipoResultante != Tipos.INT && tipo != '+')
-                throw new Exception();
+            //if (tipoResultante != Tipos.INT && tipo != '+')
+              //  throw new Exception();
 
             switch (tipo)
             {
