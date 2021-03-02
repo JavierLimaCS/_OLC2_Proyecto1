@@ -55,8 +55,8 @@ namespace Proyecto1.Analisis
             }
             LinkedList<Instruccion> listaInstrucciones = instrucciones(raiz.ChildNodes[1]);
             LinkedList<Instruccion> listaSentencias = instrucciones(raiz.ChildNodes[3]);
-            //this.ejecutar(listaInstrucciones, global);
-            //this.ejecutar(listaSentencias, global);
+            this.ejecutar(listaInstrucciones, global);
+            this.ejecutar(listaSentencias, global);
             this.generarGrafo(raiz);
             for (int i = 0; i < salida.Count; i++) 
             {
@@ -128,8 +128,9 @@ namespace Proyecto1.Analisis
                     LinkedList<Declaracion> lista_decla = new LinkedList<Declaracion>();
                     foreach (var decla in actual.ChildNodes) 
                     {
-                        String tipo = decla.ChildNodes[1].ChildNodes[0].Token.Text;
+                        String tipov = decla.ChildNodes[1].ChildNodes[0].Token.Text;
                         String id = "";
+                        Tipo tipo_var = getTipo(tipov);
                         int l = decla.ChildNodes[0].ChildNodes[0].Token.Location.Line + 1;
                         int c = decla.ChildNodes[0].ChildNodes[0].Token.Location.Column + 1;
                         List<String> vars = new List<string>();
@@ -143,25 +144,58 @@ namespace Proyecto1.Analisis
                             id = variable.Token.Text;
                             vars.Add(id);
                         }
-                        Tipos new_type = Tipos.ERROR;
-                        switch (tipo) 
-                        {
-                            case "integer":
-                                new_type = Tipos.INT;
-                                break;
-                            case "decimal":
-                                new_type = Tipos.REAL;
-                                break;
-                            case "string":
-                                new_type = Tipos.STRING;
-                                break;
-                            case "boolean":
-                                new_type = Tipos.BOOLEAN;
-                                break;
-                        }
-                        lista_decla.AddLast(new Declaracion(new Tipo(new_type, tipo), vars, valor, l, c));
+                        
+                        lista_decla.AddLast(new Declaracion(tipo_var, vars, valor, l, c));
                     }
                     return new Declaraciones(lista_decla);
+                case "funcion":
+                    String tipo = actual.ChildNodes[2].ChildNodes[0].Token.Text;
+                    Tipo tipo_funct = getTipo(tipo);
+                    Simbolo_Funcion nuevafuncion = new Simbolo_Funcion(actual.ChildNodes[0].Token.Text, tipo_funct, actual.ChildNodes[0].Token.Location.Line + 1, actual.ChildNodes[0].Token.Location.Column + 1); ;
+                    if (actual.ChildNodes.Count > 5)
+                    {
+                        foreach (var args in actual.ChildNodes[1].ChildNodes)
+                        {
+                            int indice = 0;
+                            if (args.ChildNodes.Count > 2) indice = 1;
+                            string tipoparam = args.ChildNodes[indice + 1].ChildNodes[0].Token.Text;
+                            Tipo param_type = getTipo(tipoparam);
+                            Parametro parametro;
+                            int conta = 0;
+                            foreach (var param in args.ChildNodes[indice].ChildNodes)
+                            {
+                                parametro = new Parametro(param.Token.Text, param_type);
+                                nuevafuncion.Params.Add(conta, parametro);
+                            }
+                        }
+                    }
+                    return new Funcion(nuevafuncion, instrucciones(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[4]));
+
+                case "procedimiento":
+                    Simbolo_Funcion nuevo = new Simbolo_Funcion(actual.ChildNodes[0].Token.Text, null, actual.ChildNodes[0].Token.Location.Line+1, actual.ChildNodes[0].Token.Location.Column+1); ;
+                    int proc_index_inst = 1;
+                    int proc_index_sent = 3;
+                    if (actual.ChildNodes.Count > 5)
+                    {
+                        proc_index_inst = 2;
+                        proc_index_sent = 4;
+                        foreach(var args in actual.ChildNodes[1].ChildNodes) 
+                        {
+                            int indice = 0;
+                            if (args.ChildNodes.Count > 2) indice=1; 
+                            string tipoparam = args.ChildNodes[indice+1].ChildNodes[0].Token.Text;
+                            Tipo param_type = getTipo(tipoparam);
+                            Parametro parametro;
+                            int cont = 0;
+                            foreach (var param in args.ChildNodes[indice].ChildNodes) 
+                            {
+                                parametro = new Parametro(param.Token.Text, param_type);
+                                nuevo.Params.Add(cont, parametro);
+                                cont++;
+                            }
+                        }
+                    }
+                    return new Procedimiento(nuevo, instrucciones(actual.ChildNodes[proc_index_inst]), instrucciones(actual.ChildNodes[proc_index_sent]));
                 case "asignacion":
                     return new Asignacion(actual.ChildNodes[0].Token.Text, expresion(actual.ChildNodes[1]));
                 case "llamada":
@@ -212,6 +246,27 @@ namespace Proyecto1.Analisis
                     {
                         return new Else(instrucciones(actual.ChildNodes[2]));
                     }
+                case "type":
+                    String id_objeto = actual.ChildNodes[0].Token.Text;
+                    Objeto objeto = new Objeto(id_objeto, null);
+                    List<Atributo> attrs = new List<Atributo>();
+                    ParseTreeNode var_list = actual.ChildNodes[3];
+                    foreach(var variable in var_list.ChildNodes)
+                    {
+                        String attr_tipo = variable.ChildNodes[1].Token.Text;
+                        Tipo obj_tipo = getTipo(attr_tipo);
+                       
+                        foreach (var vars in variable.ChildNodes[0].ChildNodes) 
+                        {
+                            Atributo attr_nuevo = new Atributo(vars.Token.Text, obj_tipo, null);
+                            attrs.Add(attr_nuevo);
+                        }
+                    }
+                    objeto.Attribs = attrs;
+                    return new DeclaObjeto(id_objeto, objeto);
+
+                case "case":
+                    break;
             }
             return null;
         }
@@ -269,6 +324,7 @@ namespace Proyecto1.Analisis
                 
             }
         }
+
         public LinkedList<Instruccion> instrucciones(ParseTreeNode actual)
         {
             LinkedList<Instruccion> listaInstrucciones = new LinkedList<Instruccion>();
@@ -337,6 +393,21 @@ namespace Proyecto1.Analisis
                 outputFile.WriteLine(errores);
             }
         }
-
+        public Tipo getTipo(String op)
+        {
+            switch (op)
+            {
+                case "integer":
+                    return new Tipo(Tipos.INT, "integer");
+                case "real":
+                    return new Tipo(Tipos.REAL, "real");
+                case "string":
+                    return new Tipo(Tipos.STRING, "string");
+                case "boolean":
+                    return new Tipo(Tipos.BOOLEAN, "boolean");
+                default:
+                    return null;
+            }
+        }
     }
 }

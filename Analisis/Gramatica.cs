@@ -145,7 +145,6 @@ namespace Proyecto1.Analisis
                 | TYPE + Types
                 | TYPE + Arrays;
 
-
             Declaraciones.Rule
                 = MakePlusRule(Declaraciones, Declaracion);
 
@@ -178,7 +177,8 @@ namespace Proyecto1.Analisis
                 = TINT
                 | TSTRING
                 | TREAL
-                | TBOOL;
+                | TBOOL
+                | ID;
 
             Funcion.Rule
                 = FUNCT + ID + PAR1 + arguments_list + PAR2 + BIPUNTO + Tipo + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA
@@ -188,7 +188,7 @@ namespace Proyecto1.Analisis
             Procedimiento.Rule
                 = PROC + ID + PAR1 + arguments_list + PAR2 + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA
                 | PROC + ID + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA;
-
+ 
             arguments_list.Rule
                 = MakeListRule(arguments_list, PTCOMA, Argumento);
 
@@ -302,7 +302,7 @@ namespace Proyecto1.Analisis
 
             #region Eliminacion
             this.MarkPunctuation(PTCOMA, BIPUNTO, PT,PAR1, PAR2,  IGUAL, ASIGN);
-            this.MarkPunctuation(PROG, VAR, CONST, FUNCT, PROC);
+            this.MarkPunctuation(PROG, CONST, FUNCT, PROC);
             this.MarkTransient(Instruccion, Sentencia);
             
             #endregion

@@ -22,7 +22,7 @@ namespace Proyecto1.Interprete.Instruccion
             {
                 System.Diagnostics.Debug.WriteLine("Exito");
             }
-            return null;
+            return valor;
         }
     }
 }

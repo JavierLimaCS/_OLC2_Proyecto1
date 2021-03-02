@@ -41,7 +41,6 @@ namespace Proyecto1.Interprete.Expresion
                     primitivo.Value = this.valor;
                     break;
                 case 'I':
-                    //primitivo = new Simbolo("primitivo", new Tipo(Tipos.VAR, "id"), 0, 0);
                     primitivo = ts.getVariableValor(this.valor.ToString());
                     break;
             }

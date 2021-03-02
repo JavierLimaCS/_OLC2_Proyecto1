@@ -7,18 +7,21 @@ namespace Proyecto1.TS
 {
     class Simbolo_Funcion : Simbolo
     {
-        private LinkedList<Simbolo> listaParametros;
         private LinkedList<Instruccion> listaInstruccions;
         private LinkedList<Instruccion> listaSentencias;
+        private Dictionary<int,Parametro> param;
         public Simbolo_Funcion(string n, Tipo ty, int l, int c) : base(n, ty, l, c)
         {
             this.Id = n;
             this.Tipo = ty;
             this.Linea = l;
             this.Columna = c;
+            this.listaInstruccions = new LinkedList<Instruccion>();
+            this.listaSentencias = new LinkedList<Instruccion>();
+            this.param = new Dictionary<int, Parametro>();
         }
 
-        public LinkedList<Simbolo> Params { get => listaParametros; set => listaParametros = value; }
+        public Dictionary<int,Parametro> Params { get => param; set => param = value; }
         public LinkedList<Instruccion> listaInst { get => listaInstruccions; set => listaInstruccions = value; }
         public LinkedList<Instruccion> listaSent { get => listaSentencias; set => listaSentencias = value; }
 

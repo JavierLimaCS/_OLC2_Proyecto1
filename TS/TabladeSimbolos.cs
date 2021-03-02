@@ -13,14 +13,14 @@ namespace Proyecto1.TS
         String alias;
         Dictionary<string, Simbolo> variables;
         Dictionary<string, Simbolo_Funcion> funciones;
-        Dictionary<string, object> types;
+        Dictionary<string, Objeto> types;
         public TabladeSimbolos(TabladeSimbolos padre, String alias)
         {
             this.padre = padre;
             this.alias = alias;
             this.variables = new Dictionary<string, Simbolo>();
             this.funciones = new Dictionary<string, Simbolo_Funcion>();
-            this.types = new Dictionary<string, object>();
+            this.types = new Dictionary<string, Objeto>();
         }
 
         public Simbolo getVariableValor(String id)
@@ -46,6 +46,8 @@ namespace Proyecto1.TS
             };
             return null;
         }
+
+
 
         public bool setVariableValor(String id, object valor) 
         {
@@ -83,6 +85,18 @@ namespace Proyecto1.TS
             else
             {
                 throw new Exception("La funcion " + id + " ya existe en este ambito");
+            }
+        }
+
+        public void declararObjeto(string id, Objeto objeto)
+        {
+            if (!this.types.ContainsKey(id))
+            {
+                this.types.Add(id, objeto);
+            }
+            else
+            {
+                throw new Exception("El objeto " + id + " ya existe en este ambito.");
             }
         }
 

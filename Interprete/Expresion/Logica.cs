@@ -23,7 +23,39 @@ namespace Proyecto1.Interprete.Expresion
         {
             Simbolo izquierda = this.izquierda.Evaluar(ts);
             Simbolo derecha = this.derecha.Evaluar(ts);
-            return izquierda;
+            Simbolo resultado;
+            Tipos tipoResultante = TablaTipos.getTipo(izquierda.Tipo, derecha.Tipo);
+
+            //if (tipoResultante != Tipos.INT && tipo != '+')
+            //  throw new Exception();
+
+            switch (op)
+            {
+                case '>':
+                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) > int.Parse(derecha.Value.ToString());
+                    return resultado;
+                case '<':
+                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) < int.Parse(derecha.Value.ToString());
+                    return resultado;
+                case '!':
+                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) != int.Parse(derecha.Value.ToString());
+                    return resultado;
+                case 'm':
+                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) >= int.Parse(derecha.Value.ToString());
+                    return resultado;
+                case 'i':
+                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) <= int.Parse(derecha.Value.ToString());
+                    return resultado;
+                default:
+                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    resultado.Value = int.Parse(izquierda.Value.ToString()) == int.Parse(derecha.Value.ToString());
+                    return resultado;
+            }
         }
     }
 }

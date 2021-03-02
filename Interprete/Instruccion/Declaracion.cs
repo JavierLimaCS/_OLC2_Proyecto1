@@ -29,10 +29,29 @@ namespace Proyecto1.Interprete.Instruccion
             {
                 nuevo = new Simbolo(variable, tipo_variable, this.line, this.col);
                 ids += " |" + variable +"| ";
-                if (this.value != null) 
+                if (this.value != null)
                 {
                     valor = this.value.Evaluar(TS).Value;
                     nuevo.Value = valor;
+                }
+                else 
+                {
+                    String tipo = this.type.tipoAuxiliar;
+                    switch (tipo) 
+                    {
+                        case "integer":
+                            nuevo.Value = 0;
+                            break;
+                        case "string":
+                            nuevo.Value = "";
+                            break;
+                        case "real":
+                            nuevo.Value = 0.0;
+                            break;
+                        case "boolean":
+                            nuevo.Value = false;
+                            break;
+                    }
                 }
                 TS.declararVariable(variable, nuevo);
             }
