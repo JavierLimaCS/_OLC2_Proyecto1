@@ -115,6 +115,7 @@ namespace Proyecto1.Analisis
             NonTerminal S_Else = new NonTerminal("Else");
             NonTerminal S_Else2 = new NonTerminal("Else");
             NonTerminal S_For = new NonTerminal("For");
+            NonTerminal Cuerpo_For = new NonTerminal("inst_for");
             NonTerminal S_While = new NonTerminal("While");
             NonTerminal S_Write = new NonTerminal("Write");
             NonTerminal S_WriteLn = new NonTerminal("WriteLn");
@@ -238,7 +239,11 @@ namespace Proyecto1.Analisis
                 = MakeStarRule(S_Else, RELSE + Sentencia2);
 
             S_For.Rule
-                = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Sentencias;
+                = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Cuerpo_For;
+
+            Cuerpo_For.Rule
+                = BEGIN + Sentencias + END
+                | Sentencia2;
 
             S_Case.Rule 
                 = RCASE + PAR1 + Expresion + PAR2 + ROF + case_list + PTCOMA + S_Else2 + END;
@@ -247,10 +252,12 @@ namespace Proyecto1.Analisis
                 = MakeListRule(case_list, PTCOMA ,Caso);
 
             Caso.Rule
-                = exp_list + BIPUNTO + Sentencia2;
+                = exp_list + BIPUNTO + Sentencia2
+                | exp_list + BIPUNTO + BEGIN + Sentencias + END ;
 
             S_Else2.Rule
-                = RELSE + Sentencia;
+                = RELSE + Sentencia
+                | Empty;
 
             S_While.Rule
                 = RWHILE + PAR1 + Expresion + PAR2 + RDO + BEGIN + Sentencias + END ;
@@ -302,7 +309,7 @@ namespace Proyecto1.Analisis
 
             #region Eliminacion
             this.MarkPunctuation(PTCOMA, BIPUNTO, PT,PAR1, PAR2,  IGUAL, ASIGN);
-            this.MarkPunctuation(PROG, CONST, FUNCT, PROC);
+            this.MarkPunctuation(PROG, CONST, FUNCT, PROC, ROF, RFOR, RTO);
             this.MarkTransient(Instruccion, Sentencia);
             
             #endregion

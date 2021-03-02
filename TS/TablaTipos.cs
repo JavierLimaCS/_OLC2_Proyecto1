@@ -6,9 +6,11 @@ namespace Proyecto1.TS
 {
     class TablaTipos
     {
-        public static Tipos[,] tipos = new Tipos[2, 2] {
-            { Tipos.INT, Tipos.ERROR },
-            { Tipos.ERROR, Tipos.BOOLEAN }
+        public static Tipos[,] tipos = new Tipos[4, 4] {
+            { Tipos.INT,    Tipos.ERROR,    Tipos.ERROR,    Tipos.ERROR},
+            { Tipos.ERROR,  Tipos.BOOLEAN,  Tipos.ERROR,    Tipos.ERROR},
+            { Tipos.ERROR,  Tipos.ERROR,    Tipos.STRING,   Tipos.ERROR},
+            { Tipos.ERROR,  Tipos.ERROR,    Tipos.ERROR,    Tipos.REAL}
         };
 
         public static Tipos getTipo(Tipo izquierda, Tipo derecha)

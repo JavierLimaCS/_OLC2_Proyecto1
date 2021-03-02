@@ -264,9 +264,21 @@ namespace Proyecto1.Analisis
                     }
                     objeto.Attribs = attrs;
                     return new DeclaObjeto(id_objeto, objeto);
-
                 case "case":
-                    break;
+                    List<Caso> casos = new List<Caso>();
+                    foreach (var casito in actual.ChildNodes[2].ChildNodes) {
+                        Caso caso_nuevo;
+                        List<Expresion> exps = new List<Expresion>();
+                        int index_casos = 1;
+                        foreach (var conds in casito.ChildNodes[0].ChildNodes) 
+                        {
+                            exps.Add(expresion(conds));
+                        }
+                        if (casito.ChildNodes.Count > 2) index_casos = 2;
+                        caso_nuevo = new Caso(exps, instrucciones(casito.ChildNodes[index_casos]));
+                        casos.Add(caso_nuevo);
+                    }
+                    return new Case(expresion(actual.ChildNodes[1]), casos);
             }
             return null;
         }
@@ -286,8 +298,8 @@ namespace Proyecto1.Analisis
                         return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '*');
                     case "/":
                         return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '/');
-                    case "=":
-                        return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '=');
+                    case "%":
+                        return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '%');
                     case "<>":
                         return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '!');
                     case ">":
@@ -299,7 +311,7 @@ namespace Proyecto1.Analisis
                     case "<=":
                         return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), 'i');
                     default:
-                        return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '%');
+                        return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '=');
                 }
             }
             else

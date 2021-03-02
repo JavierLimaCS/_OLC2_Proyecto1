@@ -32,7 +32,18 @@ namespace Proyecto1.Interprete.Instruccion
                 {
                     foreach (var instruccion in instrucciones)
                     {
-                        this.salida.Add(instruccion.Ejecutar(ts));
+                        if (instruccion != null)
+                        {
+                            Object output = instruccion.Ejecutar(ts);
+                            if (output is List<Object>)
+                            {
+                                this.salida.AddRange((List<Object>)output);
+                            }
+                            else
+                            {
+                                this.salida.Add(output);
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
