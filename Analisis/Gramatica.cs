@@ -115,7 +115,7 @@ namespace Proyecto1.Analisis
             NonTerminal S_Else = new NonTerminal("Else");
             NonTerminal S_Else2 = new NonTerminal("Else");
             NonTerminal S_For = new NonTerminal("For");
-            NonTerminal Cuerpo_For = new NonTerminal("inst_for");
+            NonTerminal Cuerpo_Sentencias = new NonTerminal("body_sent");
             NonTerminal S_While = new NonTerminal("While");
             NonTerminal S_Write = new NonTerminal("Write");
             NonTerminal S_WriteLn = new NonTerminal("WriteLn");
@@ -239,9 +239,9 @@ namespace Proyecto1.Analisis
                 = MakeStarRule(S_Else, RELSE + Sentencia2);
 
             S_For.Rule
-                = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Cuerpo_For;
+                = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Cuerpo_Sentencias;
 
-            Cuerpo_For.Rule
+            Cuerpo_Sentencias.Rule
                 = BEGIN + Sentencias + END
                 | Sentencia2;
 
@@ -260,7 +260,7 @@ namespace Proyecto1.Analisis
                 | Empty;
 
             S_While.Rule
-                = RWHILE + PAR1 + Expresion + PAR2 + RDO + BEGIN + Sentencias + END ;
+                = RWHILE + PAR1 + Expresion + PAR2 + RDO + Cuerpo_Sentencias;
 
             S_WriteLn.Rule
                 = WRTLN + PAR1 + exp_list + PAR2 ;

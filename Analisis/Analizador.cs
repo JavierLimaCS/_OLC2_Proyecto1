@@ -169,6 +169,7 @@ namespace Proyecto1.Analisis
                             }
                         }
                     }
+                    nuevafuncion.Tipo = tipo_funct;
                     return new Funcion(nuevafuncion, instrucciones(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[4]));
 
                 case "procedimiento":
@@ -213,7 +214,9 @@ namespace Proyecto1.Analisis
                         return new Llamada(actual.ChildNodes[0].Token.Text, list);
                     }
                 case "while":
-                    return new While(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[4])); ; 
+                    int indice_while = 0;
+                    if (actual.ChildNodes[3].ChildNodes.Count == 3) indice_while = 1;
+                    return new While(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[3].ChildNodes[indice_while])); ; 
                 case "if":
                     if (actual.ChildNodes.Count == 6)
                     {
@@ -279,6 +282,11 @@ namespace Proyecto1.Analisis
                         casos.Add(caso_nuevo);
                     }
                     return new Case(expresion(actual.ChildNodes[1]), casos);
+                case "for":
+                    int indice_for = 0;
+                    if (actual.ChildNodes[4].ChildNodes.Count == 3) indice_for = 1;
+                    String id_for = actual.ChildNodes[0].Token.Text;
+                    return new For(id_for, expresion(actual.ChildNodes[1]), expresion(actual.ChildNodes[2]), instrucciones(actual.ChildNodes[4].ChildNodes[indice_for]));
             }
             return null;
         }
@@ -331,6 +339,8 @@ namespace Proyecto1.Analisis
                     case "true":
                     case "false":
                         return new Primitivo('B', actual.ChildNodes[0].Token.Text);
+                    case "llamada":
+                        return new Primitivo('L', actual.ChildNodes[0].Token.Text);
                 }
                 return null;
                 

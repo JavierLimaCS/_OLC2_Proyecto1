@@ -43,6 +43,8 @@ namespace Proyecto1.Interprete.Expresion
                 case 'I':
                     primitivo = ts.getVariableValor(this.valor.ToString());
                     break;
+                case 'L':
+                    return null;
             }
             return primitivo;
         }
