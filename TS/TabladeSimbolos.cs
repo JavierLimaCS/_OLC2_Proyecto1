@@ -64,6 +64,21 @@ namespace Proyecto1.TS
             return false;
         }
 
+        public bool setFuncionValor(String id, object valor)
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.funciones.ContainsKey(id))
+                {
+                    actual.funciones[id].Value = valor;
+                    return true;
+                }
+                actual = actual.padre;
+            };
+            return false;
+        }
+
         public void declararVariable(string id, Simbolo variable)
         {
             if (!this.variables.ContainsKey(id))

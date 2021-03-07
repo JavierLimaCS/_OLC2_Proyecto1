@@ -7,20 +7,31 @@ namespace Proyecto1.Interprete.Instruccion
 {
     class Else : Instruccion
     {
-        private Instruccion sentencia;
         private LinkedList<Instruccion> sentencias;
-        public Else(Instruccion sentencia) 
-        {
-            this.sentencia = sentencia;
-        }
-
+        List<Object> salida;
         public Else(LinkedList<Instruccion> sentencias)
         {
             this.sentencias = sentencias;
+            this.salida = new List<object>();
         }
         public override object Ejecutar(TabladeSimbolos ts)
         {
-            throw new NotImplementedException();
+            foreach (var instruccion in sentencias)
+            {
+                if (instruccion != null)
+                {
+                    Object output = instruccion.Ejecutar(ts);
+                    if (output is List<Object>)
+                    {
+                        this.salida.AddRange((List<Object>)output);
+                    }
+                    else
+                    {
+                        this.salida.Add(output);
+                    }
+                }
+            }
+            return this.salida;
         }
     }
 }

@@ -166,11 +166,12 @@ namespace Proyecto1.Analisis
                             {
                                 parametro = new Parametro(param.Token.Text, param_type);
                                 nuevafuncion.Params.Add(conta, parametro);
+                                conta++;
                             }
                         }
                     }
                     nuevafuncion.Tipo = tipo_funct;
-                    return new Funcion(nuevafuncion, instrucciones(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[4]));
+                    return new Funcion(nuevafuncion, instrucciones(actual.ChildNodes[3]), instrucciones(actual.ChildNodes[5]));
 
                 case "procedimiento":
                     Simbolo_Funcion nuevo = new Simbolo_Funcion(actual.ChildNodes[0].Token.Text, null, actual.ChildNodes[0].Token.Location.Line+1, actual.ChildNodes[0].Token.Location.Column+1); ;
@@ -220,35 +221,31 @@ namespace Proyecto1.Analisis
                 case "if":
                     if (actual.ChildNodes.Count == 6)
                     {
-                        if (actual.ChildNodes[4].ChildNodes.Count > 0)
+                        Else elsito = null;
+                        if (actual.ChildNodes[5].ChildNodes.Count > 0)
                         {
-                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[4]), instruccion(actual.ChildNodes[4]));
+                            elsito = new Else(instrucciones(actual.ChildNodes[5]));
+                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[3]), elsito);
                         }
                         else
                         {
-                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[4]), null);
+                            elsito = new Else(instrucciones(actual.ChildNodes[5]));
+                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[3]), elsito);
                         }
                     }
                     else 
                     {
-                        if (actual.ChildNodes[4].ChildNodes.Count > 0)
+                        if (actual.ChildNodes[3].ChildNodes.Count == 1)
                         {
-                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[3]), instruccion(actual.ChildNodes[4]));
+                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[3].ChildNodes[0]), null);
                         }
                         else
                         {
-                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[3]), null);
+                            return new If(expresion(actual.ChildNodes[1]), instrucciones(actual.ChildNodes[3].ChildNodes[1]), null);
                         }
                     }
                 case "else":
-                    if (actual.ChildNodes.Count == 1)
-                    {
-                        return new Else(instruccion(actual.ChildNodes[1]));
-                    }
-                    else
-                    {
-                        return new Else(instrucciones(actual.ChildNodes[2]));
-                    }
+                    return new Else(instrucciones(actual.ChildNodes[1]));
                 case "type":
                     String id_objeto = actual.ChildNodes[0].Token.Text;
                     Objeto objeto = new Objeto(id_objeto, null);
@@ -340,7 +337,7 @@ namespace Proyecto1.Analisis
                     case "false":
                         return new Primitivo('B', actual.ChildNodes[0].Token.Text);
                     case "llamada":
-                        return new Primitivo('L', actual.ChildNodes[0].Token.Text);
+                        return new Primitivo('L', instruccion(actual.ChildNodes[0]));
                 }
                 return null;
                 

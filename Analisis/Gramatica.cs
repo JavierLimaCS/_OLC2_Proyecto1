@@ -232,11 +232,11 @@ namespace Proyecto1.Analisis
                 = ID + ASIGN + Expresion;
 
             S_If.Rule
-                = RIF + PAR1 + Expresion + PAR2 + RTHEN + Sentencia2 + S_Else
-                | RIF + PAR1 + Expresion + PAR2 + RTHEN +BEGIN + Sentencias + END ;
+                = RIF + PAR1 + Expresion + PAR2 + RTHEN + Sentencia2 + RELSE + Sentencia2
+                | RIF + PAR1 + Expresion + PAR2 + RTHEN + Cuerpo_Sentencias + S_Else;
 
             S_Else.Rule
-                = MakeStarRule(S_Else, RELSE + Sentencia2);
+                = MakeStarRule(S_Else, RELSE + Cuerpo_Sentencias);
 
             S_For.Rule
                 = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Cuerpo_Sentencias;

@@ -1,4 +1,5 @@
-﻿using Proyecto1.TS;
+﻿using Proyecto1.Interprete.Expresion;
+using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,9 +8,9 @@ namespace Proyecto1.Interprete.Instruccion
 {
     class Llamada : Instruccion
     {
-        private String id;
+        public String id;
         private List<Expresion.Expresion> exp_list;
-        private object retorno;
+        public object retorno;
         List<Object> salida;
         public Llamada(String id, List<Expresion.Expresion> exp_list) 
         {
@@ -61,7 +62,8 @@ namespace Proyecto1.Interprete.Instruccion
                     }
                     if (sent is Asignacion) 
                     {
-                        retorno = sent.Ejecutar(ts_funcion);
+                        Asignacion posible_return = (Asignacion)sent;
+                        if(posible_return.id == this.id) retorno = sent.Ejecutar(ts_funcion);
                     }
                 }
             }

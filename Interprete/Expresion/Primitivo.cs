@@ -1,4 +1,5 @@
-﻿using Proyecto1.TS;
+﻿using Proyecto1.Interprete.Instruccion;
+using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,8 +9,8 @@ namespace Proyecto1.Interprete.Expresion
     class Primitivo : Expresion
     {
 
-        private char tipo;
-        private object valor;
+        public char tipo;
+        public object valor;
 
         public Primitivo(char tipo, Object valor)
         {
@@ -44,7 +45,20 @@ namespace Proyecto1.Interprete.Expresion
                     primitivo = ts.getVariableValor(this.valor.ToString());
                     break;
                 case 'L':
-                    return null;
+                    Simbolo_Funcion funct = null;
+                    List<object> salida = new List<object>(); 
+                    if (valor is Llamada) 
+                    {
+                        object output;
+                        Llamada llamadita = (Llamada)valor;
+                        output = llamadita.Ejecutar(ts);
+                        salida = (List<object>)output;
+                        int index = salida.Count - 1;
+                        funct = ts.getFuncion(llamadita.id);
+                        Simbolo_Funcion ex = (Simbolo_Funcion)salida[index];
+                        funct.Value = ex.Value;
+                    }
+                    return funct;
             }
             return primitivo;
         }

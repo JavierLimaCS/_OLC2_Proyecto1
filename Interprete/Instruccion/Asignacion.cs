@@ -7,7 +7,7 @@ namespace Proyecto1.Interprete.Instruccion
 {
     class Asignacion : Instruccion
     {
-        String id;
+        public String id;
         Expresion.Expresion valor;
         public Asignacion(String id, Expresion.Expresion val) 
         {
@@ -18,9 +18,14 @@ namespace Proyecto1.Interprete.Instruccion
         {
             object nuevo_valor = this.valor.Evaluar(ts).Value;
             bool updated = ts.setVariableValor(this.id, nuevo_valor);
-            if (updated) 
+            if (updated)
             {
-                System.Diagnostics.Debug.WriteLine("Exito");
+                return ts.getVariableValor(this.id);
+            }
+            else
+            {
+                updated = ts.setFuncionValor(this.id, nuevo_valor);
+                if (updated) return ts.getFuncion(this.id);
             }
             return valor;
         }
