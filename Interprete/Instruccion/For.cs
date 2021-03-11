@@ -25,24 +25,29 @@ namespace Proyecto1.Interprete.Instruccion
         {
             int init = int.Parse(this.inicio.Evaluar(ts).Value.ToString());
             int end = int.Parse(this.final.Evaluar(ts).Value.ToString());
-            for (int i = init; i <= end; i++) 
+            foreach (var inst in this.instruccions)
             {
-                foreach (var inst in this.instruccions) 
+                if (init == end) break;
+                ts.setVariableValor(this.id, init);
+                Object output = inst.Ejecutar(ts);
+                if (output is List<Object>)
                 {
-                    if (init == end) break;
-                    ts.setVariableValor(this.id, i);
-                    Object output = inst.Ejecutar(ts);
-                    if (output is List<Object>)
-                    {
-                        this.salida.AddRange((List<Object>)output);
-                    }
-                    else
-                    {
-                        this.salida.Add(output);
-                    }
+                    this.salida.AddRange((List<Object>)output);
                 }
+                else if (output is Break)
+                {
+                    return salida;
+                }
+                else if (output is Continue) 
+                {
+                    init++;
+                }
+                else
+                {
+                    this.salida.Add(output);
+                }
+                init++;
             }
-
             return salida;
         }
     }

@@ -14,7 +14,7 @@ namespace Proyecto1.Analisis
             #region Expresiones Regulares
             IdentifierTerminal ID = TerminalFactory.CreateCSharpIdentifier("Id");
             NumberLiteral ENTERO = new NumberLiteral("Entero");
-            RegexBasedTerminal DECIMAL = new RegexBasedTerminal("Decimal", "[0-9]+'.'[0-9]+");
+            RegexBasedTerminal DECIMAL = new RegexBasedTerminal("Decimal", "[0-9]+[.][0-9]+");
             StringLiteral CADENA = new StringLiteral("Cadena");
             CADENA.AddStartEnd("\'", StringOptions.NoEscapes);
             #endregion
@@ -114,6 +114,7 @@ namespace Proyecto1.Analisis
             NonTerminal S_If = new NonTerminal("If");
             NonTerminal S_Else = new NonTerminal("Else");
             NonTerminal S_Else2 = new NonTerminal("Else");
+            NonTerminal S_Elif = new NonTerminal("Elif");
             NonTerminal S_For = new NonTerminal("For");
             NonTerminal Cuerpo_Sentencias = new NonTerminal("body_sent");
             NonTerminal S_While = new NonTerminal("While");
@@ -122,6 +123,7 @@ namespace Proyecto1.Analisis
             NonTerminal S_Graficar = new NonTerminal("Graficar");
             NonTerminal S_Exit = new NonTerminal("Exit");
             NonTerminal S_Case = new NonTerminal("Case");
+            NonTerminal S_Repeat = new NonTerminal("Repeat");
             NonTerminal case_list = new NonTerminal("case_list");
             NonTerminal Caso = new NonTerminal("Caso");
             NonTerminal exp_list = new NonTerminal("exp_list");
@@ -211,7 +213,10 @@ namespace Proyecto1.Analisis
                 | S_Write + PTCOMA
                 | S_Exit + PTCOMA
                 | S_Graficar + PTCOMA
-                | S_Case + PTCOMA;
+                | S_Case + PTCOMA
+                | S_Repeat + PTCOMA
+                | RBREAK + PTCOMA
+                | RCONTINUE + PTCOMA;
 
             Sentencia2.Rule
                 = Llamada
@@ -224,7 +229,9 @@ namespace Proyecto1.Analisis
                 | S_Exit
                 | S_Graficar
                 | S_Case
-                ;
+                | S_Repeat
+                | RBREAK
+                | RCONTINUE;
 
             accessArr.Rule
                 =  ID + COR1 + Expresion + COR2;
@@ -242,11 +249,15 @@ namespace Proyecto1.Analisis
                 | ID + COR1 + Expresion + COR1 + ASIGN + Expresion;
 
             S_If.Rule
-                = RIF + PAR1 + Expresion + PAR2 + RTHEN + Sentencia2 + RELSE + Sentencia2
-                | RIF + PAR1 + Expresion + PAR2 + RTHEN + Cuerpo_Sentencias + S_Else;
+                = RIF + Expresion + RTHEN + Sentencia2 + RELSE + Sentencia2
+                | RIF + Expresion + RTHEN + Cuerpo_Sentencias + S_Else
+                | RIF + Expresion + RTHEN + Cuerpo_Sentencias + S_Elif + S_Else;
 
             S_Else.Rule
                 = MakeStarRule(S_Else, RELSE + Cuerpo_Sentencias);
+
+            S_Elif.Rule
+                = MakeStarRule(S_Elif, RELSE + RIF + Expresion + RTHEN + Cuerpo_Sentencias);
 
             S_For.Rule
                 = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Cuerpo_Sentencias;
@@ -256,7 +267,7 @@ namespace Proyecto1.Analisis
                 | Sentencia2;
 
             S_Case.Rule 
-                = RCASE + PAR1 + Expresion + PAR2 + ROF + case_list + PTCOMA + S_Else2 + END;
+                = RCASE + Expresion + ROF + case_list + PTCOMA + S_Else2 + END;
 
             case_list.Rule
                 = MakeListRule(case_list, PTCOMA ,Caso);
@@ -270,7 +281,10 @@ namespace Proyecto1.Analisis
                 | Empty;
 
             S_While.Rule
-                = RWHILE + PAR1 + Expresion + PAR2 + RDO + Cuerpo_Sentencias;
+                = RWHILE + Expresion + RDO + Cuerpo_Sentencias;
+
+            S_Repeat.Rule
+                =RREPEAT + Sentencias + RUNTIL + Expresion;
 
             S_WriteLn.Rule
                 = WRTLN + PAR1 + exp_list + PAR2 ;

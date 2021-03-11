@@ -35,6 +35,10 @@ namespace Proyecto1.Interprete.Instruccion
                                 {
                                     this.salida.AddRange((List<Object>)output);
                                 }
+                                else if (output is Break)
+                                {
+                                    return salida;
+                                }
                                 else
                                 {
                                     this.salida.Add(output);

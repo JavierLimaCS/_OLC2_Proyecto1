@@ -53,7 +53,6 @@ namespace Proyecto1.Interprete.Instruccion
                             break;
                         default:
                             nuevo.Value = TS.getObjeto(this.type.tipoAuxiliar);
-                            System.Diagnostics.Debug.WriteLine(this.type.tipoAuxiliar);
                             break;
                     }
                 }

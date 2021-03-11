@@ -58,6 +58,7 @@ namespace Proyecto1.Analisis
             this.ejecutar(listaInstrucciones, global);
             this.ejecutar(listaSentencias, global);
             this.generarGrafo(raiz);
+            this.global.generarTS();
             for (int i = 0; i < salida.Count; i++) 
             {
                 if (salida.ElementAt(i) is String) 
@@ -300,6 +301,10 @@ namespace Proyecto1.Analisis
                     if (actual.ChildNodes[4].ChildNodes.Count == 3) indice_for = 1;
                     String id_for = actual.ChildNodes[0].Token.Text;
                     return new For(id_for, expresion(actual.ChildNodes[1]), expresion(actual.ChildNodes[2]), instrucciones(actual.ChildNodes[4].ChildNodes[indice_for]));
+                case "break":
+                    return new Break();
+                case "continue":
+                    return new Continue();
             }
             return null;
         }

@@ -75,6 +75,28 @@ namespace Proyecto1.TS
             return false;
         }
 
+        public bool setAttrValor(String id, String atr, object valor)
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.variables.ContainsKey(id))
+                {
+                    Objeto objt = (Objeto)actual.variables[id].Value;
+                    foreach (var ats in objt.Attribs) 
+                    {
+                        if (ats.Id == atr) 
+                        {
+                            ats.Value = valor;
+                            return true;
+                        }
+                    }
+                }
+                actual = actual.padre;
+            };
+            return false;
+        }
+
         public bool setFuncionValor(String id, object valor)
         {
             TabladeSimbolos actual = this;

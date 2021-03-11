@@ -16,8 +16,17 @@ namespace Proyecto1.Interprete.Instruccion
         }
         public override object Ejecutar(TabladeSimbolos ts) 
         {
+            bool updated = false;
             object nuevo_valor = this.valor.Evaluar(ts).Value;
-            bool updated = ts.setVariableValor(this.id, nuevo_valor);
+            if (this.id.Contains("."))
+            {
+                string[] obj = this.id.Split('.');
+                updated = ts.setAttrValor(obj[0], obj[1], nuevo_valor);
+            }
+            else 
+            {
+                updated = ts.setVariableValor(this.id, nuevo_valor);
+            }
             if (updated)
             {
                 return ts.getVariableValor(this.id);

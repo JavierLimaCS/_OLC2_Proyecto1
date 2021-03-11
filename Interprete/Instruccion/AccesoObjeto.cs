@@ -16,13 +16,22 @@ namespace Proyecto1.Interprete.Instruccion
         }
         public override object Ejecutar(TabladeSimbolos ts)
         {
+            string error = "";
             Simbolo variable = ts.getVariableValor(this.var_id);
-            Objeto var_objeto = (Objeto)variable.Value;
-            foreach (var atrs in var_objeto.Attribs) 
+            Objeto var_objeto = null;
+            if (variable.Value != null)
             {
-                if (atrs.Id == this.var_obj_attr) return atrs.Value;
+                var_objeto = (Objeto)variable.Value;
+                foreach (var atrs in var_objeto.Attribs)
+                {
+                    if (atrs.Id == this.var_obj_attr) return atrs;
+                }
             }
-            return null;
+            else 
+            {
+                
+            }
+            return "ERROR:" ;
         }
     }
 }

@@ -44,6 +44,14 @@ namespace Proyecto1.Interprete.Expresion
                 case 'I':
                     primitivo = ts.getVariableValor(this.valor.ToString());
                     break;
+                case 'O':
+                    if (this.valor is AccesoObjeto) 
+                    {
+                        AccesoObjeto tmp = (AccesoObjeto)this.valor;
+                        object new_valor = tmp.Ejecutar(ts);
+                        primitivo = (Simbolo)new_valor;
+                    }
+                    break;
                 case 'L':
                     Simbolo_Funcion funct = null;
                     List<object> salida = new List<object>(); 
