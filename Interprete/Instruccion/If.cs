@@ -22,7 +22,6 @@ namespace Proyecto1.Interprete.Instruccion
         {
             Simbolo valor = this.valor.Evaluar(ts);
 
-            //TODO verificar errores
             if (valor.Tipo.tipo != Tipos.BOOLEAN)
                 throw new Exception("El tipo no es booleano para el IF");
 
@@ -53,7 +52,7 @@ namespace Proyecto1.Interprete.Instruccion
             }
             else
             {
-                if (_else != null) this.salida.Add(_else.Ejecutar(ts));
+                if (_else != null) this.salida.AddRange((List<object>)_else.Ejecutar(ts));
             }
             return this.salida;
         }

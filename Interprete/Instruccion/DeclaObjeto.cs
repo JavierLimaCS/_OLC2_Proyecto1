@@ -17,6 +17,10 @@ namespace Proyecto1.Interprete.Instruccion
         public override object Ejecutar(TabladeSimbolos ts)
         {
             ts.declararObjeto(id, objectt);
+            foreach (var atributo in objectt.Attribs) {
+                Simbolo attr = new Simbolo(atributo.Id, atributo.Tipo, atributo.Linea, atributo.Columna);
+                ts.declararVariable(attr.Id, attr);
+            }
             return null;
         }
     }

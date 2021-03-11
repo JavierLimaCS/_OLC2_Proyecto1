@@ -51,6 +51,10 @@ namespace Proyecto1.Interprete.Instruccion
                         case "boolean":
                             nuevo.Value = false;
                             break;
+                        default:
+                            nuevo.Value = TS.getObjeto(this.type.tipoAuxiliar);
+                            System.Diagnostics.Debug.WriteLine(this.type.tipoAuxiliar);
+                            break;
                     }
                 }
                 TS.declararVariable(variable, nuevo);

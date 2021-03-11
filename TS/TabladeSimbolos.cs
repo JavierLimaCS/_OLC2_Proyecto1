@@ -48,6 +48,17 @@ namespace Proyecto1.TS
         }
 
 
+        public Objeto getObjeto(String id)
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.types.ContainsKey(id))
+                    return actual.types[id];
+                actual = actual.padre;
+            };
+            return null;
+        }
 
         public bool setVariableValor(String id, object valor) 
         {
@@ -138,11 +149,11 @@ namespace Proyecto1.TS
                 "</tr> \n</thead>\n <tbody class=\"table-hover\"> \n";
             if (this.padre != null)
             {
-                simbolo += getSimbolos();
+                simbolo += this.getSimbolos();
                 simbolo += this.padre.getSimbolos();
             }
             else {
-                simbolo += getSimbolos();
+                simbolo += this.getSimbolos();
             }
             simbolo += "</tbody> \n</table>\n </body>\n</html>";
             using (StreamWriter outputFile = new StreamWriter("C:/compiladores2/TS.html"))
@@ -156,7 +167,6 @@ namespace Proyecto1.TS
             String simbolo = "";
             if (this.variables.Count > 0)
             {
-                //simbolo += "<tr> <th colspan = \"5\" class=\"text-left\"><p style=\"text-align:center;\">VARIABLES</p></th></tr>";
                 for (int i = 0; i < this.variables.Count; i++)
                 {
                     simbolo += "<tr>" + "\n" +
@@ -167,10 +177,36 @@ namespace Proyecto1.TS
                             "<td class=\"text-left\">" + this.variables.ElementAt(i).Value.Linea +
                             "</td>" + "\n" +
                             "<td class=\"text-left\">" + this.variables.ElementAt(i).Value.Columna +
+                            "</td>" + "\n" +
+                             "<td class=\"text-left\">" + this.alias +
+                            "</td>" + "\n";
+                }
+            }
+            if (this.funciones.Count > 0)
+            {
+                for (int i = 0; i < this.funciones.Count; i++)
+                {
+                    simbolo += "<tr>" +
+                            "<td class=\"text-left\">" + this.funciones.ElementAt(i).Value.Id +
+                            "</td>" + "\n";
+                            if (this.funciones.ElementAt(i).Value.Tipo == null)
+                            {
+                                simbolo += "<td class=\"text-left\">" + "PROC::null" +
+                                            "</td>" + "\n" ;
+                            }
+                            else 
+                            {
+                                simbolo += "<td class=\"text-left\">" + "FUNCT::"+this.funciones.ElementAt(i).Value.Tipo.tipoAuxiliar +
+                                "</td>" + "\n";
+                            }
+                            simbolo +="" +
+                            "<td class=\"text-left\">" + this.funciones.ElementAt(i).Value.Linea +
+                            "</td>" + "\n" +
+                            "<td class=\"text-left\">" + this.funciones.ElementAt(i).Value.Columna +
                             "</td>" + "\n";
                     if (this.padre == null)
                     {
-                        simbolo += "<td class=\"text-left\">" + "Global" +
+                        simbolo += "<td class=\"text-left\">" + this.alias +
                            "</td>" + "\n" +
                            "</tr> \n";
                     }
@@ -182,19 +218,14 @@ namespace Proyecto1.TS
                     }
                 }
             }
-            if (this.funciones.Count > 0)
+            if (this.types.Count > 0)
             {
-                //simbolo += "<tr> <th colspan = \"5\"> <p style=\"text-align:center;\">FUNCIONES</p></th></tr>";
-                for (int i = 0; i < this.variables.Count; i++)
+                for (int i = 0; i < this.types.Count; i++)
                 {
                     simbolo += "<tr>" +
-                            "<td class=\"text-left\">" + this.funciones.ElementAt(i).Value.Id +
+                            "<td class=\"text-left\">" + this.types.ElementAt(i).Value.Id +
                             "</td>" + "\n" +
-                            "<td class=\"text-left\">" + this.funciones.ElementAt(i).Value.Tipo.tipoAuxiliar +
-                            "</td>" + "\n" +
-                            "<td class=\"text-left\">" + this.funciones.ElementAt(i).Value.Linea +
-                            "</td>" + "\n" +
-                            "<td class=\"text-left\">" + this.funciones.ElementAt(i).Value.Columna +
+                            "<td class=\"text-left\">" + this.types.ElementAt(i).Value.Attribs.Count +
                             "</td>" + "\n";
                     if (this.padre == null)
                     {

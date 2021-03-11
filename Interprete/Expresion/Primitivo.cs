@@ -53,14 +53,21 @@ namespace Proyecto1.Interprete.Expresion
                         Llamada llamadita = (Llamada)valor;
                         output = llamadita.Ejecutar(ts);
                         salida = (List<object>)output;
-                        int index = salida.Count - 1;
                         funct = ts.getFuncion(llamadita.id);
-                        Simbolo_Funcion ex = (Simbolo_Funcion)salida[index];
+                        Simbolo_Funcion ex = encontrarRetorno(salida);
                         funct.Value = ex.Value;
                     }
                     return funct;
             }
             return primitivo;
+        }
+
+        Simbolo_Funcion encontrarRetorno(List<object> salida)
+        {
+            foreach (var nodo in salida) {
+                if (nodo is Simbolo_Funcion) return (Simbolo_Funcion)nodo;
+            }
+            return null;
         }
     }
 }

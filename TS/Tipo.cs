@@ -12,7 +12,8 @@ namespace Proyecto1.TS
         STRING = 3,
         REAL = 4  ,
         FUNCTION =5,
-        PARAM = 6
+        PARAM = 6,
+        OBJ = 7
     }
     class Tipo
     {

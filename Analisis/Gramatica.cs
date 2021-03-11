@@ -59,7 +59,7 @@ namespace Proyecto1.Analisis
             var RUNTIL = ToTerm("until");
             var RFOR = ToTerm("for");
             var RTO = ToTerm("to");
-            var RGRAF = ToTerm("graficat_ts");
+            var RGRAF = ToTerm("graficar_ts");
             var RBREAK = ToTerm("break");
             var RCONTINUE = ToTerm("continue");
             #endregion
@@ -128,6 +128,8 @@ namespace Proyecto1.Analisis
             NonTerminal Sentencia2 = new NonTerminal("Sentencia");
             NonTerminal Arrays = new NonTerminal("Array");
             NonTerminal Types = new NonTerminal("Type");
+            NonTerminal accessObj = new NonTerminal("AccesoObjeto");
+            NonTerminal accessArr = new NonTerminal("AccesoArray");
             #endregion
 
             #region Gramatica
@@ -156,9 +158,8 @@ namespace Proyecto1.Analisis
                 = SyntaxError + PTCOMA;
 
             Value.Rule
-                = IGUAL + Expresion
-                | Empty;
-
+                = MakeStarRule(Value, IGUAL + Expresion);
+      
             Constantes.Rule
                 = CONST + ID + IGUAL + Expresion + PTCOMA;
 
@@ -222,14 +223,23 @@ namespace Proyecto1.Analisis
                 | S_Write
                 | S_Exit
                 | S_Graficar
-                | S_Case;
+                | S_Case
+                ;
+
+            accessArr.Rule
+                =  ID + COR1 + Expresion + COR2;
+
+            accessObj.Rule
+                = ID + PT + ID;
 
             Llamada.Rule
                 = ID + PAR1 + exp_list + PAR2 
                 | ID + PAR1 + PAR2;
 
             Asignacion.Rule
-                = ID + ASIGN + Expresion;
+                = ID + ASIGN + Expresion
+                | ID + PT + ID + ASIGN + Expresion
+                | ID + COR1 + Expresion + COR1 + ASIGN + Expresion;
 
             S_If.Rule
                 = RIF + PAR1 + Expresion + PAR2 + RTHEN + Sentencia2 + RELSE + Sentencia2
@@ -288,13 +298,17 @@ namespace Proyecto1.Analisis
                 | Expresion + IGUAL + Expresion
                 | Expresion + AND + Expresion
                 | Expresion + OR + Expresion
+                | NOT + Expresion
+                | PAR1 + Expresion + PAR2
                 | TTRUE
                 | TFALSE
                 | ENTERO
                 | CADENA
                 | DECIMAL
                 | ID
-                | Llamada;
+                | Llamada
+                | accessObj
+                | accessArr;
 
             exp_list.Rule
                 = MakeListRule(exp_list, COM, Expresion);
@@ -305,10 +319,11 @@ namespace Proyecto1.Analisis
             this.RegisterOperators(1, Associativity.Left, IGUAL, MAYOR, MENOR, MENIG, MAYIG, DIFF);
             this.RegisterOperators(2, Associativity.Left, MAS, MENOS, OR);
             this.RegisterOperators(3, Associativity.Left, POR, DIV, MOD, AND);
+            this.RegisterOperators(4, Associativity.Neutral, PAR1, PAR2);
             #endregion
 
             #region Eliminacion
-            this.MarkPunctuation(PTCOMA, BIPUNTO, PT,PAR1, PAR2,  IGUAL, ASIGN);
+            this.MarkPunctuation(PTCOMA, BIPUNTO, PT, PAR1, PAR2, ASIGN);
             this.MarkPunctuation(PROG, CONST, FUNCT, PROC, ROF, RFOR, RTO);
             this.MarkTransient(Instruccion, Sentencia);
             

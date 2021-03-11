@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -90,25 +91,6 @@ namespace Proyecto1
             {
                 AddLineNumbers();
             }
-            //KeyWords();
-        }
-
-        private void KeyWords() 
-        {
-            string tokens = "(program|;|var|function|begin|end|const|:=|switch|" +
-                              "case|repeat|for|do|if|while)";
-            Regex rex = new Regex(tokens);
-            MatchCollection mc = rex.Matches(richTextBox1.Text);
-            int StartCursorPosition = richTextBox1.SelectionStart;
-            foreach (Match m in mc)
-            {
-                int startIndex = m.Index;
-                int StopIndex = m.Length;
-                this.richTextBox1.Select(startIndex, StopIndex);
-                this.richTextBox1.SelectionColor = Color.Navy;
-                this.richTextBox1.SelectionStart = StartCursorPosition;
-                this.richTextBox1.SelectionColor = Color.Black;
-            }
         }
 
 
@@ -141,11 +123,11 @@ namespace Proyecto1
             {
                 if (this.comboBox1.SelectedItem.ToString().Equals("Reporte Errores"))
                 {
-
+                    System.Diagnostics.Process.Start(@"C:\compiladores2\reporteErrores.html");
                 }
                 else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte Tabla de Simbolos"))
                 {
-
+                    System.Diagnostics.Process.Start(@"C://compiladores2//TS.html");
                 }
                 else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte AST"))
                 {
