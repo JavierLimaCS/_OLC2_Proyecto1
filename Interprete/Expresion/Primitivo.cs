@@ -23,26 +23,28 @@ namespace Proyecto1.Interprete.Expresion
             Simbolo primitivo = null; 
             switch(this.tipo)
             {
+                case 'A':
+                    break;
                 case 'N':
-                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.INT, "integer"), 0, 0);
+                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.INT, "integer"), 0, 0, false);
                     primitivo.Value = this.valor;
                     break;
                 case 'S':
-                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.STRING, "string"), 0, 0);
+                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.STRING, "string"), 0, 0, false);
                     string val = this.valor.ToString();
                     val = val.Replace("'","");
                     primitivo.Value = val;
                     break;
                 case 'B':
-                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0, false);
                     primitivo.Value = this.valor;
                     break;
                 case 'R':
-                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.REAL, "real"), 0, 0);
+                    primitivo = new Simbolo("primitivo", new Tipo(Tipos.REAL, "real"), 0, 0, false);
                     primitivo.Value = this.valor;
                     break;
                 case 'I':
-                    primitivo = ts.getVariableValor(this.valor.ToString());
+                    primitivo = ts.getVariableValor(this.valor.ToString().ToLower());
                     break;
                 case 'O':
                     if (this.valor is AccesoObjeto) 
@@ -64,6 +66,7 @@ namespace Proyecto1.Interprete.Expresion
                         funct = ts.getFuncion(llamadita.id);
                         Simbolo_Funcion ex = encontrarRetorno(salida);
                         funct.Value = ex.Value;
+                        ts.setFuncionValor(funct.Id, funct.Value);
                     }
                     return funct;
             }
@@ -73,7 +76,8 @@ namespace Proyecto1.Interprete.Expresion
         Simbolo_Funcion encontrarRetorno(List<object> salida)
         {
             foreach (var nodo in salida) {
-                if (nodo is Simbolo_Funcion) return (Simbolo_Funcion)nodo;
+                if (nodo is Simbolo_Funcion) 
+                    return (Simbolo_Funcion)nodo;
             }
             return null;
         }

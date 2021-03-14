@@ -13,12 +13,26 @@ namespace Proyecto1.TS
         private Tipo type;
         private int line, column;
         private Object value;
+        private bool isConstant;
+        private string n;
+        private Tipo ty;
+        private int l;
+        private int c;
 
-        public Simbolo(String n, Tipo ty, int l, int c) {
+        public Simbolo(string n, Tipo ty, int l, int c)
+        {
+            this.n = n;
+            this.ty = ty;
+            this.l = l;
+            this.c = c;
+        }
+
+        public Simbolo(String n, Tipo ty, int l, int c, bool b) {
             this.id = n;
             this.type = ty;
             this.line = l;
             this.column = c;
+            this.isConstant = b;
         }
 
         public String Id { get => id; set => id = value; }
@@ -26,5 +40,7 @@ namespace Proyecto1.TS
         public int Linea { get => line; set => line = value; }
         public int Columna { get => column; set => column = value; }
         public Object Value { get => value; set => this.value = value; }
+
+        public bool esConstante { get => isConstant; set => isConstant = value; }
     }
 }

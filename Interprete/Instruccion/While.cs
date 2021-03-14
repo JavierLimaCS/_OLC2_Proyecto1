@@ -36,7 +36,7 @@ namespace Proyecto1.Interprete.Instruccion
                         }
                         else if (output is Break)
                         {
-                            return salida;
+                             return "";
                         }
                         else if (output is Continue)
                         {

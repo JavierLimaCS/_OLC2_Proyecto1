@@ -53,17 +53,17 @@ namespace Proyecto1.Analisis
                                 {
                                     String tipito_var = hijo.ChildNodes[0].ChildNodes[1].ChildNodes[0].Token.Text;
                                     String nueva_id = nodo.ChildNodes[0].Token.Text + "_" + hijo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Text;
-                                    Simbolo var_funcion = new Simbolo(nueva_id, new Tipo(Tipos.INT, tipito_var), hijo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Location.Line + 1, hijo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Location.Column+1);
+                                    Simbolo var_funcion = new Simbolo(nueva_id, new Tipo(Tipos.INT, tipito_var), hijo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Location.Line + 1, hijo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Location.Column+1, false);
                                     nuevo_entorno.declararVariable(nueva_id, var_funcion);
                                 }
                             }
-                            nuevo_entorno.generarTS();
+                            nuevo_entorno.generarTS(nuevo_entorno.alias);
                         };
                         break;
                     case "Declaracion":
                         String tipo_var = nodo.ChildNodes[0].ChildNodes[1].ChildNodes[0].Token.Text;
                         String id_var = nodo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Text;
-                        Simbolo nueva_var = new Simbolo(id_var, new Tipo(Tipos.INT, tipo_var), nodo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Location.Line + 1, nodo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Location.Column + 1);
+                        Simbolo nueva_var = new Simbolo(id_var, new Tipo(Tipos.INT, tipo_var), nodo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Location.Line + 1, nodo.ChildNodes[0].ChildNodes[0].ChildNodes[0].Token.Location.Column + 1, false);
                         this.ts.declararVariable(id_var, nueva_var);
                         break;
                 

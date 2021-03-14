@@ -22,25 +22,34 @@ namespace Proyecto1.Interprete.Expresion
         public override Simbolo Evaluar(TabladeSimbolos ts)
         {
             Simbolo izquierda = this.izquierda.Evaluar(ts);
-            Simbolo derecha = this.derecha.Evaluar(ts);
+            Simbolo derecha = null;
             Simbolo resultado;
-            Tipos tipoResultante = TablaTipos.getTipo(izquierda.Tipo, derecha.Tipo);
+            Tipos tipoResultante;
+            if (this.derecha != null)
+            {
+                derecha = this.derecha.Evaluar(ts);
+                tipoResultante = TablaTipos.getTipo(izquierda.Tipo, derecha.Tipo);
+            }
+            else
+            {
+                tipoResultante = TablaTipos.getTipo(izquierda.Tipo, izquierda.Tipo);
+            }
 
-            //if (tipoResultante != Tipos.INT && tipo != '+')
-            //  throw new Exception();
+            if ((int)tipoResultante == 7)
+                throw new Exception();
 
             switch (op)
             {
                 case 'a':
-                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0, false);
                     resultado.Value = bool.Parse(izquierda.Value.ToString()) & bool.Parse(derecha.Value.ToString());
                     return resultado;
                 case 'o':
-                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0, false);
                     resultado.Value = bool.Parse(izquierda.Value.ToString()) || bool.Parse(derecha.Value.ToString());
                     return resultado;
                 default:
-                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0);
+                    resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0, false);
                     resultado.Value = !bool.Parse(izquierda.Value.ToString());
                     return resultado;
             }

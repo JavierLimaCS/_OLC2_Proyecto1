@@ -10,7 +10,7 @@ namespace Proyecto1.TS
     class TabladeSimbolos
     {
         TabladeSimbolos padre;
-        String alias;
+        public String alias;
         Dictionary<string, Simbolo> variables;
         Dictionary<string, Simbolo_Funcion> funciones;
         Dictionary<string, Objeto> types;
@@ -75,19 +75,36 @@ namespace Proyecto1.TS
             return false;
         }
 
-        public bool setAttrValor(String id, String atr, object valor)
+        public bool setValorAccesos(List<string> accesos, object valor)
         {
             TabladeSimbolos actual = this;
+            int cont = 0; 
             while (actual != null)
             {
-                if (actual.variables.ContainsKey(id))
+                if (actual.variables.ContainsKey(accesos.ElementAt(cont)))
                 {
-                    Objeto objt = (Objeto)actual.variables[id].Value;
-                    foreach (var ats in objt.Attribs) 
+                    Objeto objt = (Objeto)actual.variables[accesos.ElementAt(cont)].Value;
+                    cont++;
+                    foreach (var ats in objt.Attribs)
                     {
-                        if (ats.Id == atr) 
+                        if (ats.Id == accesos.ElementAt(cont))
                         {
-                            ats.Value = valor;
+                            if (ats.Value is Objeto || ats.Tipo.tipo == Tipos.OBJ)
+                            {
+                                Objeto tmp = (Objeto)ats.Value;
+                                cont++;
+                                foreach (var at in tmp.Attribs) 
+                                {
+                                    if (at.Id == accesos.ElementAt(cont)) 
+                                    {
+                                        at.Value = valor;
+                                    }
+                                }
+                            }
+                            else 
+                            {
+                                ats.Value = valor;
+                            }
                             return true;
                         }
                     }
@@ -95,6 +112,23 @@ namespace Proyecto1.TS
                 actual = actual.padre;
             };
             return false;
+        }
+
+        public void setAttrValor(Objeto id, String atr, object valor)
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                Objeto objt = id;
+                foreach (var ats in objt.Attribs)
+                {
+                    if (ats.Id == atr)
+                    {
+                         ats.Value = valor;
+                    }
+                }
+                
+            };
         }
 
         public bool setFuncionValor(String id, object valor)
@@ -149,7 +183,7 @@ namespace Proyecto1.TS
         }
 
 
-        public void generarTS()
+        public void generarTS(String entorno)
         {
             String simbolo = "<html>\n <head>" +
                 "<meta charset=\"utf - 8\"/>" +
@@ -178,7 +212,7 @@ namespace Proyecto1.TS
                 simbolo += this.getSimbolos();
             }
             simbolo += "</tbody> \n</table>\n </body>\n</html>";
-            using (StreamWriter outputFile = new StreamWriter("C:/compiladores2/TS.html"))
+            using (StreamWriter outputFile = new StreamWriter("C:/compiladores2/TS_"+entorno+".html"))
             {
                 outputFile.WriteLine(simbolo);
             }
@@ -248,10 +282,14 @@ namespace Proyecto1.TS
                             "<td class=\"text-left\">" + this.types.ElementAt(i).Value.Id +
                             "</td>" + "\n" +
                             "<td class=\"text-left\">" + this.types.ElementAt(i).Value.Attribs.Count +
+                            "</td>" + "\n" +
+                            "<td class=\"text-left\">" + this.types.ElementAt(i).Value.Linea +
+                            "</td>" + "\n" +
+                            "<td class=\"text-left\">" + this.types.ElementAt(i).Value.Columna +
                             "</td>" + "\n";
                     if (this.padre == null)
                     {
-                        simbolo += "<td class=\"text-left\">" + "Global" +
+                        simbolo += "<td class=\"text-left\">" + this.alias +
                            "</td>" + "\n" +
                            "</tr> \n";
                     }

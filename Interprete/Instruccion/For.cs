@@ -1,6 +1,7 @@
 ﻿using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Proyecto1.Interprete.Instruccion
@@ -25,30 +26,38 @@ namespace Proyecto1.Interprete.Instruccion
         {
             int init = int.Parse(this.inicio.Evaluar(ts).Value.ToString());
             int end = int.Parse(this.final.Evaluar(ts).Value.ToString());
-            foreach (var inst in this.instruccions)
+            String print = "";
+            for(int i = init; i<=end; i++)
             {
-                if (init == end) break;
                 ts.setVariableValor(this.id, init);
-                Object output = inst.Ejecutar(ts);
-                if (output is List<Object>)
+                foreach (var inst in this.instruccions) 
                 {
-                    this.salida.AddRange((List<Object>)output);
+                    Object output = inst.Ejecutar(ts);
+                    if (output is List<object>)
+                    {
+                        this.salida.AddRange((List<object>)output);
+                    }
+                    else if (output is Break)
+                    {
+                        return "";
+                    }
+                    else if (output is Continue)
+                    {
+                        break;
+                    }
+                    else if (output is Exit) 
+                    {
+                    
+                    }
+                    else
+                    {
+                        this.salida.Add(output);
+                    }
                 }
-                else if (output is Break)
-                {
-                    return salida;
-                }
-                else if (output is Continue) 
-                {
-                    init++;
-                }
-                else
-                {
-                    this.salida.Add(output);
-                }
+                if (init == end) break;
                 init++;
             }
-            return salida;
+            return this.salida;
         }
     }
 }

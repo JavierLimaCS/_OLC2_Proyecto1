@@ -13,7 +13,7 @@ namespace Proyecto1.Interprete.Instruccion
         }
         public override object Ejecutar(TabladeSimbolos ts)
         {
-            ts.generarTS();
+            ts.generarTS(ts.alias);
             return null;
         }
     }

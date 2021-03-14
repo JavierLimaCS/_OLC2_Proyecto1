@@ -123,15 +123,15 @@ namespace Proyecto1
             {
                 if (this.comboBox1.SelectedItem.ToString().Equals("Reporte Errores"))
                 {
-                    System.Diagnostics.Process.Start(@"C:\compiladores2\reporteErrores.html");
+                    var proc = Process.Start(@"cmd.exe ", @"/c C:\compiladores2\reporteErrores.html");
                 }
                 else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte Tabla de Simbolos"))
                 {
-                    System.Diagnostics.Process.Start(@"C://compiladores2//TS.html");
+                    var proc = Process.Start(@"cmd.exe ", @"/c C:\compiladores2\TS_Global.html");
                 }
                 else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte AST"))
                 {
-                    System.Diagnostics.Process.Start(@"C:\compiladores2\reporte_ast.png");
+                    var proc = Process.Start(@"cmd.exe ", @"/c C:\compiladores2\ast_report.png");
                 }
             }
             else {
@@ -144,8 +144,8 @@ namespace Proyecto1
         {
             string cadena = this.richTextBox1.Text;
             Analizador parser = new Analizador();
-            parser.Analizar(cadena);
-            this.richTextBox2.Text = parser.consola;
+            parser.Analizar(cadena, this.richTextBox2);
+            if (!parser.consola.Equals("")) this.richTextBox2.Text = parser.consola;
         }
 
         private void Abrir_Click(object sender, EventArgs e)

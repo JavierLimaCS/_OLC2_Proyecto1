@@ -62,6 +62,8 @@ namespace Proyecto1.Analisis
             var RGRAF = ToTerm("graficar_ts");
             var RBREAK = ToTerm("break");
             var RCONTINUE = ToTerm("continue");
+            var RDIV = ToTerm("div");
+            var RMOD = ToTerm("mod");
             #endregion
 
             #region Terminales - SIGNOS
@@ -99,7 +101,8 @@ namespace Proyecto1.Analisis
             NonTerminal Sentencias = new NonTerminal("Sentencias");
             NonTerminal Sentencia = new NonTerminal("Sentencia");
             NonTerminal Declaraciones = new NonTerminal("Declaracion");
-            NonTerminal Constantes = new NonTerminal("Const");
+            NonTerminal Constantes = new NonTerminal("Constantes");
+            NonTerminal Constante = new NonTerminal("const");
             NonTerminal Declaracion = new NonTerminal("Var");
             NonTerminal Funcion = new NonTerminal("Funcion");
             NonTerminal Procedimiento = new NonTerminal("Procedimiento");
@@ -144,7 +147,7 @@ namespace Proyecto1.Analisis
 
             Instruccion.Rule
                 = VAR + Declaraciones
-                | Constantes
+                | CONST + Constantes
                 | Funcion
                 | Procedimiento
                 | TYPE + Types
@@ -161,9 +164,12 @@ namespace Proyecto1.Analisis
 
             Value.Rule
                 = MakeStarRule(Value, IGUAL + Expresion);
-      
+
             Constantes.Rule
-                = CONST + ID + IGUAL + Expresion + PTCOMA;
+                = MakePlusRule(Constantes, Constante);
+
+            Constante.Rule
+                = var_list + IGUAL + Expresion + PTCOMA;
 
             Constantes.ErrorRule
                 = SyntaxError + PTCOMA;
@@ -172,7 +178,7 @@ namespace Proyecto1.Analisis
                 = ID + IGUAL + OBJECT + VAR + Declaraciones + END + PTCOMA;
 
             Arrays.Rule
-                = ID + IGUAL + ARRAY + COR1 + Expresion + PT + PT + Expresion + COR2 + ROF + Tipo + PTCOMA; 
+                = ID + IGUAL + ARRAY + COR1 + Expresion + PT + PT + Expresion + COR2 + ROF + Tipo + PTCOMA;
 
             var_list.Rule
                 = MakeListRule(var_list, COM, ID);
@@ -182,6 +188,7 @@ namespace Proyecto1.Analisis
                 | TSTRING
                 | TREAL
                 | TBOOL
+                | Arrays
                 | ID;
 
             Funcion.Rule
@@ -191,8 +198,9 @@ namespace Proyecto1.Analisis
 
             Procedimiento.Rule
                 = PROC + ID + PAR1 + arguments_list + PAR2 + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA
+                | PROC + ID + PAR1 + PAR2 + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA
                 | PROC + ID + PTCOMA + Instrucciones + BEGIN + Sentencias + END + PTCOMA;
- 
+
             arguments_list.Rule
                 = MakeListRule(arguments_list, PTCOMA, Argumento);
 
@@ -234,19 +242,19 @@ namespace Proyecto1.Analisis
                 | RCONTINUE;
 
             accessArr.Rule
-                =  ID + COR1 + Expresion + COR2;
+                = ID + COR1 + Expresion + COR2;
 
             accessObj.Rule
-                = ID + PT + ID;
+                = MakeListRule(accessObj, PT, ID);
 
             Llamada.Rule
-                = ID + PAR1 + exp_list + PAR2 
+                = ID + PAR1 + exp_list + PAR2
                 | ID + PAR1 + PAR2;
 
             Asignacion.Rule
                 = ID + ASIGN + Expresion
-                | ID + PT + ID + ASIGN + Expresion
-                | ID + COR1 + Expresion + COR1 + ASIGN + Expresion;
+                | accessObj + ASIGN + Expresion
+                | accessArr + ASIGN + Expresion;
 
             S_If.Rule
                 = RIF + Expresion + RTHEN + Sentencia2 + RELSE + Sentencia2
@@ -266,15 +274,15 @@ namespace Proyecto1.Analisis
                 = BEGIN + Sentencias + END
                 | Sentencia2;
 
-            S_Case.Rule 
+            S_Case.Rule
                 = RCASE + Expresion + ROF + case_list + PTCOMA + S_Else2 + END;
 
             case_list.Rule
-                = MakeListRule(case_list, PTCOMA ,Caso);
+                = MakeListRule(case_list, PTCOMA, Caso);
 
             Caso.Rule
                 = exp_list + BIPUNTO + Sentencia2
-                | exp_list + BIPUNTO + BEGIN + Sentencias + END ;
+                | exp_list + BIPUNTO + BEGIN + Sentencias + END;
 
             S_Else2.Rule
                 = RELSE + Sentencia
@@ -284,16 +292,17 @@ namespace Proyecto1.Analisis
                 = RWHILE + Expresion + RDO + Cuerpo_Sentencias;
 
             S_Repeat.Rule
-                =RREPEAT + Sentencias + RUNTIL + Expresion;
+                = RREPEAT + Cuerpo_Sentencias + RUNTIL + Expresion;
 
             S_WriteLn.Rule
-                = WRTLN + PAR1 + exp_list + PAR2 ;
+                = WRTLN + PAR1 + exp_list + PAR2;
 
             S_Write.Rule
                 = WRT + PAR1 + exp_list + PAR2;
 
             S_Exit.Rule
-                = EXIT + PAR1 + PAR2 ;
+                = EXIT + PAR1 + Expresion + PAR2
+                | EXIT;
 
             S_Graficar.Rule
                 = RGRAF;
@@ -302,6 +311,7 @@ namespace Proyecto1.Analisis
                 = Expresion + MAS + Expresion
                 | Expresion + MENOS + Expresion
                 | Expresion + DIV + Expresion
+                | Expresion + RDIV + Expresion
                 | Expresion + POR + Expresion
                 | Expresion + MOD + Expresion
                 | Expresion + MAYOR + Expresion
@@ -313,16 +323,17 @@ namespace Proyecto1.Analisis
                 | Expresion + AND + Expresion
                 | Expresion + OR + Expresion
                 | NOT + Expresion
+                | MENOS + Expresion
                 | PAR1 + Expresion + PAR2
                 | TTRUE
                 | TFALSE
                 | ENTERO
                 | CADENA
                 | DECIMAL
-                | ID
-                | Llamada
+                | accessArr
                 | accessObj
-                | accessArr;
+                | ID
+                | Llamada;
 
             exp_list.Rule
                 = MakeListRule(exp_list, COM, Expresion);
@@ -333,7 +344,9 @@ namespace Proyecto1.Analisis
             this.RegisterOperators(1, Associativity.Left, IGUAL, MAYOR, MENOR, MENIG, MAYIG, DIFF);
             this.RegisterOperators(2, Associativity.Left, MAS, MENOS, OR);
             this.RegisterOperators(3, Associativity.Left, POR, DIV, MOD, AND);
-            this.RegisterOperators(4, Associativity.Neutral, PAR1, PAR2);
+            this.RegisterOperators(4, Associativity.Neutral, MENOS);
+            this.RegisterOperators(6, Associativity.Right, NOT);
+            this.RegisterOperators(7, Associativity.Neutral, PAR1, PAR2);
             #endregion
 
             #region Eliminacion

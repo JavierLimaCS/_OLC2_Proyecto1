@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Proyecto1.Analisis
 {
@@ -17,10 +18,13 @@ namespace Proyecto1.Analisis
         public LinkedList<Error> lista_errores = new LinkedList<Error>();
         private List<Object> salida = new List<Object>();
         TabladeSimbolos global = new TabladeSimbolos(null, "Global"); //Entorno Global
-        public void Analizar(String cadena)
+        RichTextBox rt;
+        public void Analizar(String cadena, RichTextBox rl)
         {
             Gramatica gramatica = new Gramatica();
             LanguageData lenguaje = new LanguageData(gramatica);
+            rt = rl;
+            rt.Text = "";
             foreach (var item  in lenguaje.Errors)
             {
                 System.Diagnostics.Debug.WriteLine(item);
@@ -58,14 +62,7 @@ namespace Proyecto1.Analisis
             this.ejecutar(listaInstrucciones, global);
             this.ejecutar(listaSentencias, global);
             this.generarGrafo(raiz);
-            this.global.generarTS();
-            for (int i = 0; i < salida.Count; i++) 
-            {
-                if (salida.ElementAt(i) is String) 
-                {
-                    consola += salida.ElementAt(i).ToString();
-                }
-            }
+            this.global.generarTS(this.global.alias);
         }
 
         public Boolean BuscarAnidadas(ParseTreeNode raiz)
@@ -115,16 +112,40 @@ namespace Proyecto1.Analisis
                     LinkedList<Expresion> exp_list = new LinkedList<Expresion>();
                     foreach (var exp in actual.ChildNodes[1].ChildNodes) 
                     {
-                            exp_list.AddLast(expresion(exp));
+                        exp_list.AddLast(expresion(exp));
                     }
-                    return new Writeln(exp_list);
+                    return new Writeln(exp_list, rt);
                 case "write":
                     LinkedList<Expresion> exp_list2 = new LinkedList<Expresion>();
                     foreach (var exp in actual.ChildNodes[1].ChildNodes)
                     {
-                        exp_list2.AddLast(expresion(exp.ChildNodes[0]));
+                        exp_list2.AddLast(expresion(exp));
                     }
-                    return new Write(exp_list2);
+                    return new Write(exp_list2, rt);
+                case "constantes":
+                    LinkedList<Declaracion> lista_decla_const = new LinkedList<Declaracion>();
+                    foreach (var decla in actual.ChildNodes)
+                    {
+                        String tipov = decla.ChildNodes[2].ChildNodes[0].Term.Name.ToLower();
+                        String id = "";
+                        Tipo tipo_var = getTipo(tipov);
+                        int line = decla.ChildNodes[0].ChildNodes[0].Token.Location.Line + 1;
+                        int col = decla.ChildNodes[0].ChildNodes[0].Token.Location.Column + 1;
+                        List<String> vars = new List<string>();
+                        Expresion valor = null;
+                        if (decla.ChildNodes[2].ChildNodes.Count > 0)
+                        {
+                            valor = expresion(decla.ChildNodes[2]);
+                        }
+                        foreach (var variable in decla.ChildNodes[0].ChildNodes)
+                        {
+                            id = variable.Token.Text.ToLower();
+                            vars.Add(id);
+                        }
+
+                        lista_decla_const.AddLast(new Declaracion(tipo_var, vars, valor, line, col, true));
+                    }
+                    return new Declaraciones(lista_decla_const);
                 case "declaracion":
                     LinkedList<Declaracion> lista_decla = new LinkedList<Declaracion>();
                     foreach (var decla in actual.ChildNodes) 
@@ -132,8 +153,8 @@ namespace Proyecto1.Analisis
                         String tipov = decla.ChildNodes[1].ChildNodes[0].Token.Text;
                         String id = "";
                         Tipo tipo_var = getTipo(tipov);
-                        int l = decla.ChildNodes[0].ChildNodes[0].Token.Location.Line + 1;
-                        int c = decla.ChildNodes[0].ChildNodes[0].Token.Location.Column + 1;
+                        int line = decla.ChildNodes[0].ChildNodes[0].Token.Location.Line + 1;
+                        int col = decla.ChildNodes[0].ChildNodes[0].Token.Location.Column + 1;
                         List<String> vars = new List<string>();
                         Expresion valor = null;
                         if (decla.ChildNodes[2].ChildNodes.Count > 0)
@@ -146,7 +167,7 @@ namespace Proyecto1.Analisis
                             vars.Add(id);
                         }
                         
-                        lista_decla.AddLast(new Declaracion(tipo_var, vars, valor, l, c));
+                        lista_decla.AddLast(new Declaracion(tipo_var, vars, valor, line, col, false));
                     }
                     return new Declaraciones(lista_decla);
                 case "funcion":
@@ -154,7 +175,7 @@ namespace Proyecto1.Analisis
                     if (actual.ChildNodes.Count == 6) contf = 1;
                     String tipo = actual.ChildNodes[contf].ChildNodes[0].Token.Text;
                     Tipo tipo_funct = getTipo(tipo);
-                    Simbolo_Funcion nuevafuncion = new Simbolo_Funcion(actual.ChildNodes[0].Token.Text, tipo_funct, actual.ChildNodes[0].Token.Location.Line + 1, actual.ChildNodes[0].Token.Location.Column + 1); ;
+                    Simbolo_Funcion nuevafuncion = new Simbolo_Funcion(actual.ChildNodes[0].Token.Text.ToLower(), tipo_funct, actual.ChildNodes[0].Token.Location.Line + 1, actual.ChildNodes[0].Token.Location.Column + 1); ;
                     if (actual.ChildNodes.Count == 7)
                     {
                         foreach (var args in actual.ChildNodes[1].ChildNodes)
@@ -168,7 +189,7 @@ namespace Proyecto1.Analisis
                             foreach (var param in args.ChildNodes[indice].ChildNodes)
                             {
                                 parametro = new Parametro(param.Token.Text, param_type);
-                                nuevafuncion.Params.Add(conta, parametro);
+                                nuevafuncion.Params.Add(param.Token.Text, parametro);
                                 conta++;
                             }
                         }
@@ -177,7 +198,7 @@ namespace Proyecto1.Analisis
                     return new Funcion(nuevafuncion, instrucciones(actual.ChildNodes[contf+1]), instrucciones(actual.ChildNodes[contf+3]));
 
                 case "procedimiento":
-                    Simbolo_Funcion nuevo = new Simbolo_Funcion(actual.ChildNodes[0].Token.Text, null, actual.ChildNodes[0].Token.Location.Line+1, actual.ChildNodes[0].Token.Location.Column+1); ;
+                    Simbolo_Funcion nuevo = new Simbolo_Funcion(actual.ChildNodes[0].Token.Text.ToLower(), null, actual.ChildNodes[0].Token.Location.Line+1, actual.ChildNodes[0].Token.Location.Column+1); ;
                     int proc_index_inst = 1;
                     int proc_index_sent = 3;
                     if (actual.ChildNodes.Count > 5)
@@ -195,18 +216,33 @@ namespace Proyecto1.Analisis
                             foreach (var param in args.ChildNodes[indice].ChildNodes) 
                             {
                                 parametro = new Parametro(param.Token.Text, param_type);
-                                nuevo.Params.Add(cont, parametro);
+                                nuevo.Params.Add(param.Token.Text, parametro);
                                 cont++;
                             }
                         }
                     }
                     return new Procedimiento(nuevo, instrucciones(actual.ChildNodes[proc_index_inst]), instrucciones(actual.ChildNodes[proc_index_sent]));
                 case "asignacion":
-                    if (actual.ChildNodes.Count > 2) 
+                    string id_asigna = "";
+                    List<string> acceso = new List<string>();
+                    if (actual.ChildNodes[0].Term.Name.ToLower().Equals("accesoobjeto"))
                     {
-                        return new Asignacion(actual.ChildNodes[0].Token.Text + "." + actual.ChildNodes[1].Token.Text, expresion(actual.ChildNodes[2]));
+                        int contacc = 0;
+                        foreach (var accsObj in actual.ChildNodes[0].ChildNodes)
+                        {
+                            acceso.Add(accsObj.Token.Text.ToLower());
+                            contacc++;
+                        }
+                        return new Asignacion(acceso, expresion(actual.ChildNodes[1]));
                     }
-                    return new Asignacion(actual.ChildNodes[0].Token.Text, expresion(actual.ChildNodes[1]));
+                    else if (actual.ChildNodes[0].Term.Name.ToLower().Equals("accesoarray")) 
+                    {
+                        id_asigna = actual.ChildNodes[0].ChildNodes[0].Token.Text.ToLower();
+                        return new Asignacion(id_asigna, expresion(actual.ChildNodes[0].ChildNodes[2]), expresion(actual.ChildNodes[1]));
+                    }
+                    id_asigna = actual.ChildNodes[0].Token.Text.ToLower();
+                    id_asigna = actual.ChildNodes[0].Token.Text.ToLower();
+                    return new Asignacion(id_asigna, expresion(actual.ChildNodes[1]));
                 case "llamada":
                     if (actual.ChildNodes.Count == 1)
                     {
@@ -262,9 +298,14 @@ namespace Proyecto1.Analisis
                     return new Else(instrucciones(actual.ChildNodes[1].ChildNodes[contador]));
                 case "graficar":
                     return new GraficarTS();
+                case "array":
+                    string id_array = actual.ChildNodes[0].Token.Text.ToLower() ;
+                    break; 
                 case "type":
-                    String id_objeto = actual.ChildNodes[0].Token.Text;
-                    Objeto objeto = new Objeto(id_objeto, null);
+                    String id_objeto = actual.ChildNodes[0].Token.Text.ToLower();
+                    int l = actual.ChildNodes[0].Token.Location.Line;
+                    int c = actual.ChildNodes[0].Token.Location.Column;
+                    Objeto objeto = new Objeto(id_objeto, null, l+1, c+1);
                     List<Atributo> attrs = new List<Atributo>();
                     ParseTreeNode var_list = actual.ChildNodes[4];
                     foreach(var variable in var_list.ChildNodes)
@@ -273,14 +314,22 @@ namespace Proyecto1.Analisis
                         Tipo obj_tipo = getTipo(attr_tipo);
                         foreach (var vars in variable.ChildNodes[0].ChildNodes) 
                         {
-                            Atributo attr_nuevo = new Atributo(vars.Token.Text, obj_tipo, null, vars.Token.Location.Line+1, vars.Token.Location.Column+1);
+                            Atributo attr_nuevo = new Atributo(vars.Token.Text.ToLower(), obj_tipo, null, vars.Token.Location.Line+1, vars.Token.Location.Column+1);
                             attrs.Add(attr_nuevo);
                         }
                     }
                     objeto.Attribs = attrs;
                     return new DeclaObjeto(id_objeto, objeto);
                 case "accesoobjeto":
-                    return new AccesoObjeto(actual.ChildNodes[0].Token.Text, actual.ChildNodes[1].Token.Text);
+                    List<string> ids_acceso2 = new List<string>();
+                    foreach (var idacc in actual.ChildNodes) 
+                    {
+                        ids_acceso2.Add(idacc.Token.Text.ToLower());
+                    }
+                    return new AccesoObjeto(ids_acceso2);
+                case "accesoarray":
+
+                    break;
                 case "case":
                     List<Caso> casos = new List<Caso>();
                     foreach (var casito in actual.ChildNodes[2].ChildNodes) {
@@ -299,8 +348,12 @@ namespace Proyecto1.Analisis
                 case "for":
                     int indice_for = 0;
                     if (actual.ChildNodes[4].ChildNodes.Count == 3) indice_for = 1;
-                    String id_for = actual.ChildNodes[0].Token.Text;
+                    String id_for = actual.ChildNodes[0].Token.Text.ToLower();
                     return new For(id_for, expresion(actual.ChildNodes[1]), expresion(actual.ChildNodes[2]), instrucciones(actual.ChildNodes[4].ChildNodes[indice_for]));
+                case "repeat":
+                    int cont_repeat = 0;
+                    if (actual.ChildNodes[1].ChildNodes.Count >1) cont_repeat=1;
+                    return new Repeat(instrucciones(actual.ChildNodes[1].ChildNodes[cont_repeat]), expresion(actual.ChildNodes[3]));
                 case "break":
                     return new Break();
                 case "continue":
@@ -313,7 +366,7 @@ namespace Proyecto1.Analisis
         {
             if (actual.ChildNodes.Count == 3)
             {
-                string operador = actual.ChildNodes[1].Token.Text;
+                string operador = actual.ChildNodes[1].Token.Text.ToLower();
                 switch (operador)
                 {
                     case "+":
@@ -340,17 +393,30 @@ namespace Proyecto1.Analisis
                         return new Logica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), 'a');
                     case "or":
                         return new Logica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), 'o');
-                    case "not":
-                        return new Logica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), 'n');
+                    case "mod":
+                        return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), 'm');
+                    case "div":
+                        return new Aritmetica(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), 'd');
                     default:
                         return new Relacional(expresion(actual.ChildNodes[0]), expresion(actual.ChildNodes[2]), '=');
                 }
             }
+            else if (actual.ChildNodes.Count == 2) 
+            {
+                string tipo = actual.ChildNodes[0].Token.Text.ToLower();
+                switch (tipo) 
+                {
+                    case "not":
+                        return new Logica(expresion(actual.ChildNodes[1]), null, 'n');
+                    default:
+                        return new Aritmetica(expresion(actual.ChildNodes[1]), null, '-');
+                }
+            }
             else
             {
-                String tipo = actual.ChildNodes[0].Term.Name;
+                string tipo = actual.ChildNodes[0].Term.Name;
                 tipo = tipo.ToLower();
-                switch(tipo) 
+                switch (tipo)
                 {
                     case "entero":
                         return new Primitivo('N', actual.ChildNodes[0].Token.Text);
@@ -366,11 +432,15 @@ namespace Proyecto1.Analisis
                     case "llamada":
                         return new Primitivo('L', instruccion(actual.ChildNodes[0]));
                     case "accesoobjeto":
+                        if (actual.ChildNodes[0].ChildNodes.Count == 1)
+                            return new Primitivo('I', actual.ChildNodes[0].ChildNodes[0].Token.Text);
                         return new Primitivo('O', instruccion(actual.ChildNodes[0]));
+                    case "accesoarray":
+                        return new Primitivo('A', instruccion(actual.ChildNodes[0]));
                     default:
                         return expresion(actual.ChildNodes[0]);
                 }
-                
+
             }
         }
 
@@ -447,12 +517,17 @@ namespace Proyecto1.Analisis
             switch (op)
             {
                 case "integer":
+                case "entero":
                     return new Tipo(Tipos.INT, "integer");
                 case "real":
+                case "decimal":
                     return new Tipo(Tipos.REAL, "real");
                 case "string":
+                case "cadena":
                     return new Tipo(Tipos.STRING, "string");
                 case "boolean":
+                case "true":
+                case "false":
                     return new Tipo(Tipos.BOOLEAN, "boolean");
                 default:
                     return new Tipo(Tipos.OBJ, op);

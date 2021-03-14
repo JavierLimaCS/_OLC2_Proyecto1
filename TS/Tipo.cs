@@ -6,14 +6,14 @@ namespace Proyecto1.TS
 { 
     public enum Tipos
     {
-        ERROR = 0,
-        INT = 1,
-        BOOLEAN = 2,
-        STRING = 3,
-        REAL = 4  ,
-        FUNCTION =5,
-        PARAM = 6,
-        OBJ = 7
+        INT = 0,
+        BOOLEAN = 1,
+        STRING = 2,
+        REAL = 3,
+        FUNCTION =4,
+        PARAM = 5,
+        OBJ = 6,
+        ERROR = 7
     }
     class Tipo
     {

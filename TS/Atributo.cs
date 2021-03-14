@@ -14,6 +14,7 @@ namespace Proyecto1.TS
             this.Value = valor;
             this.Linea = l;
             this.Columna = c;
+            this.esConstante = false;
         }
     }
 }

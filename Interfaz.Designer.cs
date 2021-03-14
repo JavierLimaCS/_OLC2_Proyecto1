@@ -47,9 +47,9 @@ namespace Proyecto1
             // 
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.richTextBox1.Location = new System.Drawing.Point(33, 0);
+            this.richTextBox1.Location = new System.Drawing.Point(46, 0);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(533, 627);
+            this.richTextBox1.Size = new System.Drawing.Size(643, 627);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             this.richTextBox1.SelectionChanged += new System.EventHandler(this.richTextBox1_SelectionChanged);
@@ -62,7 +62,7 @@ namespace Proyecto1
             this.richTextBox2.BackColor = System.Drawing.SystemColors.MenuText;
             this.richTextBox2.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.ScrollBar;
-            this.richTextBox2.Location = new System.Drawing.Point(586, 139);
+            this.richTextBox2.Location = new System.Drawing.Point(695, 139);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.ReadOnly = true;
             this.richTextBox2.Size = new System.Drawing.Size(356, 476);
@@ -105,7 +105,7 @@ namespace Proyecto1
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 6;
-            this.button4.Text = "Reporte";
+            this.button4.Text = "Ver Reporte";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -129,7 +129,7 @@ namespace Proyecto1
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Location = new System.Drawing.Point(586, 12);
+            this.groupBox1.Location = new System.Drawing.Point(695, 14);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(356, 104);
             this.groupBox1.TabIndex = 8;
@@ -151,7 +151,7 @@ namespace Proyecto1
             this.LineNumberTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.LineNumberTextBox.Cursor = System.Windows.Forms.Cursors.PanNE;
             this.LineNumberTextBox.Dock = System.Windows.Forms.DockStyle.Left;
-            this.LineNumberTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LineNumberTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LineNumberTextBox.Location = new System.Drawing.Point(0, 0);
             this.LineNumberTextBox.Name = "LineNumberTextBox";
             this.LineNumberTextBox.ReadOnly = true;
@@ -175,7 +175,7 @@ namespace Proyecto1
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(954, 627);
+            this.ClientSize = new System.Drawing.Size(1063, 627);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.LineNumberTextBox);
             this.Controls.Add(this.groupBox1);
