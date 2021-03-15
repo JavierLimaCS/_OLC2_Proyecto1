@@ -1,0 +1,7 @@
+C:\Users\Usuario\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto1\exe\Proyecto1.exe
+C:\Users\Usuario\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto1\exe\Proyecto1.dll
+C:\Users\Usuario\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto1\exe\Proyecto1.deps.json
+C:\Users\Usuario\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto1\exe\Proyecto1.runtimeconfig.json
+C:\Users\Usuario\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto1\exe\Proyecto1.pdb
+C:\Users\Usuario\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto1\exe\Irony.dll
+C:\Users\Usuario\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto1\exe\Irony.Interpreter.dll
