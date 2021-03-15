@@ -16,6 +16,7 @@ namespace Proyecto1.Interprete.Instruccion
         }
         public override object Ejecutar(TabladeSimbolos ts)
         {
+            if (this.exp == null) return this;
             this.valor_exit = this.exp.Evaluar(ts);
             return this;
         }

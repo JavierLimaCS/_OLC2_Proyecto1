@@ -11,19 +11,27 @@ namespace Proyecto1.Interprete.Instruccion
         private Expresion.Expresion valor;
         private LinkedList<Instruccion> instrucciones;
         private Instruccion _else;
-        List<object> salida;
+        object salida;
         public If(Expresion.Expresion valor, LinkedList<Instruccion> instrucciones, Instruccion _else)
         {
             this.valor = valor;
             this.instrucciones = instrucciones;
             this._else = _else;
-            this.salida = new List<object>();
+            this.Semanticos = new List<Analisis.Error>();
         }
         public override object Ejecutar(TabladeSimbolos ts)
         {
             Simbolo valor = this.valor.Evaluar(ts);
+            if (valor == null || valor.Value==null) 
+            {
+                this.listaErrores.Add(new Analisis.Error("Semantico","La condicion es incorrecta en sentencia IF",0,0));
+                return this.salida = "";
+            }
             if (valor.Tipo.tipo != Tipos.BOOLEAN)
-                throw new Exception("El tipo no es booleano para el IF");
+            {
+                this.listaErrores.Add(new Analisis.Error("Semantico", "La condicion no es BOOLEANA en sentencia IF", 0, 0));
+                return this.salida;
+            }
 
             if (bool.Parse(valor.Value.ToString()))
             {
@@ -34,11 +42,7 @@ namespace Proyecto1.Interprete.Instruccion
                         if (instruccion != null)
                         {
                             Object output = instruccion.Ejecutar(ts);
-                            if (output is List<object>)
-                            {
-                                this.salida.AddRange((List<object>)output);
-                            }
-                            else if (output is Break)
+                            if (output is Break)
                             {
                                 return output;
                             }
@@ -48,11 +52,11 @@ namespace Proyecto1.Interprete.Instruccion
                             }
                             else if (output is Exit)
                             {
-
+                                return output;
                             }
                             else
                             {
-                                this.salida.Add(output);
+                                this.salida = output;
                             }
                         }
                     }
@@ -66,7 +70,7 @@ namespace Proyecto1.Interprete.Instruccion
             {
                 if (_else != null) 
                 {
-                    this.salida.AddRange((List<object>)_else.Ejecutar(ts));
+                    this.salida = _else.Ejecutar(ts);
                 }
             }
             return this.salida;

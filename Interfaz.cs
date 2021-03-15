@@ -181,11 +181,16 @@ namespace Proyecto1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            String cadena = this.richTextBox1.Text;
+            String cadena = this.richTextBox1.Text.ToLower();
             String file = this.label1.Text;
             Traductor translator = new Traductor();
             translator.Traducir(cadena, file);
             this.richTextBox2.Text = translator.console;
+
+        }
+
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }

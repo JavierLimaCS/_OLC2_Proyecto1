@@ -9,41 +9,51 @@ namespace Proyecto1.Interprete.Instruccion
     {
         private Expresion.Expresion valor;
         private LinkedList<Instruccion> instrucciones;
-        List<Object> salida;
+        object salida;
         public While(Expresion.Expresion valor, LinkedList<Instruccion> instrucciones)
         {
             this.valor = valor;
             this.instrucciones = instrucciones;
-            this.salida = new List<Object>();
+            this.salida = "";
+            this.Semanticos = new List<Analisis.Error>();
         }
 
         public override object Ejecutar(TabladeSimbolos ts)
         {
             Simbolo valor = this.valor.Evaluar(ts);
+            if (valor == null)
+            {
+                this.listaErrores.Add(new Analisis.Error("Semantico", "La condicion es incorrecta en sentencia WHILE", 0, 0));
+                return this.salida;
+            }
             if (valor.Tipo.tipo != Tipos.BOOLEAN)
-                throw new Exception("El tipo no es booleano para el IF");
+            {
+                this.listaErrores.Add(new Analisis.Error("Semantico", "La condicion no es BOOLEANA en sentencia WHILE", 0, 0));
+                return this.salida;
+            }
 
-            while (bool.Parse(valor.Value.ToString())) 
+                while (bool.Parse(valor.Value.ToString())) 
             {
                 try
                 {
                     foreach (var instruccion in this.instrucciones)
                     {
                         Object output = instruccion.Ejecutar(ts);
-                        if (output is List<Object>)
+                        if (output is Break)
                         {
-                            this.salida.AddRange((List<Object>)output);
-                        }
-                        else if (output is Break)
-                        {
-                             return "";
+                            return "";
                         }
                         else if (output is Continue)
                         {
+                            break;
+                        }
+                        else if (output is Exit)
+                        {
+                            return output;
                         }
                         else
                         {
-                            this.salida.Add(output);
+                            this.salida = output;
                         }
                     }
                     valor = this.valor.Evaluar(ts);

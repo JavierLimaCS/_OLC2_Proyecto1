@@ -163,7 +163,7 @@ namespace Proyecto1.Analisis
                         }
                         foreach (var variable in decla.ChildNodes[0].ChildNodes)
                         {
-                            id = variable.Token.Text;
+                            id = variable.Token.Text.ToLower();
                             vars.Add(id);
                         }
                         
@@ -344,16 +344,22 @@ namespace Proyecto1.Analisis
                         caso_nuevo = new Caso(exps, instrucciones(casito.ChildNodes[index_casos]));
                         casos.Add(caso_nuevo);
                     }
-                    return new Case(expresion(actual.ChildNodes[1]), casos);
+                    return new Case(expresion(actual.ChildNodes[1]), casos, instruccion(actual.ChildNodes[3]));
                 case "for":
                     int indice_for = 0;
-                    if (actual.ChildNodes[4].ChildNodes.Count == 3) indice_for = 1;
+                    bool reverse = false;
+                    if (actual.ChildNodes[2].Token.Text.Equals("downto")) reverse = true;
+                    if (actual.ChildNodes[5].ChildNodes.Count == 3) indice_for = 1;
                     String id_for = actual.ChildNodes[0].Token.Text.ToLower();
-                    return new For(id_for, expresion(actual.ChildNodes[1]), expresion(actual.ChildNodes[2]), instrucciones(actual.ChildNodes[4].ChildNodes[indice_for]));
+                    return new For(id_for, expresion(actual.ChildNodes[1]), expresion(actual.ChildNodes[3]), instrucciones(actual.ChildNodes[5].ChildNodes[indice_for]), reverse);
                 case "repeat":
                     int cont_repeat = 0;
                     if (actual.ChildNodes[1].ChildNodes.Count >1) cont_repeat=1;
                     return new Repeat(instrucciones(actual.ChildNodes[1].ChildNodes[cont_repeat]), expresion(actual.ChildNodes[3]));
+                case "exit":
+                    if(actual.ChildNodes.Count > 1)
+                        return new Exit(expresion(actual.ChildNodes[1]));
+                    return new Exit(null);
                 case "break":
                     return new Break();
                 case "continue":
@@ -433,7 +439,7 @@ namespace Proyecto1.Analisis
                         return new Primitivo('L', instruccion(actual.ChildNodes[0]));
                     case "accesoobjeto":
                         if (actual.ChildNodes[0].ChildNodes.Count == 1)
-                            return new Primitivo('I', actual.ChildNodes[0].ChildNodes[0].Token.Text);
+                            return new Primitivo('I', actual.ChildNodes[0].ChildNodes[0].Token.Text.ToLower());
                         return new Primitivo('O', instruccion(actual.ChildNodes[0]));
                     case "accesoarray":
                         return new Primitivo('A', instruccion(actual.ChildNodes[0]));

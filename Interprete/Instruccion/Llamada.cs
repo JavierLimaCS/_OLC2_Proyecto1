@@ -12,17 +12,21 @@ namespace Proyecto1.Interprete.Instruccion
         public String id;
         private List<Expresion.Expresion> exp_list;
         public object retorno;
-        List<Object> salida;
         public Llamada(String id, List<Expresion.Expresion> exp_list) 
         {
             this.id = id.ToLower();
             this.exp_list = exp_list;
-            this.salida = new List<object>();
+            this.Semanticos = new List<Analisis.Error>();
         }
         public override object Ejecutar(TabladeSimbolos ts)
         {
             Simbolo_Funcion funcion = ts.getFuncion(this.id);
-            TabladeSimbolos ts_funcion = new TabladeSimbolos(ts, funcion.Id);
+            if (funcion == null)
+            {
+                this.Semanticos.Add(new Analisis.Error("Semantico", "La funcion" + this.id + "no existe.", 0, 0));
+                return "";
+            }
+            TabladeSimbolos ts_funcion = new TabladeSimbolos(ts, ts.alias+funcion.Id);
             if (this.exp_list != null) 
             {
                 if (funcion.Params.Count == this.exp_list.Count)
@@ -49,8 +53,6 @@ namespace Proyecto1.Interprete.Instruccion
                     inst.Ejecutar(ts_funcion);
                 }
             }
-            Object result = null;
-            String print = "";
             foreach (var sent in funcion.listaSent) 
             {
                 if (sent != null)
@@ -58,35 +60,43 @@ namespace Proyecto1.Interprete.Instruccion
                     if (sent is Asignacion)
                     {
                         Asignacion posible_return = (Asignacion)sent;
-                        if (posible_return.id == this.id)
+                        retorno = sent.Ejecutar(ts_funcion);
+                        if (posible_return.id == this.id) 
+                        {
                             retorno = sent.Ejecutar(ts_funcion);
+                            return retorno;
+                        }
+                            
                     }
                     else 
                     {
-                        result = sent.Ejecutar(ts_funcion);
-                    }
-                    if (result is List<Object>)
-                    {
-                        this.salida = this.salida.Union((List<Object>)result).ToList();
-                    }
-                    else
-                    {
-                        if (result != null)
-                            print += result.ToString();
-                        if (result is Simbolo_Funcion) 
+                        object output = sent.Ejecutar(ts_funcion);
+                        if (output is Break)
                         {
-                            retorno = result;
-                            Simbolo_Funcion tmp = (Simbolo_Funcion)retorno;
-                            ts.setFuncionValor(tmp.Id, tmp.Value);
+                            return "";
+                        }
+                        else if (output is Continue)
+                        {
+                            break;
+                        }
+                        else if (output is Exit)
+                        {
+                            Exit returnf = (Exit)output;
+                            Simbolo nuevo = (Simbolo)returnf.valor_exit;
+                            ts.setFuncionValor(this.id, nuevo.Value);
+                            return ts.getFuncion(this.id);
+                        }
+                        else
+                        {
+                            this.retorno = output;
                         }
                     }
-                    
                 }
             }
             if (funcion.Tipo != null) {
-                this.salida.Add(retorno);
+                return this.retorno;
             }
-            return this.salida;
+            return "";
         }
     }
 }

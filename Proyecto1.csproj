@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Interprete\Instruccion\Llamada.cs~RF114faf5a.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Irony">
       <HintPath>..\..\..\..\..\..\..\compiladores2\Irony.dll</HintPath>
     </Reference>

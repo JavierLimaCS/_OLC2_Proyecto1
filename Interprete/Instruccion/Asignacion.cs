@@ -15,17 +15,20 @@ namespace Proyecto1.Interprete.Instruccion
         {
             this.id = id;
             this.valor = val;
+            this.Semanticos = new List<Analisis.Error>();
         }
         public Asignacion(List<string> ids, Expresion.Expresion val) 
         {
             this.accesos = ids;
             this.valor = val;
+            this.Semanticos = new List<Analisis.Error>();
         }
         public Asignacion(String id, Expresion.Expresion index, Expresion.Expresion val)
         {
             this.id = id.ToLower();
             this.indice = index;
             this.valor = val;
+            this.Semanticos = new List<Analisis.Error>();
         }
         public override object Ejecutar(TabladeSimbolos ts) 
         {
@@ -50,7 +53,8 @@ namespace Proyecto1.Interprete.Instruccion
             else
             {
                 updated = ts.setFuncionValor(this.id, nuevo_valor);
-                if (updated) return ts.getFuncion(this.id);
+                if (updated) 
+                    return ts.getFuncion(this.id);
             }
             return valor;
         }

@@ -9,25 +9,21 @@ namespace Proyecto1.Interprete.Instruccion
     class Else : Instruccion
     {
         private LinkedList<Instruccion> sentencias;
-        List<object> salida;
+        object salida;
         public Else(LinkedList<Instruccion> sentencias)
         {
             this.sentencias = sentencias;
             this.salida = new List<object>();
+            this.Semanticos = new List<Analisis.Error>();
         }
         public override object Ejecutar(TabladeSimbolos ts)
         {
-            String print = "";
             foreach (var instruccion in sentencias)
             {
                 if (instruccion != null)
                 {
                     Object output = instruccion.Ejecutar(ts);
-                    if (output is List<object>)
-                    {
-                        this.salida.AddRange((List<object>)output);
-                    }
-                    else if (output is Break)
+                    if (output is Break)
                     {
                         return output;
                     }
@@ -37,11 +33,11 @@ namespace Proyecto1.Interprete.Instruccion
                     }
                     else if (output is Exit)
                     {
-
+                        return output;
                     }
                     else
                     {
-                        this.salida.Add(output);
+                        this.salida = output;
                     }
                 }
             }

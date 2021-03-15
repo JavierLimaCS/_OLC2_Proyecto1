@@ -12,50 +12,80 @@ namespace Proyecto1.Interprete.Instruccion
         Expresion.Expresion inicio;
         Expresion.Expresion final;
         LinkedList<Instruccion> instruccions;
-        List<object> salida;
-        public For(String id, Expresion.Expresion inicio, Expresion.Expresion final, LinkedList<Instruccion> inst) 
+        bool reverse;
+        object salida;
+        public For(String id, Expresion.Expresion inicio, Expresion.Expresion final, LinkedList<Instruccion> inst, bool r) 
         {
             this.id = id;
             this.inicio = inicio;
             this.final = final;
             this.instruccions = inst;
-            this.salida = new List<object>();
+            this.reverse = r;
+            this.Semanticos = new List<Analisis.Error>();
         }
 
         public override object Ejecutar(TabladeSimbolos ts)
         {
             int init = int.Parse(this.inicio.Evaluar(ts).Value.ToString());
             int end = int.Parse(this.final.Evaluar(ts).Value.ToString());
-            String print = "";
-            for(int i = init; i<=end; i++)
+            if (!reverse)
             {
-                ts.setVariableValor(this.id, init);
-                foreach (var inst in this.instruccions) 
+                for (int i = init; i <= end; i++)
                 {
-                    Object output = inst.Ejecutar(ts);
-                    if (output is List<object>)
+                    ts.setVariableValor(this.id, init);
+                    foreach (var inst in this.instruccions)
                     {
-                        this.salida.AddRange((List<object>)output);
+                        Object output = inst.Ejecutar(ts);
+                        if (output is Break)
+                        {
+                            return "";
+                        }
+                        else if (output is Continue)
+                        {
+                            break;
+                        }
+                        else if (output is Exit)
+                        {
+                            return output;
+                        }
+                        else
+                        {
+                            this.salida = output;
+                        }
                     }
-                    else if (output is Break)
-                    {
-                        return "";
-                    }
-                    else if (output is Continue)
-                    {
-                        break;
-                    }
-                    else if (output is Exit) 
-                    {
-                    
-                    }
-                    else
-                    {
-                        this.salida.Add(output);
-                    }
+                    if (init == end) break;
+                    init++;
                 }
-                if (init == end) break;
-                init++;
+
+            }
+            else 
+            {
+                for (int i = init; i >= end; i--)
+                {
+                    ts.setVariableValor(this.id, init);
+                    foreach (var inst in this.instruccions)
+                    {
+                        Object output = inst.Ejecutar(ts);
+                        if (output is Break)
+                        {
+                            return output;
+                        }
+                        else if (output is Continue)
+                        {
+                            break;
+                        }
+                        else if (output is Exit)
+                        {
+                            return output;
+                        }
+                        else
+                        {
+                            this.salida = output;
+                        }
+                    }
+                    if (init == end) break;
+                    init--;
+                }
             }
             return this.salida;
         }

@@ -30,27 +30,111 @@ namespace Proyecto1.Interprete.Expresion
             {
                 case '>':
                     resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN,"boolean"), 0, 0, false);
-                    resultado.Value = int.Parse(izquierda.Value.ToString()) > int.Parse(derecha.Value.ToString());
+                    switch (tipoResultante.ToString().ToLower())
+                    {
+                        case "int":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) > int.Parse(derecha.Value.ToString());
+                            break;
+                        case "string":
+                            resultado.Value = izquierda.Value.ToString().Length > derecha.Value.ToString().Length;
+                            break;
+                        case "real":
+                            resultado.Value = decimal.Parse(izquierda.Value.ToString()) > decimal.Parse(derecha.Value.ToString());
+                            break;
+                        case "boolean":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) > int.Parse(derecha.Value.ToString());
+                            break;
+                    }
                     return resultado;
                 case '<':
                     resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0, false);
-                    resultado.Value = int.Parse(izquierda.Value.ToString()) < int.Parse(derecha.Value.ToString());
+                    switch (tipoResultante.ToString().ToLower())
+                    {
+                        case "int":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) < int.Parse(derecha.Value.ToString());
+                            break;
+                        case "string":
+                            resultado.Value = izquierda.Value.ToString().Length < derecha.Value.ToString().Length;
+                            break;
+                        case "real":
+                            resultado.Value = decimal.Parse(izquierda.Value.ToString()) < decimal.Parse(derecha.Value.ToString());
+                            break;
+                        case "boolean":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) < int.Parse(derecha.Value.ToString());
+                            break;
+                    }
                     return resultado;
                 case '!':
                     resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0, false);
-                    resultado.Value = int.Parse(izquierda.Value.ToString()) != int.Parse(derecha.Value.ToString());
+                    switch (tipoResultante.ToString().ToLower())
+                    {
+                        case "int":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) != int.Parse(derecha.Value.ToString());
+                            break;
+                        case "string":
+                            resultado.Value = !izquierda.Value.ToString().Equals(derecha.Value.ToString());
+                            break;
+                        case "real":
+                            resultado.Value = decimal.Parse(izquierda.Value.ToString()) != decimal.Parse(derecha.Value.ToString());
+                            break;
+                        case "boolean":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) != int.Parse(derecha.Value.ToString());
+                            break;
+                    }
                     return resultado;
                 case 'm':
                     resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0, false);
-                    resultado.Value = int.Parse(izquierda.Value.ToString()) >= int.Parse(derecha.Value.ToString());
+                    switch (tipoResultante.ToString().ToLower())
+                    {
+                        case "int":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) >= int.Parse(derecha.Value.ToString());
+                            break;
+                        case "string":
+                            resultado.Value = izquierda.Value.ToString().Length >= derecha.Value.ToString().Length;
+                            break;
+                        case "real":
+                            resultado.Value = decimal.Parse(izquierda.Value.ToString()) >= decimal.Parse(derecha.Value.ToString());
+                            break;
+                        case "boolean":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) >= int.Parse(derecha.Value.ToString());
+                            break;
+                    }
                     return resultado;
                 case 'i':
                     resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0, false);
-                    resultado.Value = int.Parse(izquierda.Value.ToString()) <= int.Parse(derecha.Value.ToString());
+                    switch (tipoResultante.ToString().ToLower())
+                    {
+                        case "int":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) <= int.Parse(derecha.Value.ToString());
+                            break;
+                        case "string":
+                            resultado.Value = izquierda.Value.ToString().Length <= derecha.Value.ToString().Length;
+                            break;
+                        case "real":
+                            resultado.Value = decimal.Parse(izquierda.Value.ToString()) <= decimal.Parse(derecha.Value.ToString());
+                            break;
+                        case "boolean":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) <= int.Parse(derecha.Value.ToString());
+                            break;
+                    }
                     return resultado;
                 default:
                     resultado = new Simbolo(null, new Tipo(Tipos.BOOLEAN, "boolean"), 0, 0, false);
-                    resultado.Value = int.Parse(izquierda.Value.ToString()) == int.Parse(derecha.Value.ToString());
+                    switch (tipoResultante.ToString().ToLower())
+                    {
+                        case "int":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) == int.Parse(derecha.Value.ToString());
+                            break;
+                        case "string":
+                            resultado.Value = izquierda.Value.ToString().Equals(derecha.Value.ToString());
+                            break;
+                        case "real":
+                            resultado.Value = decimal.Parse(izquierda.Value.ToString()) == decimal.Parse(derecha.Value.ToString());
+                            break;
+                        case "boolean":
+                            resultado.Value = int.Parse(izquierda.Value.ToString()) == int.Parse(derecha.Value.ToString());
+                            break;
+                    }
                     return resultado;
             }
         }

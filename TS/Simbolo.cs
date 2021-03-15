@@ -14,17 +14,13 @@ namespace Proyecto1.TS
         private int line, column;
         private Object value;
         private bool isConstant;
-        private string n;
-        private Tipo ty;
-        private int l;
-        private int c;
 
         public Simbolo(string n, Tipo ty, int l, int c)
         {
-            this.n = n;
-            this.ty = ty;
-            this.l = l;
-            this.c = c;
+            this.id = n;
+            this.Tipo = ty;
+            this.line = l;
+            this.column = c;
         }
 
         public Simbolo(String n, Tipo ty, int l, int c, bool b) {

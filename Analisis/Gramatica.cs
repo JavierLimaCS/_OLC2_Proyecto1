@@ -59,6 +59,7 @@ namespace Proyecto1.Analisis
             var RUNTIL = ToTerm("until");
             var RFOR = ToTerm("for");
             var RTO = ToTerm("to");
+            var RDOWNTO = ToTerm("downto");
             var RGRAF = ToTerm("graficar_ts");
             var RBREAK = ToTerm("break");
             var RCONTINUE = ToTerm("continue");
@@ -268,7 +269,8 @@ namespace Proyecto1.Analisis
                 = MakeStarRule(S_Elif, RELSE + RIF + Expresion + RTHEN + Cuerpo_Sentencias);
 
             S_For.Rule
-                = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Cuerpo_Sentencias;
+                = RFOR + ID + ASIGN + Expresion + RTO + Expresion + RDO + Cuerpo_Sentencias
+                | RFOR + ID + ASIGN + Expresion + RDOWNTO + Expresion + RDO + Cuerpo_Sentencias;
 
             Cuerpo_Sentencias.Rule
                 = BEGIN + Sentencias + END
@@ -285,8 +287,7 @@ namespace Proyecto1.Analisis
                 | exp_list + BIPUNTO + BEGIN + Sentencias + END;
 
             S_Else2.Rule
-                = RELSE + Sentencia
-                | Empty;
+                = RELSE + Cuerpo_Sentencias + PTCOMA;
 
             S_While.Rule
                 = RWHILE + Expresion + RDO + Cuerpo_Sentencias;
@@ -308,7 +309,8 @@ namespace Proyecto1.Analisis
                 = RGRAF;
 
             Expresion.Rule
-                = Expresion + MAS + Expresion
+                =  MENOS + Expresion
+                | Expresion + MAS + Expresion
                 | Expresion + MENOS + Expresion
                 | Expresion + DIV + Expresion
                 | Expresion + RDIV + Expresion
@@ -323,7 +325,6 @@ namespace Proyecto1.Analisis
                 | Expresion + AND + Expresion
                 | Expresion + OR + Expresion
                 | NOT + Expresion
-                | MENOS + Expresion
                 | PAR1 + Expresion + PAR2
                 | TTRUE
                 | TFALSE
@@ -344,14 +345,14 @@ namespace Proyecto1.Analisis
             this.RegisterOperators(1, Associativity.Left, IGUAL, MAYOR, MENOR, MENIG, MAYIG, DIFF);
             this.RegisterOperators(2, Associativity.Left, MAS, MENOS, OR);
             this.RegisterOperators(3, Associativity.Left, POR, DIV, MOD, AND);
-            this.RegisterOperators(4, Associativity.Neutral, MENOS);
+           // this.RegisterOperators(4, Associativity.Right, MENOS);
             this.RegisterOperators(6, Associativity.Right, NOT);
             this.RegisterOperators(7, Associativity.Neutral, PAR1, PAR2);
             #endregion
 
             #region Eliminacion
             this.MarkPunctuation(PTCOMA, BIPUNTO, PT, PAR1, PAR2, ASIGN);
-            this.MarkPunctuation(PROG, CONST, FUNCT, PROC, ROF, RFOR, RTO);
+            this.MarkPunctuation(PROG, CONST, FUNCT, PROC, ROF, RFOR);
             this.MarkTransient(Instruccion, Sentencia);
             
             #endregion

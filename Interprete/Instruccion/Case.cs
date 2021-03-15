@@ -9,12 +9,13 @@ namespace Proyecto1.Interprete.Instruccion
     {
         Expresion.Expresion cond;
         List<Caso> casos;
-        List<object> salida;
-        public Case(Expresion.Expresion cond, List<Caso> casos) 
+        object salida;
+        Instruccion _else;
+        public Case(Expresion.Expresion cond, List<Caso> casos, Instruccion elsito) 
         {
             this.cond = cond;
             this.casos = casos;
-            this.salida = new List<object>();
+            this._else = elsito;
         }
         public override object Ejecutar(TabladeSimbolos ts)
         {
@@ -31,23 +32,31 @@ namespace Proyecto1.Interprete.Instruccion
                             if (inst != null)
                             {
                                 Object output = inst.Ejecutar(ts);
-                                if (output is List<Object>)
+                                if (output is Break)
                                 {
-                                    this.salida.AddRange((List<Object>)output);
+                                    return output;
                                 }
-                                else if (output is Break)
+                                else if (output is Continue)
                                 {
-                                    return salida;
+                                    break;
+                                }
+                                else if (output is Exit)
+                                {
+                                    return output;
                                 }
                                 else
                                 {
-                                    this.salida.Add(output);
+                                    this.salida = output;
                                 }
                             }
                         }
                         return this.salida;
                     }
                 }
+            }
+            if (_else != null)
+            {
+                this.salida = _else.Ejecutar(ts);
             }
             return this.salida;
         }

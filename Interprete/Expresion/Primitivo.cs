@@ -44,7 +44,7 @@ namespace Proyecto1.Interprete.Expresion
                     primitivo.Value = this.valor;
                     break;
                 case 'I':
-                    primitivo = ts.getVariableValor(this.valor.ToString().ToLower());
+                    primitivo = ts.getVariableValor(this.valor.ToString());
                     break;
                 case 'O':
                     if (this.valor is AccesoObjeto) 
@@ -62,11 +62,7 @@ namespace Proyecto1.Interprete.Expresion
                         object output;
                         Llamada llamadita = (Llamada)valor;
                         output = llamadita.Ejecutar(ts);
-                        salida = (List<object>)output;
                         funct = ts.getFuncion(llamadita.id);
-                        Simbolo_Funcion ex = encontrarRetorno(salida);
-                        funct.Value = ex.Value;
-                        ts.setFuncionValor(funct.Id, funct.Value);
                     }
                     return funct;
             }
