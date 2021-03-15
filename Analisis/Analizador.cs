@@ -50,7 +50,6 @@ namespace Proyecto1.Analisis
                 crearReporteErrores();
                 return;
             }
-            crearReporteErrores();
             if (BuscarAnidadas(raiz))
             {
                 consola = "No puede ejecutarse el archivo de entrada porque existen funciones anidadas\n" +
@@ -63,6 +62,7 @@ namespace Proyecto1.Analisis
             this.ejecutar(listaSentencias, global);
             this.generarGrafo(raiz);
             this.global.generarTS(this.global.alias);
+            crearReporteErrores();
         }
 
         public Boolean BuscarAnidadas(ParseTreeNode raiz)
@@ -92,6 +92,13 @@ namespace Proyecto1.Analisis
                 if (instruccion != null) 
                 {
                     output = instruccion.Ejecutar(ts);
+                    if (instruccion.Semanticos.Count > 0) 
+                    {
+                        foreach (var nodo in instruccion.Semanticos) 
+                        {
+                            this.lista_errores.AddLast(nodo);
+                        }
+                    }
                     if (output is List<Object>) 
                     {
                         this.salida.AddRange((List<Object>)output); 
@@ -299,8 +306,29 @@ namespace Proyecto1.Analisis
                 case "graficar":
                     return new GraficarTS();
                 case "array":
-                    string id_array = actual.ChildNodes[0].Token.Text.ToLower() ;
-                    break; 
+                    string id_array = actual.ChildNodes[0].Token.Text.ToLower();
+                    int line_a = actual.ChildNodes[0].Token.Location.Line + 1;
+                    int col_a = actual.ChildNodes[0].Token.Location.Column + 1;
+                    string tipo_array = actual.ChildNodes[6].ChildNodes[0].Token.Text;
+                    Tipo array_type = getTipo(tipo_array);
+                    int tipoarr = 0;
+                    Arreglo new_array = new Arreglo(id_array, array_type, line_a, col_a, tipoarr);
+                    Expresion dimension1 = null;
+                    Expresion dimension2 = null;
+                    List<int> indices_arr = new List<int>(); 
+                    foreach (var dimension in actual.ChildNodes[4].ChildNodes) 
+                    {
+                        if (dimension.ChildNodes.Count > 1) 
+                        { 
+                            tipoarr = 1;
+                            new_array.TipoArreglo = tipoarr;
+                        }
+                        dimension1 = expresion(dimension.ChildNodes[0]);
+                        dimension2 = expresion(dimension.ChildNodes[1]);
+                        indices_arr.Add(int.Parse(dimension1.Evaluar(this.global).Value.ToString()));
+                        indices_arr.Add(int.Parse(dimension2.Evaluar(this.global).Value.ToString()));
+                    }
+                    return new DeclaArreglo(id_array, new_array, indices_arr);
                 case "type":
                     String id_objeto = actual.ChildNodes[0].Token.Text.ToLower();
                     int l = actual.ChildNodes[0].Token.Location.Line;

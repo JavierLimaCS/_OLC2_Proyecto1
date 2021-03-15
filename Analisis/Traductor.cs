@@ -2,6 +2,7 @@
 using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Proyecto1.Analisis
@@ -9,6 +10,7 @@ namespace Proyecto1.Analisis
     class Traductor
     {
         public String console = "";
+        string contenido="";
         public TabladeSimbolos ts = new TabladeSimbolos(null, "Global");
         public void Traducir(String cadena, String filename) 
         {
@@ -22,9 +24,38 @@ namespace Proyecto1.Analisis
                 console = "El archivo " + filename  + " no puede traducirse porque contiene errores.";
                 return;
             }
-            traduccion(raiz.ChildNodes[1]);
+            if (BuscarAnidadas(raiz))
+            {
+
+                traduccion(raiz.ChildNodes[1]);
+                crearTraducido(contenido, filename);
+                return;
+            }
+            else 
+            {
+                crearTraducido(cadena, filename);
+                console = "El archivo " + filename + " fue traducido con exito.";
+            }
         }
 
+        public Boolean BuscarAnidadas(ParseTreeNode raiz)
+        {
+            String no_terminal;
+            foreach (var nodo in raiz.ChildNodes[1].ChildNodes)
+            {
+                no_terminal = nodo.Term.Name;
+                switch (no_terminal)
+                {
+                    case "Funcion":
+                        foreach (var funcionAnidada in nodo.ChildNodes[3].ChildNodes)
+                        {
+                            if (funcionAnidada.Term.Name == "Funcion") return true;
+                        }
+                        return false;
+                }
+            }
+            return false;
+        }
         public void traduccion(ParseTreeNode instrucciones) 
         {
             Simbolo_Funcion funcionPadre;
@@ -81,6 +112,15 @@ namespace Proyecto1.Analisis
                 }
             }
             return false;
+        }
+
+        public void crearTraducido(string cadena, string filename)
+        {
+            if (filename.Equals(".")) filename = "generico";
+            using (StreamWriter outputFile = new StreamWriter("C:/compiladores2/traducido_"+filename+".pas"))
+            {
+                outputFile.WriteLine(cadena);
+            }
         }
     }
 }

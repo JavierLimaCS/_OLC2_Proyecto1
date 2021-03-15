@@ -14,6 +14,7 @@ namespace Proyecto1.TS
         Dictionary<string, Simbolo> variables;
         Dictionary<string, Simbolo_Funcion> funciones;
         Dictionary<string, Objeto> types;
+        Dictionary<string, Arreglo> arreglos;
         public TabladeSimbolos(TabladeSimbolos padre, String alias)
         {
             this.padre = padre;
@@ -21,6 +22,7 @@ namespace Proyecto1.TS
             this.variables = new Dictionary<string, Simbolo>();
             this.funciones = new Dictionary<string, Simbolo_Funcion>();
             this.types = new Dictionary<string, Objeto>();
+            this.arreglos = new Dictionary<string, Arreglo>();
         }
 
         public Simbolo getVariableValor(String id)
@@ -55,6 +57,18 @@ namespace Proyecto1.TS
             {
                 if (actual.types.ContainsKey(id))
                     return actual.types[id];
+                actual = actual.padre;
+            };
+            return null;
+        }
+
+        public Arreglo getArray(String id)
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.types.ContainsKey(id))
+                    return actual.arreglos[id];
                 actual = actual.padre;
             };
             return null;
@@ -146,6 +160,22 @@ namespace Proyecto1.TS
             return false;
         }
 
+        public bool setValorIndiceArreglo(int indice, object valor, string id) 
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.arreglos.ContainsKey(id))
+                {
+                    actual.arreglos[id].Elementos[indice] = valor;
+                    return true;
+                }
+                actual = actual.padre;
+            };
+            return false;
+
+        }
+
         public void declararVariable(string id, Simbolo variable)
         {
             if (!this.variables.ContainsKey(id))
@@ -175,6 +205,18 @@ namespace Proyecto1.TS
             if (!this.types.ContainsKey(id))
             {
                 this.types.Add(id, objeto);
+            }
+            else
+            {
+                throw new Exception("El objeto " + id + " ya existe en este ambito.");
+            }
+        }
+
+        public void declararArreglo(string id, Arreglo arreglo) 
+        {
+            if (!this.arreglos.ContainsKey(id))
+            {
+                this.arreglos.Add(id, arreglo);
             }
             else
             {
@@ -281,7 +323,7 @@ namespace Proyecto1.TS
                     simbolo += "<tr>" +
                             "<td class=\"text-left\">" + this.types.ElementAt(i).Value.Id +
                             "</td>" + "\n" +
-                            "<td class=\"text-left\">" + this.types.ElementAt(i).Value.Attribs.Count +
+                            "<td class=\"text-left\">" + "object" +
                             "</td>" + "\n" +
                             "<td class=\"text-left\">" + this.types.ElementAt(i).Value.Linea +
                             "</td>" + "\n" +
@@ -300,6 +342,34 @@ namespace Proyecto1.TS
                                "</tr> \n";
                     }
                 }
+            }
+            if (this.arreglos.Count > 0) 
+            {
+                for (int i = 0; i < this.arreglos.Count; i++)
+                {
+                    simbolo += "<tr>" +
+                            "<td class=\"text-left\">" + this.arreglos.ElementAt(i).Value.Id +
+                            "</td>" + "\n" +
+                            "<td class=\"text-left\">" + "array" +
+                            "</td>" + "\n" +
+                            "<td class=\"text-left\">" + this.arreglos.ElementAt(i).Value.Linea +
+                            "</td>" + "\n" +
+                            "<td class=\"text-left\">" + this.arreglos.ElementAt(i).Value.Columna +
+                            "</td>" + "\n";
+                    if (this.padre == null)
+                    {
+                        simbolo += "<td class=\"text-left\">" + this.alias +
+                           "</td>" + "\n" +
+                           "</tr> \n";
+                    }
+                    else
+                    {
+                        simbolo += "<td class=\"text-left\">" + this.padre.alias +
+                               "</td>" + "\n" +
+                               "</tr> \n";
+                    }
+                }
+
             }
             return simbolo;
         }

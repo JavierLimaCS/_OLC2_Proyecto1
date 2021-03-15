@@ -12,6 +12,7 @@ namespace Proyecto1.Interprete.Instruccion
         public AccesoObjeto(List<string> ids) 
         {
             this.ids = ids;
+            this.Semanticos = new List<Analisis.Error>();
         }
         public override object Ejecutar(TabladeSimbolos ts)
         {
@@ -42,9 +43,21 @@ namespace Proyecto1.Interprete.Instruccion
             }
             else 
             {
-                error = "No existe";  
+                int cont = 0;
+                foreach (var id in this.ids)
+                {
+                    if (this.ids.Count == cont)
+                    {
+                        error += id;
+                    }
+                    else 
+                    {
+                        error += id + "->";
+                    }
+                }
+                this.Semanticos.Add(new Analisis.Error("Semantico","No existe el objeto "+error+" al que desea accederse.",0,0));
             }
-            return "ERROR: " + error;
+            return"";
         }
     }
 }

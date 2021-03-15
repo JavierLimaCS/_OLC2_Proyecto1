@@ -136,6 +136,8 @@ namespace Proyecto1.Analisis
             NonTerminal Types = new NonTerminal("Type");
             NonTerminal accessObj = new NonTerminal("AccesoObjeto");
             NonTerminal accessArr = new NonTerminal("AccesoArray");
+            NonTerminal Dimensiones = new NonTerminal("Dimensiones");
+            NonTerminal dimensions_list = new NonTerminal("dim_list");
             #endregion
 
             #region Gramatica
@@ -179,7 +181,13 @@ namespace Proyecto1.Analisis
                 = ID + IGUAL + OBJECT + VAR + Declaraciones + END + PTCOMA;
 
             Arrays.Rule
-                = ID + IGUAL + ARRAY + COR1 + Expresion + PT + PT + Expresion + COR2 + ROF + Tipo + PTCOMA;
+                = ID + IGUAL + ARRAY + COR1 + dimensions_list + COR2 + ROF + Tipo + PTCOMA;
+
+            Dimensiones.Rule
+                = Expresion + PT + PT + Expresion;
+
+            dimensions_list.Rule
+                = MakeListRule(dimensions_list, COM, Dimensiones);
 
             var_list.Rule
                 = MakeListRule(var_list, COM, ID);
