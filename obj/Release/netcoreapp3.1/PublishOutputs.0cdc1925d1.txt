@@ -1,0 +1,7 @@
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er Semestre\Compi2\Proyecto1\bin\Release\netcoreapp3.1\publish\Proyecto1.exe
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er Semestre\Compi2\Proyecto1\bin\Release\netcoreapp3.1\publish\Proyecto1.dll
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er Semestre\Compi2\Proyecto1\bin\Release\netcoreapp3.1\publish\Proyecto1.deps.json
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er Semestre\Compi2\Proyecto1\bin\Release\netcoreapp3.1\publish\Proyecto1.runtimeconfig.json
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er Semestre\Compi2\Proyecto1\bin\Release\netcoreapp3.1\publish\Proyecto1.pdb
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er Semestre\Compi2\Proyecto1\bin\Release\netcoreapp3.1\publish\Irony.dll
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er Semestre\Compi2\Proyecto1\bin\Release\netcoreapp3.1\publish\Irony.Interpreter.dll

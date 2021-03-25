@@ -1,4 +1,5 @@
-﻿using Proyecto1.TS;
+﻿using Proyecto1.Codigo3D;
+using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -142,6 +143,15 @@ namespace Proyecto1.Interprete.Expresion
                     }
                     return resultado;
             }
+        }
+
+        public override string generar3D(TabladeSimbolos ts, Intermedio c3d)
+        {
+            string code = "";
+            code += this.izquierda.generar3D(ts, c3d);
+            code += this.tipo.ToString();
+            code += this.derecha.generar3D(ts, c3d);
+            return code;
         }
     }
 }

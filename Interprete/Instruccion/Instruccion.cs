@@ -11,8 +11,10 @@ namespace Proyecto1.Interprete.Instruccion
 {
     abstract class Instruccion
     {
-        public List<Error> Semanticos;
+        public List<Error> Semanticos = new List<Error>();
         public abstract object Ejecutar(TabladeSimbolos ts);
+
+        //public abstract string generar3D(TabladeSimbolos ts);
 
         public List<Error> listaErrores
         {

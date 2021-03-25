@@ -8,23 +8,24 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\Usuario\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\javes\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto1\\Proyecto1.csproj",
+      "projectUniqueName": "C:\\Users\\javes\\OneDrive\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto1\\Proyecto1.csproj",
       "projectName": "Proyecto1",
-      "projectPath": "C:\\Users\\Usuario\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto1\\Proyecto1.csproj",
-      "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Usuario\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto1\\obj\\",
+      "projectPath": "C:\\Users\\javes\\OneDrive\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto1\\Proyecto1.csproj",
+      "packagesPath": "C:\\Users\\javes\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\javes\\OneDrive\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\javes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -67,7 +68,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.407\\RuntimeIdentifierGraph.json"
       }
     }
   }

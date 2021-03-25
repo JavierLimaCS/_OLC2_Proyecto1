@@ -13,10 +13,7 @@
 
   <ItemGroup>
     <Reference Include="Irony">
-      <HintPath>..\..\..\..\..\..\..\compiladores2\Irony.dll</HintPath>
-    </Reference>
-    <Reference Include="Irony.Interpreter">
-      <HintPath>..\..\..\..\..\..\..\compiladores2\Irony.Interpreter.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\compiladores2\Irony.dll</HintPath>
     </Reference>
   </ItemGroup>
 

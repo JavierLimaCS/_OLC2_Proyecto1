@@ -47,9 +47,10 @@ namespace Proyecto1
             // 
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.richTextBox1.Location = new System.Drawing.Point(46, 0);
+            this.richTextBox1.Location = new System.Drawing.Point(66, 0);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(681, 706);
+            this.richTextBox1.Size = new System.Drawing.Size(973, 794);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             this.richTextBox1.SelectionChanged += new System.EventHandler(this.richTextBox1_SelectionChanged);
@@ -62,18 +63,20 @@ namespace Proyecto1
             this.richTextBox2.BackColor = System.Drawing.SystemColors.MenuText;
             this.richTextBox2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.ScrollBar;
-            this.richTextBox2.Location = new System.Drawing.Point(748, 122);
+            this.richTextBox2.Location = new System.Drawing.Point(1069, 203);
+            this.richTextBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(549, 584);
+            this.richTextBox2.Size = new System.Drawing.Size(687, 604);
             this.richTextBox2.TabIndex = 2;
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
             // 
             // Abrir
             // 
-            this.Abrir.Location = new System.Drawing.Point(189, 22);
+            this.Abrir.Location = new System.Drawing.Point(153, 37);
+            this.Abrir.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Abrir.Name = "Abrir";
-            this.Abrir.Size = new System.Drawing.Size(76, 23);
+            this.Abrir.Size = new System.Drawing.Size(109, 38);
             this.Abrir.TabIndex = 3;
             this.Abrir.Text = "Abrir";
             this.Abrir.UseVisualStyleBackColor = true;
@@ -81,9 +84,10 @@ namespace Proyecto1
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(272, 22);
+            this.button2.Location = new System.Drawing.Point(272, 37);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(107, 38);
             this.button2.TabIndex = 4;
             this.button2.Text = "Traducir";
             this.button2.UseVisualStyleBackColor = true;
@@ -91,9 +95,10 @@ namespace Proyecto1
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(353, 22);
+            this.button3.Location = new System.Drawing.Point(389, 37);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(107, 38);
             this.button3.TabIndex = 5;
             this.button3.Text = "Ejecutar\r\n";
             this.button3.UseVisualStyleBackColor = true;
@@ -101,9 +106,10 @@ namespace Proyecto1
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(353, 61);
+            this.button4.Location = new System.Drawing.Point(389, 98);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.Size = new System.Drawing.Size(107, 38);
             this.button4.TabIndex = 6;
             this.button4.Text = "Ver Reporte";
             this.button4.UseVisualStyleBackColor = true;
@@ -116,9 +122,10 @@ namespace Proyecto1
             "Reporte Errores",
             "Reporte Tabla de Simbolos",
             "Reporte AST"});
-            this.comboBox1.Location = new System.Drawing.Point(16, 61);
+            this.comboBox1.Location = new System.Drawing.Point(23, 102);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(331, 23);
+            this.comboBox1.Size = new System.Drawing.Size(356, 33);
             this.comboBox1.TabIndex = 7;
             // 
             // groupBox1
@@ -130,9 +137,11 @@ namespace Proyecto1
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Location = new System.Drawing.Point(748, 12);
+            this.groupBox1.Location = new System.Drawing.Point(1069, 20);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(549, 104);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox1.Size = new System.Drawing.Size(687, 173);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Menu";
@@ -140,17 +149,19 @@ namespace Proyecto1
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 30);
+            this.label1.Location = new System.Drawing.Point(23, 50);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(10, 15);
+            this.label1.Size = new System.Drawing.Size(16, 25);
             this.label1.TabIndex = 10;
             this.label1.Text = ".";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(434, 22);
+            this.button1.Location = new System.Drawing.Point(504, 37);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(109, 63);
+            this.button1.Size = new System.Drawing.Size(156, 105);
             this.button1.TabIndex = 8;
             this.button1.Text = "About";
             this.button1.UseVisualStyleBackColor = true;
@@ -163,28 +174,29 @@ namespace Proyecto1
             this.LineNumberTextBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.LineNumberTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LineNumberTextBox.Location = new System.Drawing.Point(0, 0);
+            this.LineNumberTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.LineNumberTextBox.Name = "LineNumberTextBox";
             this.LineNumberTextBox.ReadOnly = true;
             this.LineNumberTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.LineNumberTextBox.Size = new System.Drawing.Size(27, 718);
+            this.LineNumberTextBox.Size = new System.Drawing.Size(39, 821);
             this.LineNumberTextBox.TabIndex = 9;
             this.LineNumberTextBox.Text = "";
             this.LineNumberTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LineNumberTextBox_MouseDown);
             // 
             // Interfaz
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(1328, 718);
+            this.ClientSize = new System.Drawing.Size(1766, 821);
             this.Controls.Add(this.LineNumberTextBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.richTextBox1);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Interfaz";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "COMPI PASCAL";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Interfaz_Load);
             this.Resize += new System.EventHandler(this.Interfaz_Resize);
             this.groupBox1.ResumeLayout(false);
