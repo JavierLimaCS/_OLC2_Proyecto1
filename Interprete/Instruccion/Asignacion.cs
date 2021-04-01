@@ -1,4 +1,5 @@
-﻿using Proyecto1.TS;
+﻿using Proyecto1.Codigo3D;
+using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -57,6 +58,11 @@ namespace Proyecto1.Interprete.Instruccion
                     return ts.getFuncion(this.id);
             }
             return valor;
+        }
+
+        public override string generar3D(TabladeSimbolos ts, Intermedio inter)
+        {
+            return "";
         }
     }
 }

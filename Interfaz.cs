@@ -193,5 +193,13 @@ namespace Proyecto1
         {
 
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            String cadena = this.richTextBox1.Text.ToLower();
+            String file = this.label1.Text;
+            Generador generator = new Generador();
+            generator.generar(cadena, this.richTextBox2);
+        }
     }
 }

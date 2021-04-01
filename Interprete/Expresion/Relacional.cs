@@ -10,7 +10,7 @@ namespace Proyecto1.Interprete.Expresion
     {
         private Expresion izquierda;
         private Expresion derecha;
-        private char tipo;
+        public char tipo;
         public Relacional(Expresion izquierda, Expresion derecha, char tipo) 
         {
             this.izquierda = izquierda;
@@ -142,7 +142,58 @@ namespace Proyecto1.Interprete.Expresion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio c3d)
         {
-            return "";
+            string code = "";
+            if (this.derecha == null)
+            {
+
+            }
+            else
+            {
+                if (this.izquierda is Primitivo & this.derecha is Primitivo)
+                {
+                    code += c3d.tmp.generarTemporal() + " = ";
+                    code += this.izquierda.generar3D(ts, c3d);
+                    code += this.tipo.ToString();
+                    code += this.derecha.generar3D(ts, c3d);
+                }
+                else if (this.izquierda is Primitivo & !(this.derecha is Primitivo))
+                {
+                    string tmp = "";
+                    code += this.derecha.generar3D(ts, c3d);
+                    tmp = c3d.tmp.getLastTemporal();
+                    code += c3d.tmp.generarTemporal() + " = ";
+                    code += this.izquierda.generar3D(ts, c3d);
+                    code += this.tipo.ToString();
+                    code += tmp;
+                }
+                else if (!(this.izquierda is Primitivo) & this.derecha is Primitivo)
+                {
+                    string tmp = "";
+                    code += this.izquierda.generar3D(ts, c3d);
+                    tmp = c3d.tmp.getLastTemporal();
+                    code += c3d.tmp.generarTemporal() + " = ";
+                    code += tmp;
+                    code += this.tipo.ToString();
+                    code += this.derecha.generar3D(ts, c3d);
+                }
+                else
+                {
+                    Relacional izq = (Relacional)this.izquierda;
+                    Relacional der = (Relacional)this.derecha;
+                    if (izq.tipo == '*' || izq.tipo == '/' || izq.tipo == '%')
+                    {
+                        code += izq.generar3D(ts, c3d);
+                        code += der.generar3D(ts, c3d);
+                    }
+                    if (der.tipo == '*' || der.tipo == '/' || der.tipo == '%')
+                    {
+                        code += der.generar3D(ts, c3d);
+                        code += izq.generar3D(ts, c3d);
+                    }
+                }
+            }
+
+            return code + ";\n";
         }
     }
 }

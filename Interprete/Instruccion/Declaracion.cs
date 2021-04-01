@@ -1,4 +1,6 @@
-﻿using Proyecto1.TS;
+﻿using Proyecto1.Codigo3D;
+using Proyecto1.Interprete.Expresion;
+using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -114,6 +116,51 @@ namespace Proyecto1.Interprete.Instruccion
             }
             //return "Variables " + ids  + " se ha insertado en los TS\n";
             return null;
+        }
+
+        public override string generar3D(TabladeSimbolos ts, Intermedio inter)
+        {
+            string code = "//Declaracion de Variable \n";
+            string noval = "";
+            foreach (var variable in this.id) 
+            {
+                if (this.value != null)
+                {
+                    if (this.value is Primitivo)
+                    {
+                        code += variable + " = " + this.value.generar3D(ts, inter) + ";\n";
+                        continue;
+                    }
+                    else 
+                    {
+                        code += this.value.generar3D(ts, inter);
+                    }
+                }
+                else
+                {
+                    String tipo = this.type.tipoAuxiliar;
+                    switch (tipo)
+                    {
+                        case "integer":
+                            noval += 0;
+                            break;
+                        case "string":
+                            noval += "\"\"";
+                            break;
+                        case "real":
+                            noval += 0.0;
+                            break;
+                        case "boolean":
+                            noval += false;
+                            break;
+                    }
+                    code += variable + " = " + noval + ";\n";
+                    continue;
+                }
+                code += variable + " = " + inter.tmp.getLastTemporal() + "; \n";
+            }
+
+            return code + "\n";
         }
     }
 }

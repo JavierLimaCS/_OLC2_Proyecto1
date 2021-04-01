@@ -1,4 +1,5 @@
-﻿using Proyecto1.TS;
+﻿using Proyecto1.Codigo3D;
+using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +59,11 @@ namespace Proyecto1.Interprete.Instruccion
                 this.Semanticos.Add(new Analisis.Error("Semantico","No existe el objeto "+error+" al que desea accederse.",0,0));
             }
             return"";
+        }
+
+        public override string generar3D(TabladeSimbolos ts, Intermedio inter)
+        {
+            return "";
         }
     }
 }

@@ -73,7 +73,9 @@ namespace Proyecto1.Interprete.Expresion
         public override string generar3D(TabladeSimbolos ts, Intermedio c3d)
         {
             string code = "";
-            code += this.valor.ToString();
+            code += this.valor.ToString().Replace("'", "\"");
+            if (code.ToLower().Equals("true")) code += "1";
+            if (code.ToLower().Equals("false")) code += "0";
             return code;
         }
 

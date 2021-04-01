@@ -1,4 +1,5 @@
 ﻿using Proyecto1.Analisis;
+using Proyecto1.Codigo3D;
 using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Proyecto1.Interprete.Instruccion
         public List<Error> Semanticos = new List<Error>();
         public abstract object Ejecutar(TabladeSimbolos ts);
 
-        //public abstract string generar3D(TabladeSimbolos ts);
+        public abstract string generar3D(TabladeSimbolos ts, Intermedio c3d);
 
         public List<Error> listaErrores
         {

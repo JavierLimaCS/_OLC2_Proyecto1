@@ -1,4 +1,5 @@
-﻿using Proyecto1.Interprete.Expresion;
+﻿using Proyecto1.Codigo3D;
+using Proyecto1.Interprete.Expresion;
 using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
@@ -96,6 +97,11 @@ namespace Proyecto1.Interprete.Instruccion
             if (funcion.Tipo != null) {
                 return this.retorno;
             }
+            return "";
+        }
+
+        public override string generar3D(TabladeSimbolos ts, Intermedio inter)
+        {
             return "";
         }
     }

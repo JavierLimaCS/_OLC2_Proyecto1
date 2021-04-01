@@ -6,8 +6,8 @@ namespace Proyecto1.Codigo3D
 {
     class Intermedio
     {
-        Temporales tmp;
-        Etiquetas label;
+        public Temporales tmp;
+        public Etiquetas label;
         public Intermedio() 
         {
             this.tmp = new Temporales();
