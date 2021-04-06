@@ -143,17 +143,19 @@ namespace Proyecto1.Interprete.Expresion
         public override string generar3D(TabladeSimbolos ts, Intermedio c3d)
         {
             string code = "";
+            string operador = this.tipo.ToString();
             if (this.derecha == null)
             {
 
             }
             else
             {
+                if (operador.Equals("=")) operador = "==";
                 if (this.izquierda is Primitivo & this.derecha is Primitivo)
                 {
                     code += c3d.tmp.generarTemporal() + " = ";
                     code += this.izquierda.generar3D(ts, c3d);
-                    code += this.tipo.ToString();
+                    code += operador;
                     code += this.derecha.generar3D(ts, c3d);
                 }
                 else if (this.izquierda is Primitivo & !(this.derecha is Primitivo))
@@ -163,7 +165,7 @@ namespace Proyecto1.Interprete.Expresion
                     tmp = c3d.tmp.getLastTemporal();
                     code += c3d.tmp.generarTemporal() + " = ";
                     code += this.izquierda.generar3D(ts, c3d);
-                    code += this.tipo.ToString();
+                    code += operador;
                     code += tmp;
                 }
                 else if (!(this.izquierda is Primitivo) & this.derecha is Primitivo)
@@ -173,7 +175,7 @@ namespace Proyecto1.Interprete.Expresion
                     tmp = c3d.tmp.getLastTemporal();
                     code += c3d.tmp.generarTemporal() + " = ";
                     code += tmp;
-                    code += this.tipo.ToString();
+                    code += operador;
                     code += this.derecha.generar3D(ts, c3d);
                 }
                 else

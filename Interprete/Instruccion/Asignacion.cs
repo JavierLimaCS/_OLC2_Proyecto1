@@ -62,7 +62,8 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "";
+            string code = "";
+            return code;
         }
     }
 }

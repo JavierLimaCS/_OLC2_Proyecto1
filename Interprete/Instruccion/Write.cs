@@ -29,7 +29,31 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "";
+            string code = "";
+            Simbolo valor;
+            foreach (var exp in this.exp_list)
+            {
+                valor = (Simbolo)exp.Evaluar(ts);
+                code += exp.generar3D(ts, inter);
+                switch (valor.Tipo.tipoAuxiliar)
+                {
+                    case "string":
+                        char[] mensaje = valor.Value.ToString().Replace("'", "").ToCharArray();
+                        for (int i = 0; i < mensaje.Length; i++)
+                        {
+                            char tmp = mensaje[i];
+                            code += "printf(\"%c\", " + Convert.ToInt32(tmp) + "); \n";
+                        }
+                        break;
+                    case "integer":
+                        code += "printf(\"%d\", " + inter.tmp.getLastTemporal() + "); \n";
+                        break;
+                    case "decimal":
+                        code += "printf(\"%f\", " + inter.tmp.getLastTemporal() + "); \n";
+                        break;
+                }
+            }
+            return code + "\n";
         }
     }
 }

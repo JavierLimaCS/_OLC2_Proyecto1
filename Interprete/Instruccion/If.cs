@@ -79,10 +79,22 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            string code = "";
-            code += this.valor.generar3D(ts, inter);
-            code += "if " + inter.tmp.getLastTemporal() + " then ";
-            return code + "\n";
+            string code = "//---> Sentencia Decision If \n";
+            code += "   " + this.valor.generar3D(ts, inter);
+            code += "   if (" + inter.tmp.getLastTemporal() + ") goto " + inter.label.generarLabel() + ";\n";
+            code += "   goto " + inter.label.generarLabel() + ";\n";
+            int index = inter.label.labels.Count;
+            code += "   " + inter.label.labels.ElementAt(index-2) + ": \n";
+            foreach (var inst in this.instrucciones) 
+            {
+                code += "   " + inst.generar3D(ts, inter);
+            }
+            code += "   " + inter.label.labels.ElementAt(index - 1) + ": \n";
+
+            if (this._else != null) {
+                code += this._else.generar3D(ts, inter);
+            }
+            return code;
         }
     }
 }

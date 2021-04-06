@@ -1,4 +1,5 @@
 ﻿using Proyecto1.Codigo3D;
+using Proyecto1.Interprete.Expresion;
 using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
@@ -41,18 +42,38 @@ namespace Proyecto1.Interprete.Instruccion
                         for (int i = 0; i < mensaje.Length; i ++) 
                         {
                             char tmp = mensaje[i];
-                            code += "   printf(\"%c\", " + Convert.ToInt32(tmp) + "); \n";
+                            code += "printf(\"%c\", " + Convert.ToInt32(tmp) + "); \n";
                         }
                         break;
                     case "integer":
-                        code += "   printf(\"%d\", "+valor.Value+"); \n";
+                        if (exp is Primitivo)
+                        {
+                            code += inter.tmp.generarTemporal() + "=";
+                            code += exp.generar3D(ts, inter) + ";\n";
+                        }
+                        else 
+                        {
+                            code += exp.generar3D(ts, inter);
+                        }
+                        code += "printf(\"%d\", (int)"+inter.tmp.getLastTemporal()+"); \n";
                         break;
                     case "decimal":
-                        code += "   printf(\"%f\", " +valor.Value+"); \n";
+                        if (exp is Primitivo)
+                        {
+                            code += inter.tmp.generarTemporal() + "=";
+                            code += exp.generar3D(ts, inter) + ";\n";
+                        }
+                        else
+                        {
+                            code += exp.generar3D(ts, inter);
+                        }
+                        code += inter.tmp.generarTemporal() + "=";
+                        code += exp.generar3D(ts, inter) + ";\n";
+                        code += "printf(\"%f\", (float)" +inter.tmp.getLastTemporal()+"); \n";
                         break;
                 }
             }
-            return code + "\n";
+            return code;
         }
     }
 }

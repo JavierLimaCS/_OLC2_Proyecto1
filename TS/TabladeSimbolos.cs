@@ -11,10 +11,10 @@ namespace Proyecto1.TS
     {
         TabladeSimbolos padre;
         public String alias;
-        Dictionary<string, Simbolo> variables;
-        Dictionary<string, Simbolo_Funcion> funciones;
-        Dictionary<string, Objeto> types;
-        Dictionary<string, Arreglo> arreglos;
+        public Dictionary<string, Simbolo> variables;
+        public Dictionary<string, Simbolo_Funcion> funciones;
+        public Dictionary<string, Objeto> types;
+        public Dictionary<string, Arreglo> arreglos;
         public TabladeSimbolos(TabladeSimbolos padre, String alias)
         {
             this.padre = padre;
@@ -33,6 +33,20 @@ namespace Proyecto1.TS
                 if(actual.variables.ContainsKey(id))
                     return actual.variables[id];
                 actual = actual.padre;
+            };
+            return null;
+        }
+
+        public string getVariablePos(string id) 
+        {
+            TabladeSimbolos actual = this;
+            string ambito = "g";
+            while (actual != null)
+            {
+                if (actual.variables.ContainsKey(id))
+                    return actual.variables[id].Pos + ":" + ambito;
+                actual = actual.padre;
+                ambito = actual.alias;
             };
             return null;
         }
@@ -82,6 +96,21 @@ namespace Proyecto1.TS
                 if (actual.variables.ContainsKey(id))
                 {
                     actual.variables[id].Value = valor;
+                    return true;
+                }
+                actual = actual.padre;
+            };
+            return false;
+        }
+
+        public bool setVariablePos(string id, string tmp) 
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.variables.ContainsKey(id))
+                {
+                    actual.variables[id].Pos = tmp;
                     return true;
                 }
                 actual = actual.padre;

@@ -120,7 +120,7 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            string code = "//Declaracion de Variable \n";
+            string code = "//---> DECLARACION de Variable \n";
             string noval = "";
             foreach (var variable in this.id) 
             {
@@ -128,12 +128,12 @@ namespace Proyecto1.Interprete.Instruccion
                 {
                     if (this.value is Primitivo)
                     {
-                        code += variable + " = " + this.value.generar3D(ts, inter) + ";\n";
-                        continue;
+                        noval = this.value.generar3D(ts, inter);
                     }
                     else 
                     {
                         code += this.value.generar3D(ts, inter);
+                        noval = inter.tmp.getLastTemporal();
                     }
                 }
                 else
@@ -141,6 +141,7 @@ namespace Proyecto1.Interprete.Instruccion
                     String tipo = this.type.tipoAuxiliar;
                     switch (tipo)
                     {
+                        case "boolean":
                         case "integer":
                             noval += 0;
                             break;
@@ -150,14 +151,12 @@ namespace Proyecto1.Interprete.Instruccion
                         case "real":
                             noval += 0.0;
                             break;
-                        case "boolean":
-                            noval += false;
-                            break;
                     }
-                    code += variable + " = " + noval + ";\n";
-                    continue;
                 }
-                code += variable + " = " + inter.tmp.getLastTemporal() + "; \n";
+                code += inter.tmp.generarTemporal() + " = HP;\n";
+                code += "Heap[(int)" + inter.tmp.getLastTemporal() + "] = " + noval + ";\n";
+                code += "HP = HP + 1; \n";
+                ts.setVariablePos(variable, inter.tmp.getLastTemporal());
             }
 
             return code + "\n";

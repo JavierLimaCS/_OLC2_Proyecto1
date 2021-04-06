@@ -73,9 +73,38 @@ namespace Proyecto1.Interprete.Expresion
         public override string generar3D(TabladeSimbolos ts, Intermedio c3d)
         {
             string code = "";
-            code += this.valor.ToString().Replace("'", "\"");
-            if (code.ToLower().Equals("true")) code += "1";
-            if (code.ToLower().Equals("false")) code += "0";
+            switch (this.tipo)
+            {
+                case 'A':
+                    break;
+                case 'R':
+                case 'N':
+                    code += this.valor;
+                    break;
+                case 'S':
+                    code += this.valor.ToString().Replace("'", "\"");
+                    break;
+                case 'B':
+                    if (this.valor.ToString().ToLower().Equals("true")) code += "1";
+                    if (this.valor.ToString().ToLower().Equals("false")) code += "0";
+                    break;
+                case 'I':
+                    string varval = ts.getVariablePos(this.valor.ToString());
+                    string []search = varval.Split(':');
+                    if (search[1].Equals("g"))
+                    {
+                        code +=" Heap[(int)" + search[0] + "]";
+                    }
+                    else 
+                    {
+                        code += " Stack[(int)" + search[0] + "]";
+                    }
+                    break;
+                case 'O':
+                    break;
+                case 'L':
+                    break;
+            }
             return code;
         }
 
