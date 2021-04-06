@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\javes\\OneDrive\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto1\\Proyecto1.csproj",
-      "projectName": "Proyecto1",
-      "projectPath": "C:\\Users\\javes\\OneDrive\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto1\\Proyecto1.csproj",
+      "projectUniqueName": "C:\\Users\\javes\\OneDrive\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto2\\Proyecto2.csproj",
+      "projectName": "Proyecto2",
+      "projectPath": "C:\\Users\\javes\\OneDrive\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto2\\Proyecto2.csproj",
       "packagesPath": "C:\\Users\\javes\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\javes\\OneDrive\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto1\\obj\\",
+      "outputPath": "C:\\Users\\javes\\OneDrive\\Desktop\\USAC 2021\\1er. Semestre\\Compi 2\\Proyecto2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
