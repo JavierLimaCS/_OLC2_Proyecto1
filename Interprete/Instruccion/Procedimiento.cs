@@ -29,7 +29,8 @@ namespace Proyecto1.Interprete.Instruccion
         {
             string code = "//---> Funcion \n";
             code += "void " + this.proc.Id + "() { \n";
-            if(this.instrucciones != null) {
+            ts.alias = ts.alias + this.proc.Id;
+            if (this.instrucciones != null) {
                 foreach (var inst in this.instrucciones)
                 {
                     code +=inst.generar3D(ts, inter);

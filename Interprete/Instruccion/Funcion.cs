@@ -27,8 +27,14 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            string code = "//---> Funcion \n";
-            code += "void " + this.funcion.Id + "() { \n";
+            string code = "//--- Funcion \n";
+            string parametros = "";
+            foreach (var param in funcion.Params) 
+            {
+                parametros += param.Key.ToString();
+            }
+            code += "void " + this.funcion.Tipo.tipoAuxiliar +"_"+ this.funcion.Id + "() { \n";
+            ts.alias = ts.alias + this.funcion.Id;
             if (this.instrucciones != null)
             {
                 foreach (var inst in this.instrucciones)

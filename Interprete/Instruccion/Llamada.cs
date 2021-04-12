@@ -102,7 +102,27 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "";
+            Simbolo_Funcion funct = ts.getFuncion(this.id);
+            string code = "//---> Inicio de Llamada de funcion" + this.id + "\n";
+            foreach(var exp in this.exp_list) 
+            {
+                if (!(exp is Primitivo))
+                {
+                    code += exp.generar3D(ts, inter);
+                }
+                else 
+                {
+                    code += exp.Evaluar(ts);
+                }
+                code += inter.tmp.generarTemporal() + " = " + inter.tmp.getLastTemporal()+ ";\n";
+            }
+            code += "SP = SP + 1; //cambio de ambito\n";
+            code += "SP = SP + 1; \n";
+
+
+            code += this.id+"();\n";
+
+            return code;
         }
     }
 }

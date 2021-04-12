@@ -14,3 +14,4 @@ C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\De
 C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\Debug\netcoreapp3.1\Proyecto2.dll
 C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\Debug\netcoreapp3.1\Proyecto2.pdb
 C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\Debug\netcoreapp3.1\Proyecto2.genruntimeconfig.cache
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\Debug\netcoreapp3.1\Proyecto2.csprojAssemblyReference.cache

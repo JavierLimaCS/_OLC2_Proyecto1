@@ -24,7 +24,14 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "";
+            string code = "";
+            if (this.exp != null)
+            {
+                this.valor_exit = this.exp.Evaluar(ts).Value;
+                code += "Stack[(int)SP] = " + this.valor_exit + ";\n";
+            }
+            code += "goto " + inter.label.generarLabel() + ";\n";
+            return code;
         }
     }
 }

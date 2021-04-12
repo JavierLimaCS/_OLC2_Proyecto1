@@ -1,4 +1,5 @@
 ﻿using Proyecto1.Codigo3D;
+using Proyecto1.Interprete.Expresion;
 using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
@@ -80,16 +81,25 @@ namespace Proyecto1.Interprete.Instruccion
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
             string code = "//---> Sentencia Decision If \n";
-            code += "   " + this.valor.generar3D(ts, inter);
-            code += "   if (" + inter.tmp.getLastTemporal() + ") goto " + inter.label.generarLabel() + ";\n";
-            code += "   goto " + inter.label.generarLabel() + ";\n";
-            int index = inter.label.labels.Count;
-            code += "   " + inter.label.labels.ElementAt(index-2) + ": \n";
-            foreach (var inst in this.instrucciones) 
+            if (this.valor is Primitivo)
             {
-                code += "   " + inst.generar3D(ts, inter);
+                code += inter.tmp.generarTemporal() + " = " + this.valor.generar3D(ts, inter) + ";\n";
             }
-            code += "   " + inter.label.labels.ElementAt(index - 1) + ": \n";
+            else 
+            {
+                code += this.valor.generar3D(ts, inter);
+            }
+            code += "if (" + inter.tmp.getLastTemporal() + ") goto " + inter.label.generarLabel() + ";\n";
+            code += "goto " + inter.label.generarLabel() + ";\n";
+            int index = inter.label.labels.Count;
+            code += inter.label.labels.ElementAt(index - 2) + ": \n";
+            foreach (var inst in this.instrucciones)
+            {
+                 code += inst.generar3D(ts, inter);
+            }
+            code += inter.label.labels.ElementAt(index - 1) + ": \n";
+            
+            
 
             if (this._else != null) {
                 code += this._else.generar3D(ts, inter);

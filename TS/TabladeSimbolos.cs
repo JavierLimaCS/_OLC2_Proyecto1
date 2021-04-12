@@ -30,14 +30,14 @@ namespace Proyecto1.TS
             TabladeSimbolos actual = this;
             while (actual != null)
             {
-                if(actual.variables.ContainsKey(id))
+                if (actual.variables.ContainsKey(id))
                     return actual.variables[id];
                 actual = actual.padre;
             };
             return null;
         }
 
-        public string getVariablePos(string id) 
+        public string getVariablePos(string id)
         {
             TabladeSimbolos actual = this;
             string ambito = "g";
@@ -46,7 +46,7 @@ namespace Proyecto1.TS
                 if (actual.variables.ContainsKey(id))
                     return actual.variables[id].Pos + ":" + ambito;
                 actual = actual.padre;
-                ambito = actual.alias;
+                if (actual != null) ambito = actual.alias;
             };
             return null;
         }
@@ -88,7 +88,7 @@ namespace Proyecto1.TS
             return null;
         }
 
-        public bool setVariableValor(String id, object valor) 
+        public bool setVariableValor(String id, object valor)
         {
             TabladeSimbolos actual = this;
             while (actual != null)
@@ -101,6 +101,21 @@ namespace Proyecto1.TS
                 actual = actual.padre;
             };
             return false;
+        }
+
+        public bool esFuncion(string id) 
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.funciones.ContainsKey(id))
+                {
+                    return true;
+                }
+                actual = actual.padre;
+            };
+            return false;
+
         }
 
         public bool setVariablePos(string id, string tmp) 

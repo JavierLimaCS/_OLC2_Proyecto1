@@ -71,18 +71,18 @@ namespace Proyecto1.Interprete.Instruccion
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
             string code = "//---> Sentencia While \n";
-            code += "   " + inter.label.generarLabel() + ":\n";
-            code += "   " + this.valor.generar3D(ts, inter);
-            code += "   if (" + inter.tmp.getLastTemporal() + ") goto " + inter.label.generarLabel() + ";\n";
-            code += "   goto " + inter.label.generarLabel() + ";\n";
+            code += inter.label.generarLabel() + ":\n";
+            code += this.valor.generar3D(ts, inter);
+            code += "if (" + inter.tmp.getLastTemporal() + ") goto " + inter.label.generarLabel() + ";\n";
+            code += "goto " + inter.label.generarLabel() + ";\n";
             int indice = inter.label.labels.Count;
-            code += "   " + inter.label.labels.ElementAt(indice - 2) + ": \n";
+            code += inter.label.labels.ElementAt(indice - 2) + ": \n";
             foreach (var inst in this.instrucciones)
             {
-                code += "   " + inst.generar3D(ts, inter);
+                code += inst.generar3D(ts, inter);
             }
-            code += "   goto " + inter.label.labels.ElementAt(indice - 3) + ";\n";
-            code += "   " +inter.label.labels.ElementAt(indice - 1) + ":\n";
+            code += "goto " + inter.label.labels.ElementAt(indice - 3) + ";\n";
+            code += inter.label.labels.ElementAt(indice - 1) + ":\n";
 
             return code;
         }

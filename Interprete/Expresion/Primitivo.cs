@@ -82,7 +82,16 @@ namespace Proyecto1.Interprete.Expresion
                     code += this.valor;
                     break;
                 case 'S':
-                    code += this.valor.ToString().Replace("'", "\"");
+                    code += c3d.tmp.generarTemporal() + " = HP; //guardo la referencia de inicio de la cadena\n";
+                    string cadena = this.valor.ToString();
+                    cadena = cadena.Replace("'", "");
+                    foreach (var car in cadena) 
+                    {
+                        code += "Heap[(int)HP] = " + (int)car +";   //" + car + "\n";
+                        code += "HP = HP + 1; \n";
+                    }
+                    code += "Heap[(int)HP] = -1;\n";
+                    code += "HP = HP + 1; \n";
                     break;
                 case 'B':
                     if (this.valor.ToString().ToLower().Equals("true")) code += "1";

@@ -153,10 +153,13 @@ namespace Proyecto1.Interprete.Expresion
                 if (operador.Equals("=")) operador = "==";
                 if (this.izquierda is Primitivo & this.derecha is Primitivo)
                 {
-                    code += c3d.tmp.generarTemporal() + " = ";
+                    code += "if(";
                     code += this.izquierda.generar3D(ts, c3d);
                     code += operador;
                     code += this.derecha.generar3D(ts, c3d);
+                    code += ") goto " + c3d.label.generarLabel() + ";\n";
+                    code += c3d.tmp.generarTemporal() + " = 0;\n";
+                    code += "goto " + c3d.label.generarLabel() + ";\n";
                 }
                 else if (this.izquierda is Primitivo & !(this.derecha is Primitivo))
                 {
@@ -182,20 +185,12 @@ namespace Proyecto1.Interprete.Expresion
                 {
                     Relacional izq = (Relacional)this.izquierda;
                     Relacional der = (Relacional)this.derecha;
-                    if (izq.tipo == '*' || izq.tipo == '/' || izq.tipo == '%')
-                    {
-                        code += izq.generar3D(ts, c3d);
-                        code += der.generar3D(ts, c3d);
-                    }
-                    if (der.tipo == '*' || der.tipo == '/' || der.tipo == '%')
-                    {
-                        code += der.generar3D(ts, c3d);
-                        code += izq.generar3D(ts, c3d);
-                    }
+                    code += izq.generar3D(ts, c3d);
+                    code += der.generar3D(ts, c3d);
                 }
             }
 
-            return code + ";\n";
+            return code;
         }
     }
 }

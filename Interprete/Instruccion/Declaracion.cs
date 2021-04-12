@@ -120,7 +120,16 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            string code = "//---> DECLARACION de Variable \n";
+            string tipovar = "";
+            if (this.constant)
+            {
+                tipovar = "constante";
+            }
+            else
+            {
+                tipovar = "variable";
+            }
+            string code = "//--- Declaracion de "+tipovar+"---//\n";
             string noval = "";
             foreach (var variable in this.id) 
             {
@@ -153,9 +162,43 @@ namespace Proyecto1.Interprete.Instruccion
                             break;
                     }
                 }
-                code += inter.tmp.generarTemporal() + " = HP;\n";
-                code += "Heap[(int)" + inter.tmp.getLastTemporal() + "] = " + noval + ";\n";
-                code += "HP = HP + 1; \n";
+                
+                if (ts.alias.ToLower().Equals("global"))
+                {
+                    if (this.type.tipoAuxiliar.Equals("integer") || this.type.tipoAuxiliar.Equals("real") || this.type.tipoAuxiliar.Equals("boolean"))
+                    {
+                        code += inter.tmp.generarTemporal() + " = HP; //referencia a "+tipovar+ " global\n";
+                        code += "Heap[(int)" + inter.tmp.getLastTemporal() + "] = " + noval + ";\n";
+                        code += "HP = HP + 1; \n";
+                    }
+                    else
+                    {
+                        code += noval;
+                        noval = inter.tmp.getLastTemporal();
+                        code += inter.tmp.generarTemporal() + " = HP;   //referencia a " + tipovar + " global\n";
+                        code += "Heap[(int)" + inter.tmp.getLastTemporal() + "] = " + noval + ";\n";
+                        code += "HP = HP + 1; \n";
+                    }
+                }
+                else 
+                {
+                    if (this.type.tipoAuxiliar.Equals("integer") || this.type.tipoAuxiliar.Equals("real"))
+                    {
+                        code += inter.tmp.generarTemporal() + " = SP; //referencia a " + tipovar + " local\n";
+                        code += "Stack[(int)" + inter.tmp.getLastTemporal() + "] = " + noval + ";\n";
+                        code += "SP = SP + 1; \n";
+                    }
+                    else
+                    {
+                        code += noval;
+                        noval = inter.tmp.getLastTemporal();
+                        code += inter.tmp.generarTemporal() + " = SP;   //referencia a " + tipovar + " local\n";
+                        code += "Stack[(int)" + inter.tmp.getLastTemporal() + "] = " + noval + ";\n";
+                        code += "SP = SP + 1; \n";
+                    }
+                }
+                
+                
                 ts.setVariablePos(variable, inter.tmp.getLastTemporal());
             }
 

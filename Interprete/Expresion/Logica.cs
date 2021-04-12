@@ -65,51 +65,74 @@ namespace Proyecto1.Interprete.Expresion
             }
             else
             {
-                if (this.izquierda is Primitivo & this.derecha is Primitivo)
+                string firstcond = "";
+                string secondcond = "";
+                List<string> lv = new List<string>();
+                List<string> lf = new List<string>();
+                switch (this.op)
                 {
-                    code += c3d.tmp.generarTemporal() + " = ";
-                    code += this.izquierda.generar3D(ts, c3d);
-                    code += this.op.ToString();
-                    code += this.derecha.generar3D(ts, c3d);
+                    case 'a':
+                        if (this.izquierda is Relacional)
+                        {
+                            Relacional rel_izq = (Relacional)this.izquierda;
+                            firstcond += rel_izq.generar3D(ts, c3d);
+                            firstcond += "if(" + c3d.tmp.getLastTemporal() + ") goto " + c3d.label.generarLabel() + ";\n";
+                            lv.Add(c3d.label.getLastLabel());
+                            firstcond += "goto " + c3d.label.generarLabel() + ";\n";
+                            lf.Add(c3d.label.getLastLabel());
+                        }
+                        else
+                        {
+                            firstcond += this.izquierda.generar3D(ts, c3d);
+                            lv.Add(c3d.label.getLastLabel());
+                        }
+                        if (this.derecha is Relacional)
+                        {
+                            Relacional rel_der = (Relacional)this.derecha;
+                            secondcond += lv[lv.Count - 1] + ":\n";
+                            secondcond += rel_der.generar3D(ts, c3d);
+                            secondcond += "if(" + c3d.tmp.getLastTemporal() + ") goto " + c3d.label.generarLabel() + ";\n";
+                            lv.Add(c3d.label.getLastLabel());
+                            secondcond += "goto " + c3d.label.generarLabel() + ";\n";
+                            lf.Add(c3d.label.getLastLabel());
+                        }
+                        else
+                        {
+                            secondcond = this.derecha.generar3D(ts, c3d);
+                            lv.Add(c3d.label.getLastLabel());
+                        }
+
+                        break;
+
+                    case 'o':
+                        if (this.izquierda is Relacional)
+                        {
+                            Relacional rel_izq = (Relacional)this.izquierda;
+                            firstcond += rel_izq.generar3D(ts, c3d);
+                            firstcond += "if(" + c3d.tmp.getLastTemporal() + ") goto " + c3d.label.generarLabel() + ";\n";
+                        }
+                        if (this.derecha is Relacional)
+                        {
+                            Relacional rel_der = (Relacional)this.derecha;
+                            secondcond += rel_der.generar3D(ts, c3d);
+                            secondcond += "if(" + c3d.tmp.getLastTemporal() + ") goto " + c3d.label.generarLabel() + ";\n";
+                        }
+                        break;
                 }
-                else if (this.izquierda is Primitivo & !(this.derecha is Primitivo))
+                code += firstcond + secondcond;
+                code += lv[lv.Count - 1] + ":\n";
+                code += c3d.tmp.generarTemporal() + " = 1;\n";
+                foreach (var etiqueta in lf)
                 {
-                    string tmp = "";
-                    code += this.derecha.generar3D(ts, c3d);
-                    tmp = c3d.tmp.getLastTemporal();
-                    code += c3d.tmp.generarTemporal() + " = ";
-                    code += this.izquierda.generar3D(ts, c3d);
-                    code += this.op.ToString();
-                    code += tmp;
+                    code += etiqueta + ",";
                 }
-                else if (!(this.izquierda is Primitivo) & this.derecha is Primitivo)
-                {
-                    string tmp = "";
-                    code += this.izquierda.generar3D(ts, c3d);
-                    tmp = c3d.tmp.getLastTemporal();
-                    code += c3d.tmp.generarTemporal() + " = ";
-                    code += tmp;
-                    code += this.op.ToString();
-                    code += this.derecha.generar3D(ts, c3d);
-                }
-                else
-                {
-                    Logica izq = (Logica)this.izquierda;
-                    Logica der = (Logica)this.derecha;
-                    if (izq.op == '*' || izq.op == '/' || izq.op == '%')
-                    {
-                        code += izq.generar3D(ts, c3d);
-                        code += der.generar3D(ts, c3d);
-                    }
-                    if (der.op == '*' || der.op == '/' || der.op == '%')
-                    {
-                        code += der.generar3D(ts, c3d);
-                        code += izq.generar3D(ts, c3d);
-                    }
-                }
+                code = code.TrimEnd(',');
+                code += ":\n";
+
             }
 
-            return code + ";\n";
+
+            return code + "\n";
         }
     }
 }
