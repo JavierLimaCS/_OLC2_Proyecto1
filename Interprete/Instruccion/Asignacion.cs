@@ -1,4 +1,5 @@
 ﻿using Proyecto1.Codigo3D;
+using Proyecto1.Interprete.Expresion;
 using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,36 @@ namespace Proyecto1.Interprete.Instruccion
                     {
                         code += "Stack[(int)SP] = " + nuevo_valor + ";\n";
                         code += "goto " + inter.label.generarLabel() + ";\n";
+                    }
+                    else
+                    {
+                        code += "//asignacion de nuevo valor la variable "+this.id+"\n";
+                        string varval = ts.getVariablePos(this.id);
+                        if (varval != null) 
+                        {
+                            code += inter.tmp.generarTemporal() + " = "; 
+                            string[] search = varval.Split(':');
+                            code += search[0] + ";\n";
+                            string valu = "";
+                            string tmpasig = inter.tmp.getLastTemporal();
+                            if (this.valor is Primitivo)
+                            {
+                                valu = this.valor.generar3D(ts,inter);
+                            }
+                            else 
+                            {
+                                code += this.valor.generar3D(ts, inter);
+                                valu = inter.tmp.getLastTemporal();
+                            }
+                            if (search[1].Equals("g"))
+                            {
+                                code += "Heap[(int)" + tmpasig + "] = " + valu + ";\n";
+                            }
+                            else
+                            {
+                                code += "Stack[(int)" + tmpasig + "] = " + valu + ";\n";
+                            }
+                        }
                     }
                 }
             }

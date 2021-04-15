@@ -104,18 +104,26 @@ namespace Proyecto1.Interprete.Instruccion
         {
             Simbolo_Funcion funct = ts.getFuncion(this.id);
             string code = "//---> Inicio de Llamada de funcion" + this.id + "\n";
-            foreach(var exp in this.exp_list) 
+            if (this.exp_list != null)
             {
-                if (!(exp is Primitivo))
+                foreach (var exp in this.exp_list)
                 {
-                    code += exp.generar3D(ts, inter);
+                    if (!(exp is Primitivo))
+                    {
+                        code += exp.generar3D(ts, inter);
+                    }
+                    else
+                    {
+                        code += exp.Evaluar(ts);
+                    }
+                    code += inter.tmp.generarTemporal() + " = " + inter.tmp.getLastTemporal() + ";\n";
                 }
-                else 
-                {
-                    code += exp.Evaluar(ts);
-                }
-                code += inter.tmp.generarTemporal() + " = " + inter.tmp.getLastTemporal()+ ";\n";
             }
+            else 
+            {
+                code += "//no hay parametros en la llamada \n"; 
+            }
+            
             code += "SP = SP + 1; //cambio de ambito\n";
             code += "SP = SP + 1; \n";
 

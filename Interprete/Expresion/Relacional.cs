@@ -143,23 +143,45 @@ namespace Proyecto1.Interprete.Expresion
         public override string generar3D(TabladeSimbolos ts, Intermedio c3d)
         {
             string code = "";
+            string tmpglobal = "";
+            string lv = "";
+            string lf = "";
+            string izquierdaval = "";
+            string derechaval = "";
             string operador = this.tipo.ToString();
             if (this.derecha == null)
             {
-
+                
             }
             else
             {
                 if (operador.Equals("=")) operador = "==";
+                if (operador.Equals("<>")) operador = "!=";
                 if (this.izquierda is Primitivo & this.derecha is Primitivo)
                 {
+                    izquierdaval = this.izquierda.generar3D(ts, c3d);
+                    if (izquierdaval.Contains("Heap") || izquierdaval.Contains("Stack")) 
+                    {
+                        code += izquierdaval + "\n";
+                        izquierdaval = c3d.tmp.getLastTemporal();
+                    }
+                    derechaval = this.derecha.generar3D(ts, c3d);
+                    if (derechaval.Contains("Heap") || derechaval.Contains("Stack")) 
+                    {
+                        code += derechaval + "\n";
+                        derechaval = c3d.tmp.getLastTemporal();
+                    } 
                     code += "if(";
-                    code += this.izquierda.generar3D(ts, c3d);
-                    code += operador;
-                    code += this.derecha.generar3D(ts, c3d);
+                    code += izquierdaval + operador + derechaval;
                     code += ") goto " + c3d.label.generarLabel() + ";\n";
+                    lv = c3d.label.getLastLabel();
                     code += c3d.tmp.generarTemporal() + " = 0;\n";
+                    tmpglobal = c3d.tmp.getLastTemporal();
                     code += "goto " + c3d.label.generarLabel() + ";\n";
+                    lf = c3d.label.getLastLabel();
+                    code += lv + ":\n";
+                    code += tmpglobal + " = 1;\n";
+                    code += lf + ":\n\n";
                 }
                 else if (this.izquierda is Primitivo & !(this.derecha is Primitivo))
                 {

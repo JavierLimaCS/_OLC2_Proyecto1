@@ -70,20 +70,27 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            string code = "//---> Sentencia While \n";
-            code += inter.label.generarLabel() + ":\n";
+            string code = "//--- Sentencia Loop While ---//\n";
+            string recursive_lbl = "";
+            string lf = "";
+            string lv = "";
+            code += inter.label.generarLabel() + ":     //etiqueta recursiva \n";
+            recursive_lbl = inter.label.getLastLabel();
+            code += "//--- codigo de condicion \n";
             code += this.valor.generar3D(ts, inter);
-            code += "if (" + inter.tmp.getLastTemporal() + ") goto " + inter.label.generarLabel() + ";\n";
+            code += "//validacion de la condicion\n";
+            code += "if (" + inter.tmp.getLastTemporal() + "==1) goto " + inter.label.generarLabel() + ";\n";
+            lv = inter.label.getLastLabel();
             code += "goto " + inter.label.generarLabel() + ";\n";
+            lf = inter.label.getLastLabel();
             int indice = inter.label.labels.Count;
-            code += inter.label.labels.ElementAt(indice - 2) + ": \n";
+            code += lv + ": \n";
             foreach (var inst in this.instrucciones)
             {
                 code += inst.generar3D(ts, inter);
             }
-            code += "goto " + inter.label.labels.ElementAt(indice - 3) + ";\n";
-            code += inter.label.labels.ElementAt(indice - 1) + ":\n";
-
+            code += "goto " + recursive_lbl+ ";\n";
+            code += lf + ":\n";
             return code;
         }
     }

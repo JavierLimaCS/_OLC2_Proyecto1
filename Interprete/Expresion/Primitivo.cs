@@ -99,14 +99,22 @@ namespace Proyecto1.Interprete.Expresion
                     break;
                 case 'I':
                     string varval = ts.getVariablePos(this.valor.ToString());
-                    string []search = varval.Split(':');
+                    string[] search;
+                    if (varval != null) 
+                    {
+                        search = varval.Split(':'); 
+                    }
+                    else
+                    {
+                        search = new string[2];
+                    }
                     if (search[1].Equals("g"))
                     {
-                        code +=" Heap[(int)" + search[0] + "]";
+                        code +=c3d.tmp.generarTemporal() + " = Heap[(int)" + search[0] + "];";
                     }
                     else 
                     {
-                        code += " Stack[(int)" + search[0] + "]";
+                        code += c3d.tmp.generarTemporal() + " = Stack[(int)" + search[0] + "];";
                     }
                     break;
                 case 'O':

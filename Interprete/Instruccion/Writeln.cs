@@ -45,7 +45,7 @@ namespace Proyecto1.Interprete.Instruccion
                                 Primitivo primi = (Primitivo)exp;
                                 if (primi.tipo == 'I')
                                 {
-                                    code += inter.tmp.generarTemporal() + " =" + exp.generar3D(ts, inter) + ";\n";
+                                    code += inter.tmp.generarTemporal() + " = " + exp.generar3D(ts, inter) + ";\n";
                                 }
                                 else
                                 {
@@ -54,7 +54,7 @@ namespace Proyecto1.Interprete.Instruccion
                                 string tmp = inter.tmp.getLastTemporal();
                                 string label_inicio = "";
                                 string label_salida = "";
-                                code += "//impresion de una cadea \n";
+                                code += "//impresion de una cadena \n";
                                 code += inter.label.generarLabel() + ":\n";
                                 label_inicio = inter.label.getLastLabel();
                                 code += inter.tmp.generarTemporal() + " = Heap[(int)" + tmp + "];\n";
@@ -64,14 +64,21 @@ namespace Proyecto1.Interprete.Instruccion
                                 code += tmp + " = " + tmp + " + 1;\n";
                                 code += "goto " + label_inicio + ";\n";
                                 code += label_salida + ":\n";
-                                code += "printf( \"%c\" , (char)10) ;\n";
                             }
                             break;
                         case "integer":
                             if (exp is Primitivo)
                             {
-                                code += inter.tmp.generarTemporal() + "=";
-                                code += exp.generar3D(ts, inter) + ";\n";
+                                string busquedaID2 = exp.generar3D(ts, inter);
+                                if (busquedaID2.Contains("Heap") || busquedaID2.Contains("Stack"))
+                                {
+                                    code += busquedaID2 + "\n";
+                                }
+                                else
+                                {
+                                    code += inter.tmp.generarTemporal() + "=";
+                                    code += exp.generar3D(ts, inter) + ";\n";
+                                }
                             }
                             else
                             {
@@ -82,8 +89,16 @@ namespace Proyecto1.Interprete.Instruccion
                         case "real":
                             if (exp is Primitivo)
                             {
-                                code += inter.tmp.generarTemporal() + "=";
-                                code += exp.generar3D(ts, inter) + ";\n";
+                                string busquedaID = exp.generar3D(ts, inter);
+                                if (busquedaID.Contains("Heap") || busquedaID.Contains("Stack")) 
+                                {
+                                    code += busquedaID + "\n";
+                                }
+                                else 
+                                {
+                                    code += inter.tmp.generarTemporal() + "=";
+                                    code += exp.generar3D(ts, inter) + ";\n";
+                                }   
                             }
                             else
                             {
@@ -91,10 +106,57 @@ namespace Proyecto1.Interprete.Instruccion
                             }
                             code += "printf(\"%f\", (float)" + inter.tmp.getLastTemporal() + "); \n";
                             break;
+                        case "boolean":
+                            if (valor.Value.ToString().ToLower().Equals("true"))
+                            {
+                                code += inter.tmp.generarTemporal() + "= HP; //se guarda referencia de inicio de cadena\n";
+                                code += "Heap[(int)HP] = 84;  //T \n";
+                                code += "HP = HP + 1;\n";
+                                code += "Heap[(int)HP] = 82;  //R \n";
+                                code += "HP = HP + 1; \n";
+                                code += "Heap[(int)HP] = 85;  //U \n";
+                                code += "HP = HP + 1;\n";
+                                code += "Heap[(int)HP] = 69;  //E\n";
+                                code += "HP = HP + 1;\n";
+                                code += "Heap[(int)HP] = -1;\n";
+                                code += "HP = HP + 1;\n";
+                            }
+                            else 
+                            {
+                                code += inter.tmp.generarTemporal() + "= HP; //se guarda referencia de inicio de cadena\n";
+                                code += "Heap[(int)HP] = 70;  //F \n";
+                                code += "HP = HP + 1;\n";
+                                code += "Heap[(int)HP] = 65;  //A \n";
+                                code += "HP = HP + 1; \n";
+                                code += "Heap[(int)HP] = 76;  //L \n";
+                                code += "HP = HP + 1;\n";
+                                code += "Heap[(int)HP] = 83;  //S \n";
+                                code += "HP = HP + 1;\n";
+                                code += "Heap[(int)HP] = 69;  //E\n";
+                                code += "HP = HP + 1;\n";
+                                code += "Heap[(int)HP] = -1;\n";
+                                code += "HP = HP + 1;\n";
+                            }
+                            string tmp_bool = inter.tmp.getLastTemporal();
+                            string label_inicio_bool = "";
+                            string label_salida_bool = "";
+                            code += "//impresion de una cadena \n";
+                            code += inter.label.generarLabel() + ":\n";
+                            label_inicio_bool = inter.label.getLastLabel();
+                            code += inter.tmp.generarTemporal() + " = Heap[(int)" + tmp_bool + "];\n";
+                            code += "if(" + inter.tmp.getLastTemporal() + "==-1) goto " + inter.label.generarLabel() + ";\n";
+                            label_salida_bool = inter.label.getLastLabel();
+                            code += "printf(\"%c\", (char)" + inter.tmp.getLastTemporal() + "); \n";
+                            code += tmp_bool + " = " + tmp_bool + " + 1;\n";
+                            code += "goto " + label_inicio_bool + ";\n";
+                            code += label_salida_bool + ":\n";
+                            break;
                     }
                 }
                 
             }
+
+            code += "printf(\"%c\", (char)10);\n";
             return code;
         }
     }

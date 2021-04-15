@@ -148,53 +148,94 @@ namespace Proyecto1.Interprete.Expresion
         public override string generar3D(TabladeSimbolos ts, Intermedio c3d)
         {
             string code = "";
+            string izquierdaval = "";
+            string derechaval = "";
             if (this.derecha == null)
             {
-                
+                code += this.izquierda.generar3D(ts, c3d);
             }
             else 
             {
                 if (this.izquierda is Primitivo & this.derecha is Primitivo)
                 {
+                    izquierdaval = this.izquierda.generar3D(ts, c3d);
+                    if (izquierdaval.Contains("Heap") || izquierdaval.Contains("Stack"))
+                    {
+                        code += izquierdaval + "\n";
+                        izquierdaval = c3d.tmp.getLastTemporal();
+                    }
+                    derechaval = this.derecha.generar3D(ts, c3d);
+                    if (derechaval.Contains("Heap") || derechaval.Contains("Stack"))
+                    {
+                        code += derechaval + "\n";
+                        derechaval = c3d.tmp.getLastTemporal();
+                    }
                     code += c3d.tmp.generarTemporal() + " = ";
-                    code += this.izquierda.generar3D(ts, c3d);
+                    code += izquierdaval;
                     code += this.tipo.ToString();
-                    code += this.derecha.generar3D(ts, c3d);
+                    code += derechaval;
                 }
                 else if (this.izquierda is Primitivo & !(this.derecha is Primitivo))
                 {
+                    izquierdaval = this.izquierda.generar3D(ts, c3d);
+                    if (izquierdaval.Contains("Heap") || izquierdaval.Contains("Stack"))
+                    {
+                        code += izquierdaval + "\n";
+                        izquierdaval = c3d.tmp.getLastTemporal();
+                    }
                     string tmp = "";
                     code += this.derecha.generar3D(ts, c3d);
                     tmp = c3d.tmp.getLastTemporal();
                     code += c3d.tmp.generarTemporal() + " = ";
-                    code += this.izquierda.generar3D(ts, c3d);
+                    code += izquierdaval;
                     code += this.tipo.ToString();
                     code += tmp;
                 }
                 else if (!(this.izquierda is Primitivo) & this.derecha is Primitivo)
                 {
+                    derechaval = this.derecha.generar3D(ts, c3d);
+                    if (derechaval.Contains("Heap") || derechaval.Contains("Stack"))
+                    {
+                        code += derechaval + "\n";
+                        derechaval = c3d.tmp.getLastTemporal();
+                    }
                     string tmp = "";
                     code += this.izquierda.generar3D(ts, c3d);
                     tmp = c3d.tmp.getLastTemporal();
                     code += c3d.tmp.generarTemporal() + " = ";
                     code += tmp;
                     code += this.tipo.ToString();
-                    code += this.derecha.generar3D(ts, c3d);
+                    code += derechaval;
                 }
                 else
                 {
                     Aritmetica izq = (Aritmetica)this.izquierda;
                     Aritmetica der = (Aritmetica)this.derecha;
-                    if (izq.tipo == '*' || izq.tipo == '/' || izq.tipo == '%') 
+                    string tmpizq = "";
+                    string tmpder = "";
+                    if (izq.tipo == '*' || izq.tipo == '/' || izq.tipo == '%')
                     {
                         code += izq.generar3D(ts, c3d);
+                        tmpizq = c3d.tmp.getLastTemporal();
                         code += der.generar3D(ts, c3d);
+                        tmpder = c3d.tmp.getLastTemporal();
                     }
                     if (der.tipo == '*' || der.tipo == '/' || der.tipo == '%')
                     {
                         code += der.generar3D(ts, c3d);
+                        tmpder = c3d.tmp.getLastTemporal();
                         code += izq.generar3D(ts, c3d);
+                        tmpizq = c3d.tmp.getLastTemporal();
                     }
+                    else 
+                    {
+                        code += der.generar3D(ts, c3d);
+                        tmpder = c3d.tmp.getLastTemporal();
+                        code += izq.generar3D(ts, c3d);
+                        tmpizq = c3d.tmp.getLastTemporal();
+                    }
+                    code += c3d.tmp.generarTemporal() + " = " + tmpizq + this.tipo.ToString() + tmpder;
+                    
                 }
             }
             
