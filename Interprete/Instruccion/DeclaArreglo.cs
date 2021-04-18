@@ -39,7 +39,30 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "";
+            string code = "";
+            code += "//----- Declaracion de Arreglo \n";
+            if (this.arr != null)
+            {
+                if (this.indices.Count == 2)
+                {
+                    code += inter.tmp.generarTemporal() + " = ";
+                    code += this.indices[1] + " - " + this.indices[0] + ";";
+                }
+                else if (this.indices.Count == 4)
+                {
+
+                }
+            }
+            if (ts.alias.ToLower().Equals("global"))
+            {
+                code += inter.tmp.generarTemporal() + " = HP;  //referencia a arreglo global\n";
+            }
+            else 
+            {
+                code += inter.tmp.generarTemporal() + " = SP;  //referencia a arreglo local\n";
+            }
+
+            return code;
         }
     }
 }

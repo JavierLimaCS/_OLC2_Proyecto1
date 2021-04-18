@@ -50,7 +50,27 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "";
+            string code = "//--- Sentencia Loop Repeat ---//\n";
+            string recursive_lbl = "";
+            string lf = "";
+            string lv = "";
+            code += inter.label.generarLabel() + ":     //etiqueta recursiva \n";
+            recursive_lbl = inter.label.getLastLabel();
+            foreach (var inst in this.instrucciones)
+            {
+                code += inst.generar3D(ts, inter);
+            }
+            code += "//--- codigo de condicion \n";
+            code += this.condicion.generar3D(ts, inter);
+            code += "//validacion de la condicion\n";
+            code += "if (" + inter.tmp.getLastTemporal() + "==1) goto " + inter.label.generarLabel() + ";\n";
+            lv = inter.label.getLastLabel();
+            code += "goto " + inter.label.generarLabel() + ";\n";
+            lf = inter.label.getLastLabel();
+            code += lf + ": \n";
+            code += "goto " + recursive_lbl + ";\n";
+            code += lv + ":\n";
+            return code;
         }
     }
 }

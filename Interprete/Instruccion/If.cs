@@ -14,6 +14,8 @@ namespace Proyecto1.Interprete.Instruccion
         private LinkedList<Instruccion> instrucciones;
         private Instruccion _else;
         object salida;
+        public string lv;
+        public string lf;
         public If(Expresion.Expresion valor, LinkedList<Instruccion> instrucciones, Instruccion _else)
         {
             this.valor = valor;
@@ -80,7 +82,8 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            string code = "//---> Sentencia Decision If \n";
+            string code = "//------- Sentencia Decision If \n";
+            if (inter.ls.Equals("")) inter.ls = inter.label.generarLabel();
             if (this.valor is Primitivo)
             {
                 code += inter.tmp.generarTemporal() + " = " + this.valor.generar3D(ts, inter) + ";\n";
@@ -90,20 +93,25 @@ namespace Proyecto1.Interprete.Instruccion
                 code += this.valor.generar3D(ts, inter);
             }
             code += "if (" + inter.tmp.getLastTemporal() + ") goto " + inter.label.generarLabel() + ";\n";
+            lv = inter.label.getLastLabel();
             code += "goto " + inter.label.generarLabel() + ";\n";
-            int index = inter.label.labels.Count;
-            code += inter.label.labels.ElementAt(index - 2) + ": \n";
+            lf = inter.label.getLastLabel();
+            code += lv + ":\n";
             foreach (var inst in this.instrucciones)
             {
-                 code += inst.generar3D(ts, inter);
+                code += inst.generar3D(ts, inter);
             }
-            code += inter.label.labels.ElementAt(index - 1) + ": \n";
-            
-            
-
+            code += "\ngoto " + inter.ls + ";\n";
+            code += lf + ":\n";
             if (this._else != null) {
+                if (this._else is If) code += "/----- Sentencia Else-If\n";
                 code += this._else.generar3D(ts, inter);
             }
+            if (!(inter.ls.Equals(""))) 
+            {
+                code += inter.ls + ":\n";
+                inter.ls = "";
+            }    
             return code;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Proyecto1.Codigo3D;
+using Proyecto1.Interprete.Expresion;
 using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,47 @@ namespace Proyecto1.Interprete.Instruccion
         }
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "";
+            string code = "//------- Sentencia Decision Case\n";
+            string eval = "";
+            string lcase = "";
+            if (inter.ls.Equals("")) inter.ls = inter.label.generarLabel();
+            if (this.cond is Primitivo)
+            {
+                code += inter.tmp.generarTemporal() + " = " + this.cond.generar3D(ts, inter) + ";\n";
+            }
+            else
+            {
+                code += this.cond.generar3D(ts, inter);
+            }
+            eval = inter.tmp.getLastTemporal();
+            foreach (var caso in this.casos)
+            {
+                foreach (var cond in caso.Condiciones) 
+                {
+                    if (cond is Primitivo)
+                    {
+                        code += inter.tmp.generarTemporal() + " = " + cond.generar3D(ts, inter) + ";\n";
+                    }
+                    else
+                    {
+                        code += cond.generar3D(ts, inter);
+                    }
+                    code += "if (" + eval + "!= " + inter.tmp.getLastTemporal() +") goto " + inter.label.generarLabel() + ";\n";
+                    lcase = inter.label.getLastLabel();
+                    foreach (var sent in caso.Sentencias) 
+                    {
+                        code += sent.generar3D(ts, inter);
+                    }
+                    code += "goto " + inter.ls + ";\n";
+                    code += lcase + ":\n";
+                }
+            }
+            if (!(inter.ls.Equals("")))
+            {
+                code += inter.ls + ":\n";
+                inter.ls = "";
+            }
+            return code;
         }
     }
 }

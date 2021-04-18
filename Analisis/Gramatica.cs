@@ -133,6 +133,7 @@ namespace Proyecto1.Analisis
             NonTerminal exp_list = new NonTerminal("exp_list");
             NonTerminal Sentencia2 = new NonTerminal("Sentencia");
             NonTerminal Arrays = new NonTerminal("Array");
+            NonTerminal TipoArray = new NonTerminal("tipoarr");
             NonTerminal Types = new NonTerminal("Type");
             NonTerminal accessObj = new NonTerminal("AccesoObjeto");
             NonTerminal accessArr = new NonTerminal("AccesoArray");
@@ -192,12 +193,15 @@ namespace Proyecto1.Analisis
             var_list.Rule
                 = MakeListRule(var_list, COM, ID);
 
+            TipoArray.Rule
+                = ARRAY + COR1 + dimensions_list + COR2 + ROF + Tipo;
+
             Tipo.Rule
                 = TINT
                 | TSTRING
                 | TREAL
                 | TBOOL
-                | Arrays
+                | TipoArray
                 | ID;
 
             Funcion.Rule
@@ -317,7 +321,7 @@ namespace Proyecto1.Analisis
                 = RGRAF;
 
             Expresion.Rule
-                =  MENOS + Expresion
+                = MENOS + Expresion
                 | Expresion + MAS + Expresion
                 | Expresion + MENOS + Expresion
                 | Expresion + DIV + Expresion
@@ -353,7 +357,7 @@ namespace Proyecto1.Analisis
             this.RegisterOperators(1, Associativity.Left, IGUAL, MAYOR, MENOR, MENIG, MAYIG, DIFF);
             this.RegisterOperators(2, Associativity.Left, MAS, MENOS, OR);
             this.RegisterOperators(3, Associativity.Left, POR, DIV, MOD, AND);
-           // this.RegisterOperators(4, Associativity.Right, MENOS);
+            // this.RegisterOperators(4, Associativity.Right, MENOS);
             this.RegisterOperators(6, Associativity.Right, NOT);
             this.RegisterOperators(7, Associativity.Neutral, PAR1, PAR2);
             #endregion
@@ -362,7 +366,7 @@ namespace Proyecto1.Analisis
             this.MarkPunctuation(PTCOMA, BIPUNTO, PT, PAR1, PAR2, ASIGN);
             this.MarkPunctuation(PROG, CONST, FUNCT, PROC, ROF, RFOR);
             this.MarkTransient(Instruccion, Sentencia);
-            
+
             #endregion
 
         }

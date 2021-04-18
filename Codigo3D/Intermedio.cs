@@ -8,8 +8,10 @@ namespace Proyecto1.Codigo3D
     {
         public Temporales tmp;
         public Etiquetas label;
+        public string ls;
         public Intermedio() 
         {
+            this.ls = "";
             this.tmp = new Temporales();
             this.label = new Etiquetas();
         }

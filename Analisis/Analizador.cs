@@ -157,24 +157,55 @@ namespace Proyecto1.Analisis
                     LinkedList<Declaracion> lista_decla = new LinkedList<Declaracion>();
                     foreach (var decla in actual.ChildNodes) 
                     {
-                        String tipov = decla.ChildNodes[1].ChildNodes[0].Token.Text;
-                        String id = "";
-                        Tipo tipo_var = getTipo(tipov);
-                        int line = decla.ChildNodes[0].ChildNodes[0].Token.Location.Line + 1;
-                        int col = decla.ChildNodes[0].ChildNodes[0].Token.Location.Column + 1;
-                        List<String> vars = new List<string>();
-                        Expresion valor = null;
-                        if (decla.ChildNodes[2].ChildNodes.Count > 0)
+                        //declaracion de variables tipo array
+                        if (decla.ChildNodes[1].ChildNodes[0].ChildNodes.Count > 1)
                         {
-                            valor = expresion(decla.ChildNodes[2].ChildNodes[1]);
+                            string var_arr_ty = decla.ChildNodes[1].ChildNodes[0].ChildNodes[4].ChildNodes[0].Token.Text;
+                            string var_id_array = decla.ChildNodes[0].ChildNodes[0].Token.Text.ToLower();
+                            int var_line_a = decla.ChildNodes[0].ChildNodes[0].Token.Location.Line + 1;
+                            int var_col_a = decla.ChildNodes[0].ChildNodes[0].Token.Location.Column + 1;
+                            Tipo var_array_type = getTipo(var_arr_ty);
+                            int var_tipoarr = 0;
+                            Arreglo var_new_array = new Arreglo(var_id_array, var_array_type, var_line_a, var_col_a, var_tipoarr);
+                            Expresion var_dimension1 = null;
+                            Expresion var_dimension2 = null;
+                            List<int> var_indices_arr = new List<int>();
+                            foreach (var dimension in decla.ChildNodes[1].ChildNodes[0].ChildNodes[2].ChildNodes)
+                            {
+                                if (dimension.ChildNodes.Count > 1)
+                                {
+                                    var_tipoarr = 1;
+                                    var_new_array.TipoArreglo = var_tipoarr;
+                                }
+                                var_dimension1 = expresion(dimension.ChildNodes[0]);
+                                var_dimension2 = expresion(dimension.ChildNodes[1]);
+                                var_indices_arr.Add(int.Parse(var_dimension1.Evaluar(this.global).Value.ToString()));
+                                var_indices_arr.Add(int.Parse(var_dimension2.Evaluar(this.global).Value.ToString()));
+                            }
+                            return new DeclaArreglo(var_id_array, var_new_array, var_indices_arr);
                         }
-                        foreach (var variable in decla.ChildNodes[0].ChildNodes)
+                        else 
                         {
-                            id = variable.Token.Text.ToLower();
-                            vars.Add(id);
+                            //declaracion variables primitivas
+                            String tipov = decla.ChildNodes[1].ChildNodes[0].Token.Text;
+                            String id = "";
+                            Tipo tipo_var = getTipo(tipov);
+                            int line = decla.ChildNodes[0].ChildNodes[0].Token.Location.Line + 1;
+                            int col = decla.ChildNodes[0].ChildNodes[0].Token.Location.Column + 1;
+                            List<String> vars = new List<string>();
+                            Expresion valor = null;
+                            if (decla.ChildNodes[2].ChildNodes.Count > 0)
+                            {
+                                valor = expresion(decla.ChildNodes[2].ChildNodes[1]);
+                            }
+                            foreach (var variable in decla.ChildNodes[0].ChildNodes)
+                            {
+                                id = variable.Token.Text.ToLower();
+                                vars.Add(id);
+                            }
+
+                            lista_decla.AddLast(new Declaracion(tipo_var, vars, valor, line, col, false));
                         }
-                        
-                        lista_decla.AddLast(new Declaracion(tipo_var, vars, valor, line, col, false));
                     }
                     return new Declaraciones(lista_decla);
                 case "funcion":

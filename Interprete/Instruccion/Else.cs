@@ -47,7 +47,12 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "";
+            string code = "";
+            foreach(var inst in this.sentencias)
+            {
+                code += inst.generar3D(ts, inter);
+            }
+            return code;
         }
     }
 }
