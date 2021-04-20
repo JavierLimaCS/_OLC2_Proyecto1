@@ -54,7 +54,7 @@ namespace Proyecto1.Analisis
                           "Por favor, traduzca antes de ejecutar el archivo.";
                 return;
             }
-            Analizador an = new Analizador();
+            Analizador an = new Analizador(rt);
             LinkedList<Instruccion> listaInstrucciones = an.instrucciones(raiz.ChildNodes[1]);
             LinkedList<Instruccion> listaSentencias = an.instrucciones(raiz.ChildNodes[3]);
             this.primeraPasada(listaInstrucciones, this.global);
@@ -91,7 +91,7 @@ namespace Proyecto1.Analisis
                             "float SP; //puntero Stack pointer\n" +
                             "float HP; //puntero Heap pointer\n"; 
             encabezado += "float ";
-            cuerpo += "void main() { \n \n";
+            cuerpo += "//-----Codigo Intermedio\nvoid main() { \n \n";
             foreach (var instruccion in instrucciones)
             {
                 if (instruccion != null)

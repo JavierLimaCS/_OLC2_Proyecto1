@@ -366,7 +366,6 @@ namespace Proyecto1.Analisis
             this.MarkPunctuation(PTCOMA, BIPUNTO, PT, PAR1, PAR2, ASIGN);
             this.MarkPunctuation(PROG, CONST, FUNCT, PROC, ROF, RFOR);
             this.MarkTransient(Instruccion, Sentencia);
-
             #endregion
 
         }

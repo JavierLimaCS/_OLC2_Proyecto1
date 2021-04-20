@@ -37,12 +37,12 @@ namespace Proyecto1
             this.button4 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.LineNumberTextBox = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button6 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -149,6 +149,16 @@ namespace Proyecto1
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Proyecto 2";
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(299, 74);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(202, 34);
+            this.button6.TabIndex = 12;
+            this.button6.Text = " Optimizar Codigo 3D";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(300, 34);
@@ -207,15 +217,6 @@ namespace Proyecto1
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Proyecto 1";
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(299, 74);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(202, 34);
-            this.button6.TabIndex = 12;
-            this.button6.Text = " Optimizar Codigo 3D";
-            this.button6.UseVisualStyleBackColor = true;
             // 
             // Interfaz
             // 

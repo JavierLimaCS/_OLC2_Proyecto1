@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Proyecto1.Analisis;
+using Proyecto2.Optimización;
 
 namespace Proyecto1
 {
@@ -143,8 +144,8 @@ namespace Proyecto1
         private void button3_Click(object sender, EventArgs e)
         {
             string cadena = this.richTextBox1.Text;
-            Analizador parser = new Analizador();
-            parser.Analizar(cadena, this.richTextBox2);
+            Analizador parser = new Analizador(this.richTextBox2);
+            parser.Analizar(cadena);
             if (!parser.consola.Equals("")) this.richTextBox2.Text = parser.consola;
         }
 
@@ -200,6 +201,13 @@ namespace Proyecto1
             String file = this.label1.Text;
             Generador generator = new Generador();
             generator.generar(cadena, this.richTextBox2);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            string cadena = this.richTextBox2.Text;
+            Optimizador opt = new Optimizador(cadena);
+            opt.Optimizacion();
         }
     }
 }

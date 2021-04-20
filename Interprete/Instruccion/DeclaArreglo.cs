@@ -46,7 +46,7 @@ namespace Proyecto1.Interprete.Instruccion
                 if (this.indices.Count == 2)
                 {
                     code += inter.tmp.generarTemporal() + " = ";
-                    code += this.indices[1] + " - " + this.indices[0] + ";";
+                    code += this.indices[1] + " - " + this.indices[0] + ";      //size del arreglo \n";
                 }
                 else if (this.indices.Count == 4)
                 {

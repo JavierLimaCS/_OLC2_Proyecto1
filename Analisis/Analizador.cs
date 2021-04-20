@@ -14,17 +14,25 @@ namespace Proyecto1.Analisis
 {
     class Analizador
     {
-        public string consola = "";
-        public LinkedList<Error> lista_errores = new LinkedList<Error>();
-        private List<Object> salida = new List<Object>();
-        TabladeSimbolos global = new TabladeSimbolos(null, "Global"); //Entorno Global
+        public string consola;
+        public LinkedList<Error> lista_errores;
+        private List<Object> salida;
+        TabladeSimbolos global;
         RichTextBox rt;
-        public void Analizar(String cadena, RichTextBox rl)
+
+        public Analizador(RichTextBox text) 
+        {
+            this.consola = "";
+            this.lista_errores = new LinkedList<Error>();
+            this.salida = new List<Object>();
+            this.global = new TabladeSimbolos(null, "Global"); //Entorno Global
+            this.rt = text;
+        }
+        public void Analizar(String cadena)
         {
             Gramatica gramatica = new Gramatica();
             LanguageData lenguaje = new LanguageData(gramatica);
-            rt = rl;
-            rt.Text = "";
+            this.rt.Text = "";
             foreach (var item  in lenguaje.Errors)
             {
                 System.Diagnostics.Debug.WriteLine(item);

@@ -13,6 +13,8 @@ namespace Proyecto2.Optimización
             IdentifierTerminal ID = TerminalFactory.CreateCSharpIdentifier("Id");
             NumberLiteral ENTERO = new NumberLiteral("Entero");
             RegexBasedTerminal DECIMAL = new RegexBasedTerminal("Decimal", "[0-9]+[.][0-9]+");
+            RegexBasedTerminal temporal = new RegexBasedTerminal("tmp", "t[0-9]+");
+            RegexBasedTerminal label = new RegexBasedTerminal("lbl", "L[0-9]+");
             StringLiteral CADENA = new StringLiteral("Cadena");
             CADENA.AddStartEnd("\"", StringOptions.NoEscapes);
             #endregion
@@ -31,6 +33,9 @@ namespace Proyecto2.Optimización
             var INT = ToTerm("int");
             var CHAR = ToTerm("char");
             var GOTO = ToTerm("goto");
+            var RET = ToTerm("return");
+            var HEAP = ToTerm("Heap");
+            var STACK = ToTerm("Stack");
             #endregion
 
             #region Terminales - SIGNOS
@@ -44,7 +49,7 @@ namespace Proyecto2.Optimización
             var MAYIG = ToTerm(">=", "Relacional");
             var MENIG = ToTerm("<=", "Relacional");
             var IGUAL = ToTerm("==", "Relacional");
-            var DIFF = ToTerm("<>", "Relacional");
+            var DIFF = ToTerm("!=", "Relacional");
             var PAR1 = ToTerm("(", "Parentesis Apertura");
             var PAR2 = ToTerm(")", "Parentesis Cierre");
             var ASIGN = ToTerm("=");
@@ -58,6 +63,90 @@ namespace Proyecto2.Optimización
             var PT = ToTerm(".");
             #endregion
 
+            #region No Terminales
+            NonTerminal Raiz = new NonTerminal("Raiz");
+            NonTerminal Instrucciones = new NonTerminal("Instrucciones");
+            NonTerminal Instruccion = new NonTerminal("Instruccion");
+            NonTerminal Metodos = new NonTerminal("Metodos");
+            NonTerminal Metodo = new NonTerminal("Metodo");
+            NonTerminal Expresion = new NonTerminal("Expresion");
+            NonTerminal Salto = new NonTerminal("Salto");
+            NonTerminal Etiqueta = new NonTerminal("Etiqueta");
+            NonTerminal Asignacion = new NonTerminal("Asignacion");
+            NonTerminal Retorno = new NonTerminal("Retorno");
+            NonTerminal Tipo = new NonTerminal("Tipo");
+            #endregion
+
+            #region GramaticaOptimizacion
+            this.Root = Raiz;
+
+            Raiz.Rule = VOID + MAIN + PAR1 + PAR2 + LLAVE1 + Instrucciones + LLAVE2 + Metodos;
+
+            Metodos.Rule
+                = MakeStarRule(Metodos, Metodo);
+
+            Metodo.Rule
+                = VOID + ID + PAR1 + PAR2 + LLAVE1 + Instrucciones + LLAVE2;
+
+            Instrucciones.Rule
+                = MakeStarRule(Instrucciones, Instruccion);
+
+            Instruccion.Rule
+                = Etiqueta
+                | Salto
+                | Asignacion + PTCOMA
+                | Retorno;
+
+            Etiqueta.Rule
+                = label + BIPUNTO;
+
+            Salto.Rule
+                = GOTO + label + PTCOMA;
+
+            Asignacion.Rule
+                = temporal + ASIGN + Expresion
+                | ID + ASIGN + Expresion
+                | HEAP + COR1 + Expresion + COR2 + ASIGN + Expresion
+                | STACK + COR1 + Expresion + COR2 + ASIGN + Expresion;
+
+            Retorno.Rule
+                = RET + PTCOMA;
+
+            Expresion.Rule
+                = Expresion + MAS + Expresion
+                | Expresion + MENOS + Expresion
+                | Expresion + DIV + Expresion
+                | Expresion + POR + Expresion
+                | Expresion + MOD + Expresion
+                | Expresion + MAYOR + Expresion
+                | Expresion + MENOR + Expresion
+                | ENTERO
+                | CADENA
+                | DECIMAL
+                | HEAP + COR1 + Expresion + COR2
+                | STACK + COR1 + Expresion + COR2
+                | temporal
+                | PAR1 + Tipo + PAR2 + temporal
+                | ID;
+
+            Tipo.Rule
+                = INT | CHAR | FLOAT;
+
+            #endregion
+
+            #region Preferencias
+            this.RegisterOperators(1, Associativity.Left, IGUAL, MAYOR, MENOR, MENIG, MAYIG, DIFF);
+            this.RegisterOperators(2, Associativity.Left, MAS, MENOS);
+            this.RegisterOperators(3, Associativity.Left, POR, DIV, MOD);
+            // this.RegisterOperators(4, Associativity.Right, MENOS);
+            this.RegisterOperators(7, Associativity.Neutral, PAR1, PAR2);
+            #endregion
+
+
+            #region Eliminacion
+            this.MarkPunctuation(PTCOMA, BIPUNTO, PT, PAR1, PAR2, ASIGN, LLAVE1, LLAVE2);
+            this.MarkTransient(Instruccion);
+            #endregion
         }
 
     }
