@@ -8,9 +8,9 @@ namespace Proyecto1.Interprete.Instruccion
 {
     class AccesoArray : Instruccion
     {
-        int indice;
-        string id;
-        public AccesoArray(string id, int indice) 
+        Expresion.Expresion indice;
+        public string id;
+        public AccesoArray(string id, Expresion.Expresion indice) 
         {
             this.id = id;
             this.indice = indice;
@@ -18,11 +18,14 @@ namespace Proyecto1.Interprete.Instruccion
         public override object Ejecutar(TabladeSimbolos ts)
         {
             Arreglo tmp = ts.getArray(this.id);
+            Simbolo i = this.indice.Evaluar(ts);
+            int index = int.Parse(i.Value.ToString());
             if (tmp != null) 
             {
                 foreach (var element in tmp.Elementos)
                 {
-                    if (element.Key == indice) return element.Value;
+                    if (element.Key == index) 
+                        return element.Value;
                 }
             }
             return "";

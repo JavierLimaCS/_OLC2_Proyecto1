@@ -51,6 +51,18 @@ namespace Proyecto1.TS
             return null;
         }
 
+        public string getArrayPos(string id)
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.arreglos.ContainsKey(id))
+                    return actual.arreglos[id].Pos;
+                actual = actual.padre;
+            };
+            return null;
+        }
+
         public Simbolo_Funcion getFuncion(String id)
         {
             TabladeSimbolos actual = this;
@@ -81,7 +93,7 @@ namespace Proyecto1.TS
             TabladeSimbolos actual = this;
             while (actual != null)
             {
-                if (actual.types.ContainsKey(id))
+                if (actual.arreglos.ContainsKey(id))
                     return actual.arreglos[id];
                 actual = actual.padre;
             };

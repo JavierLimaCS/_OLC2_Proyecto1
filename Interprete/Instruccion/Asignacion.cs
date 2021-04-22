@@ -40,6 +40,15 @@ namespace Proyecto1.Interprete.Instruccion
             {
                 updated = ts.setValorAccesos(this.accesos, nuevo_valor);
             }
+            else if(this.indice != null)
+            {
+                object index = this.indice.Evaluar(ts).Value;
+                updated = ts.setValorIndiceArreglo(int.Parse(index.ToString()), nuevo_valor, this.id);
+                if (updated) 
+                {
+                    return ts.getArray(this.id);
+                }
+            }
             else 
             {
                 Simbolo variable = ts.getVariableValor(this.id);

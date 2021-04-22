@@ -79,7 +79,7 @@ namespace Proyecto1.Interprete.Expresion
                             resultado.Value = decimal.Parse(izquierda.Value.ToString()) != decimal.Parse(derecha.Value.ToString());
                             break;
                         case "boolean":
-                            resultado.Value = int.Parse(izquierda.Value.ToString()) != int.Parse(derecha.Value.ToString());
+                            resultado.Value = bool.Parse(izquierda.Value.ToString()) != bool.Parse(derecha.Value.ToString());
                             break;
                     }
                     return resultado;
@@ -133,7 +133,8 @@ namespace Proyecto1.Interprete.Expresion
                             resultado.Value = decimal.Parse(izquierda.Value.ToString()) == decimal.Parse(derecha.Value.ToString());
                             break;
                         case "boolean":
-                            resultado.Value = int.Parse(izquierda.Value.ToString()) == int.Parse(derecha.Value.ToString());
+
+                            resultado.Value = bool.Parse(izquierda.Value.ToString()) == bool.Parse(derecha.Value.ToString());
                             break;
                     }
                     return resultado;

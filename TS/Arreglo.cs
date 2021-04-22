@@ -17,6 +17,7 @@ namespace Proyecto1.TS
             this.Columna = c;
             this.tipoArreglo = tipo;
             this.elementos = new Dictionary<int, Object>();
+            this.Pos = "";
         }
 
         public int TipoArreglo { get => tipoArreglo; set => tipoArreglo = value; }

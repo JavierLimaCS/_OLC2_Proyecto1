@@ -3,6 +3,7 @@ using Proyecto1.Analisis;
 using Proyecto2.Optimización.Reglas;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Proyecto2.Optimización
@@ -11,10 +12,12 @@ namespace Proyecto2.Optimización
     {
         public string codigo;
         public LinkedList<Error> lista_errores;
+        public List<Regla> optimizaciones;
         public Optimizador(string code)
         {
             this.codigo = code;
             this.lista_errores = new LinkedList<Error>();
+            this.optimizaciones = new List<Regla>();
         }
 
         public void Optimizacion()
@@ -46,6 +49,7 @@ namespace Proyecto2.Optimización
             }
             LinkedList<Instruccion3D> instrucciones_3d = instrucciones(raiz.ChildNodes[2]);
             this.optimizar(instrucciones_3d);
+            this.generar_Reporte_Opt();
         }
 
         public void optimizar(LinkedList<Instruccion3D> instrucciones) 
@@ -56,6 +60,7 @@ namespace Proyecto2.Optimización
                 if (instruccion != null)
                 {
                     newcode += instruccion.optimizar3d();
+                    this.optimizaciones.AddRange(instruccion.Optimizaciones);
                 }
             }
 
@@ -92,6 +97,47 @@ namespace Proyecto2.Optimización
                     return new Expresion3D(izq, der, oper);
             }
             return null;
+        }
+
+        public void generar_Reporte_Opt()
+        {
+            String simbolo = "<html>\n <head>" +
+                "<meta charset=\"utf - 8\"/>" +
+                "<title> Reporte de Optimizacion</title>" +
+                "<meta name=\"viewport\" content=\"initial-scale=1.0; maximum-scale=1.0; width=device-width;\">" +
+                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
+                "</head>\n" +
+                "<body>" + "\n" +
+                "<div class=\"table-title\">" +
+                "<h2 style=\"text-align:center;\">Reporte de Optimizacion</h2>\n" +
+                "</div> \n" +
+                "<table class=\"table-fill\"> " + "\n" +
+                "<thead>\n" +
+                "<tr><th class=\"text-left\">TIPO OPT.</th>" + "\n" +
+                "    <th class=\"text-left\">NO. REGLA</th>" + "\n" +
+                "    <th class=\"text-left\">CODIGO ELIMINADO</th> " + "\n" +
+                "    <th class=\"text-left\">CODIGO AGREGADO</th>" + "\n" +
+                "    <th class=\"text-left\">FILA</th>" + "\n" +
+                "</tr> \n</thead>\n <tbody class=\"table-hover\"> \n";
+            foreach(var regla in this.optimizaciones)
+            {
+                simbolo += "<tr>" + "\n" +
+                            "<td class=\"text-left\">" + regla.Tipo +
+                            "</td>" + "\n" +
+                            "<td class=\"text-left\">" + regla._Regla +
+                            "</td>" + "\n" +
+                            "<td class=\"text-left\">" + regla.Codigo_anterior +
+                            "</td>" + "\n" +
+                            "<td class=\"text-left\">" + regla.Codigo_Actual +
+                            "</td>" + "\n" +
+                             "<td class=\"text-left\">" + regla.Fila +
+                            "</td>" + "\n";
+            }
+            simbolo += "</tbody> \n</table>\n </body>\n</html>";
+            using (StreamWriter outputFile = new StreamWriter("C:/compiladores2/rep_optimizacion.html"))
+            {
+                outputFile.WriteLine(simbolo);
+            }
         }
     }
 }

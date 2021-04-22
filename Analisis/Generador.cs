@@ -4,6 +4,8 @@ using Proyecto1.Interprete.Instruccion;
 using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -46,6 +48,7 @@ namespace Proyecto1.Analisis
                 }
                 consola = "Hay " + lista_errores.Count + " errores en el archivo de entrada, revise reporte de errores \n";
                 //crearReporteErrores();
+                rt.Text = consola;
                 return;
             }
             if (BuscarAnidadas(raiz))
@@ -155,6 +158,28 @@ namespace Proyecto1.Analisis
                     else if (instruccion is DeclaArreglo) output = instruccion.Ejecutar(ts);
                 }
 
+            }
+        }
+        public void crearReporteErrores()
+        {
+            String errores = "<html>\n <body> <h2>Reporte de Errores</h2> <table style=\"width:100%\" border=\"1\"> <tr><th>Tipo</th><th>Descripcion del error</th><th>Linea</th> <th>Columna</th></tr> \n";
+            for (int i = 0; i < this.lista_errores.Count; i++)
+            {
+                errores += "<tr>" +
+                        "<td>" + this.lista_errores.ElementAt(i).Tipo +
+                        "</td>" +
+                        "<td>" + this.lista_errores.ElementAt(i).Descripcion +
+                        "</td>" +
+                        "<td>" + this.lista_errores.ElementAt(i).Linea +
+                        "</td>" +
+                        "<td>" + this.lista_errores.ElementAt(i).Columna +
+                        "</td>" +
+                        "</tr>";
+            }
+            errores += "</table> </body> </html>";
+            using (StreamWriter outputFile = new StreamWriter("C:/compiladores2/reporteErrores.html"))
+            {
+                outputFile.WriteLine(errores);
             }
         }
     }

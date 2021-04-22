@@ -395,8 +395,8 @@ namespace Proyecto1.Analisis
                     }
                     return new AccesoObjeto(ids_acceso2);
                 case "accesoarray":
-
-                    break;
+                    string arr_id = actual.ChildNodes[0].Token.Text;
+                    return new AccesoArray(arr_id,expresion(actual.ChildNodes[2]));
                 case "case":
                     List<Caso> casos = new List<Caso>();
                     foreach (var casito in actual.ChildNodes[2].ChildNodes) {
@@ -587,7 +587,7 @@ namespace Proyecto1.Analisis
         }
         public Tipo getTipo(String op)
         {
-            switch (op)
+            switch (op.ToLower())
             {
                 case "integer":
                 case "entero":

@@ -25,6 +25,11 @@ namespace Proyecto1.Interprete.Expresion
             switch(this.tipo)
             {
                 case 'A':
+                    AccesoArray accesito = (AccesoArray)this.valor;
+                    object valor_accesitoo = accesito.Ejecutar(ts);
+                    Arreglo tmp_arr = ts.getArray(accesito.id);
+                    primitivo = new Simbolo("primitivo", tmp_arr.Tipo,0,0,false);
+                    primitivo.Value = valor_accesitoo;
                     break;
                 case 'N':
                     primitivo = new Simbolo("primitivo", new Tipo(Tipos.INT, "integer"), 0, 0, false);
