@@ -54,22 +54,29 @@ namespace Proyecto1.Interprete.Instruccion
             string recursive_lbl = "";
             string lf = "";
             string lv = "";
+            string code_body = "";
+            string code_cond = ""; 
             code += inter.label.generarLabel() + ":     //etiqueta recursiva \n";
             recursive_lbl = inter.label.getLastLabel();
+            inter.lrecursives.Push(recursive_lbl);
+            code_cond += "//--- codigo de condicion \n";
+            code_cond += this.condicion.generar3D(ts, inter);
+            code_cond += "//validacion de la condicion\n";
+            code_cond += "if (" + inter.tmp.getLastTemporal() + "==1) goto " + inter.label.generarLabel() + ";\n";
+            lv = inter.label.getLastLabel();
+            inter.lbreaks.Push(lv);
+            code_cond += "goto " + inter.label.generarLabel() + ";\n";
+            lf = inter.label.getLastLabel();
+            code_cond += lf + ": \n";
+            code_cond += "goto " + recursive_lbl + ";\n";
+            code_cond += lv + ":\n";
             foreach (var inst in this.instrucciones)
             {
-                code += inst.generar3D(ts, inter);
+                code_body += inst.generar3D(ts, inter);
             }
-            code += "//--- codigo de condicion \n";
-            code += this.condicion.generar3D(ts, inter);
-            code += "//validacion de la condicion\n";
-            code += "if (" + inter.tmp.getLastTemporal() + "==1) goto " + inter.label.generarLabel() + ";\n";
-            lv = inter.label.getLastLabel();
-            code += "goto " + inter.label.generarLabel() + ";\n";
-            lf = inter.label.getLastLabel();
-            code += lf + ": \n";
-            code += "goto " + recursive_lbl + ";\n";
-            code += lv + ":\n";
+            code += code_body + code_cond;
+            inter.lrecursives.Pop();
+            inter.lbreaks.Pop();
             return code;
         }
     }

@@ -15,7 +15,8 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "continue;\n";
+            inter.lcontinue = inter.lrecursives.Peek();
+            return "goto " + inter.lcontinue + "; //etieuqeta CONTINUE\n";
         }
     }
 }

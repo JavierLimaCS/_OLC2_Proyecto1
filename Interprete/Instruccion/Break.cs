@@ -15,7 +15,7 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "goto ";
+            return "goto " + inter.lbreaks.Peek() + "; //etiqueta BREAK\n";
         }
     }
 }

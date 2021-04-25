@@ -40,13 +40,11 @@ namespace Proyecto1.TS
         public string getVariablePos(string id)
         {
             TabladeSimbolos actual = this;
-            string ambito = "g";
             while (actual != null)
             {
                 if (actual.variables.ContainsKey(id))
-                    return actual.variables[id].Pos + ":" + ambito;
+                    return actual.variables[id].Pos + ":" + actual.alias;
                 actual = actual.padre;
-                if (actual != null) ambito = actual.alias;
             };
             return null;
         }

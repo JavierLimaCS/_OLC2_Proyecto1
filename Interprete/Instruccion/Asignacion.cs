@@ -110,7 +110,7 @@ namespace Proyecto1.Interprete.Instruccion
                                 code += this.valor.generar3D(ts, inter);
                                 valu = inter.tmp.getLastTemporal();
                             }
-                            if (search[1].Equals("g"))
+                            if (search[1].ToLower().Equals("global"))
                             {
                                 code += "Heap[(int)" + tmpasig + "] = " + valu + ";\n";
                             }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Proyecto2.Optimización
 {
@@ -22,34 +23,41 @@ namespace Proyecto2.Optimización
 
         public void Optimizacion()
         {
-            Gramatica3D grammar = new Gramatica3D();
-            LanguageData lenguaje = new LanguageData(grammar);
-            foreach (var item in lenguaje.Errors)
+            if (!(this.codigo.Equals("")) && this.codigo.Contains("#include <stdio.h>"))
             {
-                System.Diagnostics.Debug.WriteLine(item);
-            }
-            string[] code = this.codigo.Split("Intermedio");
-            this.codigo = code[1];
-            Parser parser = new Parser(lenguaje);
-            ParseTree arbol = parser.Parse(this.codigo);
-            ParseTreeNode raiz = arbol.Root;
-            if (raiz == null)
-            {
-                foreach (var er in arbol.ParserMessages)
+                Gramatica3D grammar = new Gramatica3D();
+                LanguageData lenguaje = new LanguageData(grammar);
+                foreach (var item in lenguaje.Errors)
                 {
-                    if (er.Message.Contains("Invalid character"))
+                    System.Diagnostics.Debug.WriteLine(item);
+                }
+                string[] code = this.codigo.Split("Intermedio");
+                this.codigo = code[1];
+                Parser parser = new Parser(lenguaje);
+                ParseTree arbol = parser.Parse(this.codigo);
+                ParseTreeNode raiz = arbol.Root;
+                if (raiz == null)
+                {
+                    foreach (var er in arbol.ParserMessages)
                     {
-                        lista_errores.AddLast(new Error("Léxico", er.Message, er.Location.Line + 1, er.Location.Column + 1));
-                    }
-                    else
-                    {
-                        lista_errores.AddLast(new Error("Sintáctico", er.Message, er.Location.Line + 1, er.Location.Column + 1));
+                        if (er.Message.Contains("Invalid character"))
+                        {
+                            lista_errores.AddLast(new Error("Léxico", er.Message, er.Location.Line + 1, er.Location.Column + 1));
+                        }
+                        else
+                        {
+                            lista_errores.AddLast(new Error("Sintáctico", er.Message, er.Location.Line + 1, er.Location.Column + 1));
+                        }
                     }
                 }
+                LinkedList<Instruccion3D> instrucciones_3d = instrucciones(raiz.ChildNodes[2]);
+                this.optimizar(instrucciones_3d);
+                this.generar_Reporte_Opt();
             }
-            LinkedList<Instruccion3D> instrucciones_3d = instrucciones(raiz.ChildNodes[2]);
-            this.optimizar(instrucciones_3d);
-            this.generar_Reporte_Opt();
+            else
+            {
+                MessageBox.Show("Codigo Intermedio incorrecto", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public void optimizar(LinkedList<Instruccion3D> instrucciones) 

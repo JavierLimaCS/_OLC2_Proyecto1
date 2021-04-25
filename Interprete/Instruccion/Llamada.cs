@@ -41,7 +41,7 @@ namespace Proyecto1.Interprete.Instruccion
                 }
                 foreach (var par in funcion.Params)
                 {
-                    Simbolo tmp_param = new Simbolo(par.Value.Id, par.Value.Tipo, 0, 0, false);
+                    Simbolo tmp_param = new Simbolo(par.Value.Id, par.Value.Tipo, 0, 0, par.Value.Referencia);
                     tmp_param.Value = par.Value.ValorPar;
                     ts_funcion.declararVariable(par.Value.Id, tmp_param);
                 }

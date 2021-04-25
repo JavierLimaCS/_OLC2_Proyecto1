@@ -9,7 +9,7 @@ namespace Proyecto1.Interprete.Instruccion
     class Funcion : Instruccion
     {
         private Simbolo_Funcion funcion;
-        private LinkedList<Instruccion> instrucciones;
+        public LinkedList<Instruccion> instrucciones;
         private LinkedList<Instruccion> sentencias;
         public Funcion(Simbolo_Funcion funcion, LinkedList<Instruccion> instrucciones, LinkedList<Instruccion> sentencias)
         {
@@ -29,27 +29,68 @@ namespace Proyecto1.Interprete.Instruccion
         {
             string code = "//--- Funcion \n";
             string parametros = "";
-            foreach (var param in funcion.Params) 
+            string void_name = "";
+            int size = 1;
+            if (this.funcion.Params.Count > 0)
             {
-                parametros += param.Key.ToString();
+                foreach (var param in this.funcion.Params)
+                {
+                    parametros += param.Key.ToString() + "_";
+                    size++;
+                }
+                void_name = this.funcion.Id + "_" + parametros;
+                void_name = void_name.TrimEnd('_');
+                inter.voids.Add(void_name, size);
+                code += "void " + void_name;
+                code += "() { \n";
             }
-            code += "void " + this.funcion.Tipo.tipoAuxiliar +"_"+ this.funcion.Id + "() { \n";
-            ts.alias = ts.alias + this.funcion.Id;
+            else
+            {
+                void_name = this.funcion.Id;
+                inter.voids.Add(void_name, size);
+                code += "void " + void_name + "() { \n";
+            }
+            TabladeSimbolos ts_proc = new TabladeSimbolos(ts, ts.alias + this.funcion.Id);
+            if (this.funcion.Params.Count > 0)
+            {
+                foreach (var par in funcion.Params)
+                {
+                    Simbolo tmp_param = new Simbolo(par.Value.Id, par.Value.Tipo, 0, 0, par.Value.Referencia);
+                    switch (par.Value.Tipo.tipoAuxiliar.ToLower())
+                    {
+                        case "integer":
+                            tmp_param.Value = 0;
+                            break;
+                        case "real":
+                            tmp_param.Value = 0.0;
+                            break;
+                        case "boolean":
+                            tmp_param.Value = false;
+                            break;
+                        case "string":
+                            tmp_param.Value = "";
+                            break;
+                    }
+                    ts_proc.declararVariable(par.Value.Id, tmp_param);
+                }
+            }
             if (this.instrucciones != null)
             {
                 foreach (var inst in this.instrucciones)
                 {
-                    code += inst.generar3D(ts, inter);
+                    inst.Ejecutar(ts_proc);
+                    code += inst.generar3D(ts_proc, inter);
                 }
             }
             if (this.sentencias != null)
             {
                 foreach (var sent in this.sentencias)
                 {
-                    code += sent.generar3D(ts, inter);
+                    code += sent.generar3D(ts_proc, inter);
                 }
             }
             code += "return;\n } \n";
+            ts.alias = "global";
             return code;
         }
     }

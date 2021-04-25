@@ -94,6 +94,7 @@ namespace Proyecto1.Interprete.Expresion
             { ///FALTA implementar cuando hay primitivos con RElacionales o Logicas
                 string lt = "";
                 string lfa = "";
+                string primi = "";
                 List<string> lv = new List<string>();
                 List<string> lf = new List<string>();
                 if (this.izquierda is Primitivo && this.derecha is Primitivo)
@@ -154,10 +155,33 @@ namespace Proyecto1.Interprete.Expresion
                             code += c3d.tmp.getLastTemporal() + " = 1;\n";
                             foreach (var f in lf)
                             {
-                                code += f + ":\n\n";
+                                code += f + ":\n";
                             }
                             break;
                         case 'o':
+                            //-------------------------Lado Izquierdo
+                            code += this.izquierda.generar3D(ts, c3d);
+                            tmp_izq = c3d.tmp.getLastTemporal();
+                            code += this.derecha.generar3D(ts, c3d);
+                            tmp_d = c3d.tmp.getLastTemporal();
+                            code += "//Operacion logica OR \n";
+                            code += "if(" + tmp_izq + "==1) goto " + c3d.label.generarLabel() + ";\n";
+                            lv.Add(c3d.label.getLastLabel());
+                            code += "goto " + c3d.label.generarLabel() + ";\n";
+                            lf.Add(c3d.label.getLastLabel());
+                            code += lf[lf.Count - 1] + ":\n";
+                            //--------------------------Lado Derecho
+                            code += "if(" + tmp_d + "==1) goto " + c3d.label.generarLabel() + ";\n";
+                            lv.Add(c3d.label.getLastLabel());
+                            code += c3d.tmp.getLastTemporal() + " = 0;\n";
+                            code += "goto " + c3d.label.generarLabel() + ";\n";
+                            lf.Add(c3d.label.getLastLabel());
+                            foreach (var v in lv)
+                            {
+                                code += v + ":\n";
+                            }
+                            code += c3d.tmp.getLastTemporal() + " = 1;\n";
+                            code += lf[lf.Count - 1] + ":\n";
                             break;
                     }
                 }
@@ -190,7 +214,7 @@ namespace Proyecto1.Interprete.Expresion
                             code += c3d.tmp.getLastTemporal() + " = 1;\n";
                             foreach (var f in lf)
                             {
-                                code += f + ":\n\n";
+                                code += f + ":\n";
                             }
                             break;
                         case 'o':

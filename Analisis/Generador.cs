@@ -16,7 +16,7 @@ namespace Proyecto1.Analisis
         public string consola = "";
         public LinkedList<Error> lista_errores = new LinkedList<Error>();
         private List<Object> salida = new List<Object>();
-        TabladeSimbolos global = new TabladeSimbolos(null, "Global"); //Entorno Global
+        TabladeSimbolos global = new TabladeSimbolos(null, "global"); //Entorno Global
         Intermedio codeigointer = new Intermedio();
         RichTextBox rt;
         public void generar(String cadena, RichTextBox rl)
@@ -137,7 +137,7 @@ namespace Proyecto1.Analisis
             tmps = tmps.TrimEnd(',');
             encabezado += tmps + "; \n";
             string funciones = "";
-            foreach (var funcion in ts.funciones) {
+            foreach (var funcion in inter.voids) {
                 funciones += "void " + funcion.Key + "(); \n";
             }
             encabezado += "\n//Encabezado de Funciones \n" + funciones + "\n";
@@ -155,6 +155,7 @@ namespace Proyecto1.Analisis
                     if (instruccion is Funcion) output = instruccion.Ejecutar(ts);
                     else if (instruccion is Procedimiento) output = instruccion.Ejecutar(ts);
                     else if (instruccion is Declaraciones) output = instruccion.Ejecutar(ts);
+                    else if (instruccion is DeclaArreglo) output = instruccion.Ejecutar(ts);
                     else if (instruccion is DeclaArreglo) output = instruccion.Ejecutar(ts);
                 }
 

@@ -113,7 +113,7 @@ namespace Proyecto1.Interprete.Expresion
                     {
                         search = new string[2];
                     }
-                    if (search[1].Equals("g"))
+                    if (search[1].Equals("global"))
                     {
                         code +=c3d.tmp.generarTemporal() + " = Heap[(int)" + search[0] + "];";
                     }

@@ -76,6 +76,7 @@ namespace Proyecto1.Interprete.Instruccion
             string lv = "";
             code += inter.label.generarLabel() + ":     //etiqueta recursiva \n";
             recursive_lbl = inter.label.getLastLabel();
+            inter.lrecursives.Push(recursive_lbl);
             code += "//--- codigo de condicion \n";
             code += this.valor.generar3D(ts, inter);
             code += "//validacion de la condicion\n";
@@ -91,6 +92,7 @@ namespace Proyecto1.Interprete.Instruccion
             }
             code += "goto " + recursive_lbl+ ";\n";
             code += lf + ":\n";
+            inter.lrecursives.Pop();
             return code;
         }
     }
