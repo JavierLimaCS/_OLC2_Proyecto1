@@ -45,7 +45,7 @@ namespace Proyecto1.Interprete.Instruccion
                                 Primitivo primi = (Primitivo)exp;
                                 if (primi.tipo == 'I')
                                 {
-                                    code += inter.tmp.generarTemporal() + " = " + exp.generar3D(ts, inter) + ";\n";
+                                    code += exp.generar3D(ts, inter) + "\n";
                                 }
                                 else
                                 {

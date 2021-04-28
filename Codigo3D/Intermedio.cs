@@ -14,6 +14,7 @@ namespace Proyecto1.Codigo3D
         public Stack<string> lbreaks;
         public Stack<string> lrecursives;
         public Dictionary<string, int> voids;
+        public Queue<string> param_tmp;
         public Intermedio() 
         {
             this.size = 0;
@@ -24,6 +25,24 @@ namespace Proyecto1.Codigo3D
             this.lbreaks = new Stack<string>();
             this.tmp = new Temporales();
             this.label = new Etiquetas();
+            this.param_tmp = new Queue<string>();
+        }
+
+        public string getVoid(string id){
+            foreach (var v in this.voids) 
+            {
+                if (v.Key.Contains(id)) return v.Key;
+            }
+            return "";
+        }
+
+        public int getVoidSize(string id)
+        {
+            foreach (var v in this.voids)
+            {
+                if (v.Key.Contains(id)) return v.Value;
+            }
+            return 0;
         }
     }
 }

@@ -111,11 +111,17 @@ namespace Proyecto1.Interprete.Expresion
                     }
                     else
                     {
-                        search = new string[2];
+                        search = new string[3];
                     }
                     if (search[1].Equals("global"))
                     {
-                        code +=c3d.tmp.generarTemporal() + " = Heap[(int)" + search[0] + "];";
+                        code += c3d.tmp.generarTemporal() + " = Heap[(int)" + search[0] + "];";
+                    }
+                    else if (search[1].Equals("param"))
+                    {
+                        code += c3d.tmp.generarTemporal() + " = SP + " + search[0] + "; //posicion de parametro " +search[2]+ "\n";
+                        string tmp_param = c3d.tmp.getLastTemporal();
+                        code += c3d.tmp.generarTemporal() + " = Stack[(int)" + tmp_param + "];";
                     }
                     else 
                     {

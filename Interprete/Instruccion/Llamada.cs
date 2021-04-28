@@ -102,7 +102,7 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            Simbolo_Funcion funct = ts.getFuncion(this.id);
+            string void_name = inter.getVoid(this.id);
             string code = "//---> Inicio de Llamada de funcion" + this.id + "\n";
             if (this.exp_list != null)
             {
@@ -111,12 +111,26 @@ namespace Proyecto1.Interprete.Instruccion
                     if (!(exp is Primitivo))
                     {
                         code += exp.generar3D(ts, inter);
+                        string tmp_exp = inter.tmp.getLastTemporal();
+                        code += inter.tmp.generarTemporal() + " = " + tmp_exp + ";\n";
+                        inter.param_tmp.Enqueue(inter.tmp.getLastTemporal());
                     }
                     else
                     {
-                        code += exp.Evaluar(ts);
+                        Simbolo tmp = exp.Evaluar(ts);
+                        switch (tmp.Tipo.tipoAuxiliar) 
+                        {
+                            case "string":
+                                code += exp.generar3D(ts, inter);
+                                string tmp_cadena = inter.tmp.getLastTemporal();
+                                code += inter.tmp.generarTemporal() + " = " + tmp_cadena + ";\n";
+                                break;
+                            default:
+                                code += inter.tmp.generarTemporal() + " = " + exp.generar3D(ts, inter) + ";\n";
+                                break;
+                        }
+                        inter.param_tmp.Enqueue(inter.tmp.getLastTemporal());
                     }
-                    code += inter.tmp.generarTemporal() + " = " + inter.tmp.getLastTemporal() + ";\n";
                 }
             }
             else 
@@ -124,11 +138,25 @@ namespace Proyecto1.Interprete.Instruccion
                 code += "//no hay parametros en la llamada \n"; 
             }
             
-            code += "SP = SP + 1; //cambio de ambito\n";
-            code += "SP = SP + 1; \n";
+            code += "SP = SP + 1;         //cambio de ambito simulado\n";
+            code += "//-----> se guardan temporales\n";
+            string tmp_guardado = inter.tmp.generarTemporal();
+            for (int i = 0; i < inter.param_tmp.Count; i++) 
+            {
+                code += tmp_guardado + " = SP + " + i + ";\n" ;
+                code += "Stack[(int)" + tmp_guardado + "] = " + inter.param_tmp.ElementAt(i)+";\n";
+            }
+            code += "//----------------------------- \n";
+            code += "SP = SP + " + inter.getVoidSize(this.id) + ";\n";
+            code += "//-------Paso de Parametros \n";
+            for (int j = 0; j < inter.param_tmp.Count; j++)
+            {
+                code += inter.tmp.generarTemporal() + " = SP + " + (j+1) + ";\n";
+                code += "Stack[(int)" + inter.tmp.getLastTemporal() + "] = " + inter.param_tmp.ElementAt(j) + ";\n";
 
+            }
 
-            code += this.id+"();\n";
+            code += void_name+"();\n";
 
             return code;
         }

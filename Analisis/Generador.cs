@@ -88,6 +88,7 @@ namespace Proyecto1.Analisis
         {
             string code3d = "";
             string cuerpo = "";
+            string funciones_body = "";
             string encabezado = "#include <stdio.h> \n" +
                             "float Heap[100000]; //estructura heap\n" +
                             "float Stack[100000]; //estructura stack\n" +
@@ -106,6 +107,18 @@ namespace Proyecto1.Analisis
                 }
 
             }
+
+            foreach (var instruccion in instrucciones)
+            {
+                if (instruccion != null)
+                {
+                    if (instruccion is Funcion || instruccion is Procedimiento)
+                    {
+                        funciones_body += instruccion.generar3D(ts, inter);
+                    }
+                }
+
+            }
             foreach (var sentencia in sentencias)
             {
                 if (sentencia != null)
@@ -117,18 +130,7 @@ namespace Proyecto1.Analisis
             cuerpo += "    return; \n" +
                 "} \n \n";
 
-
-            foreach (var instruccion in instrucciones)
-            {
-                if (instruccion != null)
-                {
-                    if (instruccion is Funcion || instruccion is Procedimiento)
-                    {
-                        cuerpo += instruccion.generar3D(ts, inter);
-                    }
-                }
-
-            }
+            cuerpo += funciones_body;
             string tmps = "";
             foreach (var tmp in inter.tmp.temporales)
             {

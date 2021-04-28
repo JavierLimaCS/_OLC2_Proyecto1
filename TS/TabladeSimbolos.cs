@@ -43,7 +43,14 @@ namespace Proyecto1.TS
             while (actual != null)
             {
                 if (actual.variables.ContainsKey(id))
-                    return actual.variables[id].Pos + ":" + actual.alias;
+                    if (actual.variables[id].esParametro)
+                    {
+                        return actual.variables[id].Pos + ":param:"+id;
+                    }
+                    else 
+                    {
+                        return actual.variables[id].Pos + ":" + actual.alias;
+                    }
                 actual = actual.padre;
             };
             return null;

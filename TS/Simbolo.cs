@@ -14,6 +14,7 @@ namespace Proyecto1.TS
         private int line, column;
         private Object value;
         private bool isConstant;
+        private bool isParam;
         private string pos;
 
         public Simbolo(string n, Tipo ty, int l, int c)
@@ -23,6 +24,7 @@ namespace Proyecto1.TS
             this.line = l;
             this.column = c;
             this.pos = "";
+            this.isParam = false;
         }
 
         public Simbolo(String n, Tipo ty, int l, int c, bool b) {
@@ -32,6 +34,7 @@ namespace Proyecto1.TS
             this.column = c;
             this.isConstant = b;
             this.pos = "";
+            this.isParam = false;
         }
 
         public String Id { get => id; set => id = value; }
@@ -41,6 +44,7 @@ namespace Proyecto1.TS
         public Object Value { get => value; set => this.value = value; }
 
         public bool esConstante { get => isConstant; set => isConstant = value; }
+        public bool esParametro { get => isParam; set => isParam = value; }
         public string Pos { get => pos; set => pos = value; }
     }
 }

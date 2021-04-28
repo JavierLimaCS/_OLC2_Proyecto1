@@ -35,7 +35,7 @@ namespace Proyecto1.Interprete.Instruccion
             {
                 foreach (var param in this.proc.Params)
                 {
-                    parametros += param.Key.ToString() + "_";
+                    parametros += param.Value.Tipo.tipo.ToString().ToLower() + "_";
                     size++;
                 }
                 void_name = this.proc.Id + "_" + parametros;
@@ -50,7 +50,9 @@ namespace Proyecto1.Interprete.Instruccion
                 inter.voids.Add(void_name, size);
                 code += "void " + void_name + "() { \n";
             }
-            TabladeSimbolos ts_proc = new TabladeSimbolos(ts, ts.alias + this.proc.Id);
+            inter.size = size;
+            TabladeSimbolos ts_proc = new TabladeSimbolos(ts, void_name);
+            int param_cont = 1;
             if (this.proc.Params.Count > 0)
             {
                 foreach (var par in proc.Params)
@@ -71,6 +73,9 @@ namespace Proyecto1.Interprete.Instruccion
                             tmp_param.Value = "";
                             break;
                     }
+                    tmp_param.esParametro = true;
+                    tmp_param.Pos =param_cont.ToString();
+                    param_cont++;
                     ts_proc.declararVariable(par.Value.Id, tmp_param);
                 }
             }

@@ -184,18 +184,17 @@ namespace Proyecto1.Interprete.Instruccion
                 {
                     if (this.type.tipoAuxiliar.Equals("integer") || this.type.tipoAuxiliar.Equals("real"))
                     {
-                        code += inter.tmp.generarTemporal() + " = SP; //referencia a " + tipovar + " local\n";
+                        code += inter.tmp.generarTemporal() + " = SP + " +inter.size +"; //referencia a " + tipovar + " local\n";
                         code += "Stack[(int)" + inter.tmp.getLastTemporal() + "] = " + noval + ";\n";
-                        code += "SP = SP + 1; \n";
                     }
                     else
                     {
                         code += noval;
                         noval = inter.tmp.getLastTemporal();
-                        code += inter.tmp.generarTemporal() + " = SP;   //referencia a " + tipovar + " local\n";
+                        code += inter.tmp.generarTemporal() + " = SP + " +inter.size+ ";   //referencia a " + tipovar + " local\n";
                         code += "Stack[(int)" + inter.tmp.getLastTemporal() + "] = " + noval + ";\n";
-                        code += "SP = SP + 1; \n";
                     }
+                    inter.size++;
                 }
                 
                 
