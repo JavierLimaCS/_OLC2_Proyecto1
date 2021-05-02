@@ -92,7 +92,7 @@ namespace Proyecto1.Interprete.Instruccion
             {
                 code += this.valor.generar3D(ts, inter);
             }
-            code += "if (" + inter.tmp.getLastTemporal() + ") goto " + inter.label.generarLabel() + ";\n";
+            code += "if (" + inter.tmp.getLastTemporal() + "==1) goto " + inter.label.generarLabel() + ";\n";
             lv = inter.label.getLastLabel();
             code += "goto " + inter.label.generarLabel() + ";\n";
             lf = inter.label.getLastLabel();

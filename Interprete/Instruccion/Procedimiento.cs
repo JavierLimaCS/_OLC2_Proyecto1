@@ -82,7 +82,14 @@ namespace Proyecto1.Interprete.Instruccion
             if (this.instrucciones != null) {
                 foreach (var inst in this.instrucciones)
                 {
-                    inst.Ejecutar(ts_proc);
+                    if (inst != null)
+                    {
+                        if (inst is Funcion) inst.Ejecutar(ts_proc);
+                        else if (inst is Procedimiento) inst.Ejecutar(ts_proc);
+                        else if (inst is Declaraciones) inst.Ejecutar(ts_proc);
+                        else if (inst is DeclaArreglo) inst.Ejecutar(ts_proc);
+                        else if (inst is DeclaArreglo) inst.Ejecutar(ts_proc);
+                    }
                     code +=inst.generar3D(ts_proc, inter);
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using Proyecto1.Codigo3D;
+using Proyecto1.Interprete.Expresion;
 using Proyecto1.TS;
 using System;
 using System.Collections.Generic;
@@ -27,10 +28,25 @@ namespace Proyecto1.Interprete.Instruccion
             string code = "";
             if (this.exp != null)
             {
-                this.valor_exit = this.exp.Evaluar(ts).Value;
-                code += "Stack[(int)SP] = " + this.valor_exit + ";\n";
+                if (this.exp is Primitivo)
+                {
+                    this.valor_exit = this.exp.generar3D(ts, inter);
+                    if (this.valor_exit.ToString().Contains("Stack") || this.valor_exit.ToString().Contains("Heap")) 
+                    {
+                        code += this.valor_exit.ToString();
+                        this.valor_exit = inter.tmp.getLastTemporal();
+                    }
+                }
+                else 
+                {
+                    code += this.exp.generar3D(ts, inter);
+                    this.valor_exit = inter.tmp.getLastTemporal();
+                }
+                code += "\nStack[(int)SP] = " + this.valor_exit + ";\n";
             }
             code += "goto " + inter.label.generarLabel() + ";\n";
+            if(inter.lreturn.Equals(""))
+                inter.lreturn = inter.label.getLastLabel();
             return code;
         }
     }

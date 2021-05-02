@@ -103,7 +103,7 @@ namespace Proyecto1.Interprete.Instruccion
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
             string void_name = inter.getVoid(this.id);
-            string code = "//---> Inicio de Llamada de funcion" + this.id + "\n";
+            string code = "//---> Inicio de Llamada de void " + this.id + "\n";
             if (this.exp_list != null)
             {
                 foreach (var exp in this.exp_list)
@@ -118,18 +118,31 @@ namespace Proyecto1.Interprete.Instruccion
                     else
                     {
                         Simbolo tmp = exp.Evaluar(ts);
-                        switch (tmp.Tipo.tipoAuxiliar) 
+                        if(tmp != null) 
                         {
-                            case "string":
-                                code += exp.generar3D(ts, inter);
-                                string tmp_cadena = inter.tmp.getLastTemporal();
-                                code += inter.tmp.generarTemporal() + " = " + tmp_cadena + ";\n";
-                                break;
-                            default:
-                                code += inter.tmp.generarTemporal() + " = " + exp.generar3D(ts, inter) + ";\n";
-                                break;
+                            switch (tmp.Tipo.tipoAuxiliar)
+                            {
+                                case "string":
+                                    code += exp.generar3D(ts, inter);
+                                    string tmp_cadena = inter.tmp.getLastTemporal();
+                                    code += inter.tmp.generarTemporal() + " = " + tmp_cadena + ";\n";
+                                    break;
+                                default:
+                                    string valor = exp.generar3D(ts, inter);
+                                    if (valor.Contains("Heap") || valor.Contains("Stack"))
+                                    {
+                                        code += valor + "\n";
+                                        string tmp_id = inter.tmp.getLastTemporal();
+                                        code += inter.tmp.generarTemporal() + " = " + tmp_id + ";\n";
+                                    }
+                                    else 
+                                    {
+                                        code += inter.tmp.generarTemporal() + " = " + valor + ";\n";
+                                    }
+                                    break;
+                            }
+                            inter.param_tmp.Enqueue(inter.tmp.getLastTemporal());
                         }
-                        inter.param_tmp.Enqueue(inter.tmp.getLastTemporal());
                     }
                 }
             }
@@ -146,18 +159,32 @@ namespace Proyecto1.Interprete.Instruccion
                 code += tmp_guardado + " = SP + " + i + ";\n" ;
                 code += "Stack[(int)" + tmp_guardado + "] = " + inter.param_tmp.ElementAt(i)+";\n";
             }
+            string recuperacion_tmp = "//-----> se recuperan los temporales\n";
+            for (int i = 0; i < inter.param_tmp.Count; i++) 
+            {
+                recuperacion_tmp += tmp_guardado + " = SP + " + i + ";\n";
+                recuperacion_tmp += inter.param_tmp.ElementAt(i) + " = Stack[(int)" + tmp_guardado + "];\n";
+            }
             code += "//----------------------------- \n";
             code += "SP = SP + " + inter.getVoidSize(this.id) + ";\n";
             code += "//-------Paso de Parametros \n";
             for (int j = 0; j < inter.param_tmp.Count; j++)
             {
-                code += inter.tmp.generarTemporal() + " = SP + " + (j+1) + ";\n";
+                code += inter.tmp.generarTemporal() + " = SP + " + (j + 1)  + ";\n";
                 code += "Stack[(int)" + inter.tmp.getLastTemporal() + "] = " + inter.param_tmp.ElementAt(j) + ";\n";
-
             }
-
-            code += void_name+"();\n";
-
+            code += void_name + "();\n";
+            Simbolo_Funcion funcion = ts.getFuncion(this.id);
+            if (funcion.Tipo != null) 
+            {
+                code += inter.tmp.generarTemporal() + " = Stack[(int)SP];\n";
+                inter.tmp_return = inter.tmp.getLastTemporal();
+            }
+            code += "SP = SP - " + inter.getVoidSize(this.id) + ";\n";
+            code += recuperacion_tmp;
+            code += "//---- fin de Recuperacion\n";
+            code += "SP = SP - 1;\n";
+            inter.param_tmp.Clear();
             return code;
         }
     }

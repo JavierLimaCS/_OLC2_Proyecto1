@@ -72,7 +72,7 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            object nuevo_valor = this.valor.Evaluar(ts).Value;
+            string nuevo_valor = "";
             string code = "";
             if (this.accesos != null)
             {
@@ -87,8 +87,23 @@ namespace Proyecto1.Interprete.Instruccion
                 {
                     if (ts.esFuncion(this.id)) 
                     {
+                        if (this.valor is Primitivo)
+                        {
+                            nuevo_valor = this.valor.generar3D(ts, inter);
+                            if (nuevo_valor.Contains("Llamada")) {
+
+                                code += this.valor.generar3D(ts, inter);
+                                nuevo_valor = inter.tmp.getLastTemporal();
+                            }
+                        }
+                        else
+                        {
+                            code += this.valor.generar3D(ts, inter);
+                            nuevo_valor = inter.tmp.getLastTemporal();
+                        }
                         code += "Stack[(int)SP] = " + nuevo_valor + ";\n";
                         code += "goto " + inter.label.generarLabel() + ";\n";
+                        inter.ls = inter.label.getLastLabel();
                     }
                     else
                     {
@@ -104,6 +119,11 @@ namespace Proyecto1.Interprete.Instruccion
                             if (this.valor is Primitivo)
                             {
                                 valu = this.valor.generar3D(ts,inter);
+                                if (valu.Contains("Llamada"))
+                                {
+                                    code += this.valor.generar3D(ts, inter);
+                                    valu = inter.tmp.getLastTemporal();
+                                }
                             }
                             else 
                             {
@@ -113,6 +133,12 @@ namespace Proyecto1.Interprete.Instruccion
                             if (search[1].ToLower().Equals("global"))
                             {
                                 code += "Heap[(int)" + tmpasig + "] = " + valu + ";\n";
+                            }
+                            else if (search[1].Equals("param"))
+                            {
+                                code += inter.tmp.generarTemporal() + " = SP + " + search[0] + "; //posicion de parametro " + search[2] + "\n";
+                                string tmp_param = inter.tmp.getLastTemporal();
+                                code += "Stack[(int)" + tmp_param + "] = " + valu +";";
                             }
                             else
                             {

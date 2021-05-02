@@ -93,7 +93,26 @@ namespace Proyecto1.Interprete.Instruccion
 
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
-            return "";
+            string code = "";
+            string lrec = "";
+            string lasign ="";
+            string lcond = "";
+            string linst = "";
+            code += "//---- Loop FOR \n";
+            /*for(<asignacion>;<condicion>;<actualización>){<cuerpo>}
+
+<asignacion de variables>
+Lregreso: if(condicion) goto Lv;
+goto Lf;
+Lactualizar:
+<actualizacion>
+goto Lregreso;
+Lv:
+<instrucciones>
+goto Lactualizar;
+Lf:
+<instrucciones>*/
+            return code;
         }
     }
 }

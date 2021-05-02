@@ -90,9 +90,9 @@ namespace Proyecto1.Interprete.Expresion
                     code += c3d.tmp.generarTemporal() + " = HP; //guardo la referencia de inicio de la cadena\n";
                     string cadena = this.valor.ToString();
                     cadena = cadena.Replace("'", "");
-                    foreach (var car in cadena) 
+                    foreach (var car in cadena)
                     {
-                        code += "Heap[(int)HP] = " + (int)car +";   //" + car + "\n";
+                        code += "Heap[(int)HP] = " + (int)car + ";   //" + car + "\n";
                         code += "HP = HP + 1; \n";
                     }
                     code += "Heap[(int)HP] = -1;\n";
@@ -105,9 +105,9 @@ namespace Proyecto1.Interprete.Expresion
                 case 'I':
                     string varval = ts.getVariablePos(this.valor.ToString());
                     string[] search;
-                    if (varval != null) 
+                    if (varval != null)
                     {
-                        search = varval.Split(':'); 
+                        search = varval.Split(':');
                     }
                     else
                     {
@@ -119,11 +119,11 @@ namespace Proyecto1.Interprete.Expresion
                     }
                     else if (search[1].Equals("param"))
                     {
-                        code += c3d.tmp.generarTemporal() + " = SP + " + search[0] + "; //posicion de parametro " +search[2]+ "\n";
+                        code += c3d.tmp.generarTemporal() + " = SP + " + search[0] + "; //posicion de parametro " + search[2] + "\n";
                         string tmp_param = c3d.tmp.getLastTemporal();
                         code += c3d.tmp.generarTemporal() + " = Stack[(int)" + tmp_param + "];";
                     }
-                    else 
+                    else
                     {
                         code += c3d.tmp.generarTemporal() + " = Stack[(int)" + search[0] + "];";
                     }
@@ -131,6 +131,11 @@ namespace Proyecto1.Interprete.Expresion
                 case 'O':
                     break;
                 case 'L':
+                    if (valor is Llamada)
+                    {
+                        Llamada llamadita = (Llamada)valor;
+                        code += llamadita.generar3D(ts, c3d);
+                    }
                     break;
             }
             return code;

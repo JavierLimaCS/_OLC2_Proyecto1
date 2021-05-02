@@ -83,7 +83,12 @@ namespace Proyecto1.Interprete.Instruccion
             {
                 foreach (var inst in this.instrucciones)
                 {
-                    inst.Ejecutar(ts_proc);
+                    
+                     if (inst is Funcion) inst.Ejecutar(ts_proc);
+                     else if (inst is Procedimiento) inst.Ejecutar(ts_proc);
+                     else if (inst is Declaraciones) inst.Ejecutar(ts_proc);
+                     else if (inst is DeclaArreglo) inst.Ejecutar(ts_proc);
+                     else if (inst is DeclaArreglo) inst.Ejecutar(ts_proc);
                     code += inst.generar3D(ts_proc, inter);
                 }
             }
@@ -94,6 +99,7 @@ namespace Proyecto1.Interprete.Instruccion
                     code += sent.generar3D(ts_proc, inter);
                 }
             }
+            code += inter.lreturn + ":\n";
             code += "return;\n } \n";
             ts.alias = "global";
             return code;
