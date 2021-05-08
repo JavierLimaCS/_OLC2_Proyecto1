@@ -63,11 +63,16 @@ namespace Proyecto1.Interprete.Expresion
             {
                 string lt = "";
                 string lf = "";
-                
+                string valizq = "";
                 if (this.izquierda is Primitivo)
                 {
+                    valizq = this.izquierda.generar3D(ts, c3d);
+                    if (valizq.Contains("Heap") || valizq.Contains("Stack")) {
+                        code += valizq + "\n";
+                        valizq = c3d.tmp.getLastTemporal();
+                    }
                     code += "//Operacion logica NOT \n";
-                    code += "if(" + this.izquierda.generar3D(ts, c3d) + "==1) goto " + c3d.label.generarLabel() + ";\n";
+                    code += "if(" + valizq + "==1) goto " + c3d.label.generarLabel() + ";\n";
                     lf = c3d.label.getLastLabel();
                     code += c3d.tmp.generarTemporal() + " = 1;\n";
                     code += "goto " + c3d.label.generarLabel() + ";\n";
@@ -218,6 +223,29 @@ namespace Proyecto1.Interprete.Expresion
                             }
                             break;
                         case 'o':
+                            //-------------------------Lado Izquierdo
+                            code += this.izquierda.generar3D(ts, c3d);
+                            tmp_izq = c3d.tmp.getLastTemporal();
+                            code += this.derecha.generar3D(ts, c3d);
+                            tmp_d = c3d.tmp.getLastTemporal();
+                            code += "//Operacion logica OR \n";
+                            code += "if(" + tmp_izq + "==1) goto " + c3d.label.generarLabel() + ";\n";
+                            lv.Add(c3d.label.getLastLabel());
+                            code += "goto " + c3d.label.generarLabel() + ";\n";
+                            lf.Add(c3d.label.getLastLabel());
+                            code += lf[lf.Count - 1] + ":\n";
+                            //--------------------------Lado Derecho
+                            code += "if(" + tmp_d + "==1) goto " + c3d.label.generarLabel() + ";\n";
+                            lv.Add(c3d.label.getLastLabel());
+                            code += c3d.tmp.getLastTemporal() + " = 0;\n";
+                            code += "goto " + c3d.label.generarLabel() + ";\n";
+                            lf.Add(c3d.label.getLastLabel());
+                            foreach (var v in lv)
+                            {
+                                code += v + ":\n";
+                            }
+                            code += c3d.tmp.getLastTemporal() + " = 1;\n";
+                            code += lf[lf.Count - 1] + ":\n";
                             break;
                     }
                 }

@@ -99,6 +99,10 @@ namespace Proyecto1.Interprete.Instruccion
                     code += lcase + ":\n";
                 }
             }
+            if (this._else != null)
+            {
+                code += this._else.generar3D(ts, inter);
+            }
             if (!(inter.ls.Equals("")))
             {
                 code += inter.ls + ":\n";

@@ -255,7 +255,7 @@ namespace Proyecto1.Analisis
                 | RCONTINUE;
 
             accessArr.Rule
-                = ID + COR1 + Expresion + COR2;
+                = ID + COR1 + exp_list + COR2;
 
             accessObj.Rule
                 = MakeListRule(accessObj, PT, ID);

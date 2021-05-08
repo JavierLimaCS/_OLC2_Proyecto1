@@ -102,6 +102,7 @@ namespace Proyecto1.Interprete.Instruccion
             code += inter.lreturn + ":\n";
             code += "return;\n } \n";
             ts.alias = "global";
+            inter.lreturn = "";
             return code;
         }
     }

@@ -102,8 +102,9 @@ namespace Proyecto1.Interprete.Instruccion
                             nuevo_valor = inter.tmp.getLastTemporal();
                         }
                         code += "Stack[(int)SP] = " + nuevo_valor + ";\n";
-                        code += "goto " + inter.label.generarLabel() + ";\n";
-                        inter.ls = inter.label.getLastLabel();
+                        if (inter.lreturn.Equals(""))
+                            inter.lreturn = inter.label.generarLabel();
+                        code += "goto " + inter.lreturn + ";\n";
                     }
                     else
                     {

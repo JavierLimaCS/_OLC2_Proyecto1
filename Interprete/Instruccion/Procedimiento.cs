@@ -100,8 +100,13 @@ namespace Proyecto1.Interprete.Instruccion
                     code +=sent.generar3D(ts_proc, inter);
                 }
             }
+            if (inter.lreturn != "") 
+            {
+                code += inter.lreturn + ":\n";
+            }
             code += "return;\n } \n";
             ts.alias = "global";
+            inter.lreturn = "";
             return code;
         }
     }

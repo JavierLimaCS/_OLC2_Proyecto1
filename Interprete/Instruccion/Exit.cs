@@ -44,9 +44,9 @@ namespace Proyecto1.Interprete.Instruccion
                 }
                 code += "\nStack[(int)SP] = " + this.valor_exit + ";\n";
             }
-            code += "goto " + inter.label.generarLabel() + ";\n";
             if(inter.lreturn.Equals(""))
-                inter.lreturn = inter.label.getLastLabel();
+                inter.lreturn = inter.label.generarLabel();
+            code += "goto " + inter.lreturn + ";\n";
             return code;
         }
     }

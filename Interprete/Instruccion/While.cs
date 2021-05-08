@@ -84,6 +84,7 @@ namespace Proyecto1.Interprete.Instruccion
             lv = inter.label.getLastLabel();
             code += "goto " + inter.label.generarLabel() + ";\n";
             lf = inter.label.getLastLabel();
+            inter.lbreaks.Push(lf);
             int indice = inter.label.labels.Count;
             code += lv + ": \n";
             foreach (var inst in this.instrucciones)
@@ -93,6 +94,7 @@ namespace Proyecto1.Interprete.Instruccion
             code += "goto " + recursive_lbl+ ";\n";
             code += lf + ":\n";
             inter.lrecursives.Pop();
+            inter.lbreaks.Pop();
             return code;
         }
     }
