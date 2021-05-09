@@ -37,6 +37,7 @@ namespace Proyecto2.Optimización
             var HEAP = ToTerm("Heap");
             var STACK = ToTerm("Stack");
             var PRINTF = ToTerm("printf");
+            var IFF = ToTerm("if");
             #endregion
 
             #region Terminales - SIGNOS
@@ -77,6 +78,8 @@ namespace Proyecto2.Optimización
             NonTerminal Retorno = new NonTerminal("Retorno");
             NonTerminal Tipo = new NonTerminal("Tipo");
             NonTerminal Impresion = new NonTerminal("Impresion");
+            NonTerminal Llamada = new NonTerminal("Llamada");
+            NonTerminal Condicional = new NonTerminal("Condicional");
             #endregion
 
             #region GramaticaOptimizacion
@@ -98,7 +101,15 @@ namespace Proyecto2.Optimización
                 | Salto
                 | Asignacion + PTCOMA
                 | Impresion
+                | Llamada
+                | Condicional
                 | Retorno;
+
+            Condicional.Rule
+                = IFF + PAR1 + Expresion + PAR2 + Salto + Salto;
+
+            Llamada.Rule
+                = ID + PAR1 + PAR2 + PTCOMA;
 
             Etiqueta.Rule
                 = label + BIPUNTO;

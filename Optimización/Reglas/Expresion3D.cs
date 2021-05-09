@@ -9,7 +9,7 @@ namespace Proyecto2.Optimización.Reglas
         public string izquierda;
         public string derecha;
         public string op;
-        public Expresion3D(string izq, string der, string op) 
+        public Expresion3D(string izq, string der, string op)
         {
             this.op = op;
             this.izquierda = izq;

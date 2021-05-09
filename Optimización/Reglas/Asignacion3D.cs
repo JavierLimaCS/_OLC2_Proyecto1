@@ -10,82 +10,96 @@ namespace Proyecto2.Optimización.Reglas
         char tipo;
         Expresion3D exp;
         int line;
+        bool isOpt;
         public Asignacion3D(string id,char ty, Expresion3D exp, int fila) 
         {
             this.id = id;
             this.tipo = ty;
             this.exp = exp;
             this.line = fila;
+            this.isOpt = true;
+        }
+
+        public Asignacion3D() 
+        {
+            this.id = "";
+            this.tipo = 'f';
+            this.exp = null;
+            this.line = 0;
+            this.isOpt = false;
         }
         public override string optimizar3d()
         {
             string codigo = "";
-            string code_ant = "";
-            string code_act = "";
-            switch (this.exp.op)
+            if (isOpt) 
             {
-                case "+":
-                    if (this.id.Equals(this.exp.izquierda) || this.id.Equals(this.exp.derecha))
-                    {
-                        if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
+                string code_ant = "";
+                string code_act = "";
+                switch (this.exp.op)
+                {
+                    case "+":
+                        if (this.id.Equals(this.exp.izquierda) || this.id.Equals(this.exp.derecha))
                         {
-                            code_ant = this.id +  "=" + this.exp.optimizar3d() + ";";
-                            code_act = "//se elimino instruccion";
-                            this.Optimizaciones.Add(new Regla("Mirilla", "Regla 6", code_ant, code_act, this.line));
+                            if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = "//se elimino instruccion";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 6", code_ant, code_act, this.line));
+                            }
                         }
-                    }
-                    else 
-                    {
-                        code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
-                        code_act = this.id + "=";
-                        if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
-                        else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
-                        code_act += ";";
-                        this.Optimizaciones.Add(new Regla("Mirilla", "Regla 10", code_ant, code_act, this.line));
-                    }
-                    break;
-                case "-":
-                    if (this.id.Equals(this.exp.izquierda) || this.id.Equals(this.exp.derecha))
-                    {
-                        if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
+                        else if (this.exp.izquierda.Contains("t") || this.exp.derecha.Contains("t"))
                         {
                             code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
-                            code_act = "//se elimino instruccion";
-                            this.Optimizaciones.Add(new Regla("Mirilla", "Regla 7", code_ant, code_act, this.line));
+                            code_act = this.id + "=";
+                            if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
+                            else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
+                            code_act += ";";
+                            this.Optimizaciones.Add(new Regla("Mirilla", "Regla 10", code_ant, code_act, this.line));
                         }
-                    }
-                    else
-                    {
-                        code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
-                        code_act = this.id + "=";
-                        if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
-                        else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
-                        code_act += ";";
-                        this.Optimizaciones.Add(new Regla("Mirilla", "Regla 11", code_ant, code_act, this.line));
-                    }
-                    break;
-                case "/":
-                    if (this.id.Equals(this.exp.izquierda) || this.id.Equals(this.exp.derecha))
-                    {
-                        if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1"))
+                        break;
+                    case "-":
+                        if (this.id.Equals(this.exp.izquierda) || this.id.Equals(this.exp.derecha))
+                        {
+                            if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = "//se elimino instruccion";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 7", code_ant, code_act, this.line));
+                            }
+                        }
+                        else if (this.exp.izquierda.Contains("t") || this.exp.derecha.Contains("t"))
                         {
                             code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
-                            code_act = "//se elimino instruccion";
-                            this.Optimizaciones.Add(new Regla("Mirilla", "Regla 9", code_ant, code_act, this.line));
+                            code_act = this.id + "=";
+                            if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
+                            else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
+                            code_act += ";";
+                            this.Optimizaciones.Add(new Regla("Mirilla", "Regla 11", code_ant, code_act, this.line));
                         }
-                    }
-                    break;
-                case "*":
-                    if (this.id.Equals(this.exp.izquierda) || this.id.Equals(this.exp.derecha))
-                    {
-                        if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1"))
+                        break;
+                    case "/":
+                        if (this.id.Equals(this.exp.izquierda) || this.id.Equals(this.exp.derecha))
                         {
-                            code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
-                            code_act = "//se elimino instruccion";
-                            this.Optimizaciones.Add(new Regla("Mirilla", "Regla 8", code_ant, code_act, this.line));
+                            if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = "//se elimino instruccion";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 9", code_ant, code_act, this.line));
+                            }
                         }
-                    }
-                    break;
+                        break;
+                    case "*":
+                        if (this.id.Equals(this.exp.izquierda) || this.id.Equals(this.exp.derecha))
+                        {
+                            if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = "//se elimino instruccion";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 8", code_ant, code_act, this.line));
+                            }
+                        }
+                        break;
+                }
             }
             return codigo;
         }

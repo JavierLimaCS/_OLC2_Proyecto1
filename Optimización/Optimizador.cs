@@ -66,7 +66,14 @@ namespace Proyecto2.Optimización
                     this.crearReporteErrores();
                 }
                 else { 
-                    LinkedList<Instruccion3D> instrucciones_3d = instrucciones(raiz.ChildNodes[2]);
+                    List<Instruccion3D> instrucciones_3d = instrucciones(raiz.ChildNodes[2]);
+                    if (raiz.ChildNodes[3].ChildNodes.Count > 0) 
+                    {
+                        foreach (var funcion in raiz.ChildNodes[3].ChildNodes)
+                        {
+                            instrucciones_3d.AddRange(instrucciones(funcion.ChildNodes[2]));
+                        }
+                    }
                     this.optimizar(instrucciones_3d);
                     this.generar_Reporte_Opt();
                     this.crearReporteErrores();
@@ -103,7 +110,7 @@ namespace Proyecto2.Optimización
             }
         }
 
-        public void optimizar(LinkedList<Instruccion3D> instrucciones) 
+        public void optimizar(List<Instruccion3D> instrucciones) 
         {
             string newcode = "";
             foreach (var instruccion in instrucciones)
@@ -117,12 +124,12 @@ namespace Proyecto2.Optimización
 
         }
 
-        public LinkedList<Instruccion3D> instrucciones(ParseTreeNode actual)
+        public List<Instruccion3D> instrucciones(ParseTreeNode actual)
         {
-            LinkedList<Instruccion3D> listaInstrucciones = new LinkedList<Instruccion3D>();
+            List<Instruccion3D> listaInstrucciones = new List<Instruccion3D>();
             foreach (ParseTreeNode nodo in actual.ChildNodes)
             {
-                listaInstrucciones.AddLast(instruccion(nodo));
+                listaInstrucciones.Add(instruccion(nodo));
             }
             return listaInstrucciones;
         }
@@ -136,6 +143,10 @@ namespace Proyecto2.Optimización
                     char ty = 'a';
                     id = actual.ChildNodes[0].Token.Text;
                     int l = actual.ChildNodes[0].Token.Location.Line;
+                    if (id.Equals("Heap") || id.Equals("Stack")) 
+                    {
+                        return new Asignacion3D();
+                    }
                     if (actual.ChildNodes[0].Term.Name == "tmp") ty = 't';
                     if (actual.ChildNodes[0].Term.Name == "exp") {
                         if (actual.ChildNodes[0].Term.Name == "tmp") ty = 't';
