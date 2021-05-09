@@ -32,6 +32,7 @@ namespace Proyecto1.Interprete.Instruccion
             foreach (var variable in this.id) 
             {
                 nuevo = new Simbolo(variable.ToLower(), tipo_variable, this.line, this.col, this.constant);
+                nuevo.Scope = TS.alias;
                 ids += " |" + variable +"| ";
                 if (this.value != null)
                 {
@@ -107,7 +108,6 @@ namespace Proyecto1.Interprete.Instruccion
                                     }
                                 }
                             }
-                           
                             nuevo.Value = nuevo_objeto;
                             break;
                     }

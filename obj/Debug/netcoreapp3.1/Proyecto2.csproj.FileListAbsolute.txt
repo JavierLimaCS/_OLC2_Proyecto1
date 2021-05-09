@@ -16,3 +16,7 @@ C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\De
 C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\Debug\netcoreapp3.1\Proyecto2.genruntimeconfig.cache
 C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\Debug\netcoreapp3.1\Proyecto2.csprojAssemblyReference.cache
 C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\Debug\netcoreapp3.1\Proyecto2.Properties.Resources.resources
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\bin\Debug\netcoreapp3.1\Interop.WINGRAPHVIZLib.dll
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\Debug\netcoreapp3.1\Interop.WINGRAPHVIZLib.dll
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\obj\Debug\netcoreapp3.1\Proyecto2.csproj.ResolveComReference.cache
+C:\Users\javes\OneDrive\Desktop\USAC 2021\1er. Semestre\Compi 2\Proyecto2\bin\Debug\netcoreapp3.1\Irony.Interpreter.dll

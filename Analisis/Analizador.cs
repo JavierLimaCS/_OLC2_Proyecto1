@@ -247,6 +247,7 @@ namespace Proyecto1.Analisis
                     Simbolo_Funcion nuevo = new Simbolo_Funcion(actual.ChildNodes[0].Token.Text.ToLower(), null, actual.ChildNodes[0].Token.Location.Line+1, actual.ChildNodes[0].Token.Location.Column+1); ;
                     int proc_index_inst = 1;
                     int proc_index_sent = 3;
+                    bool eseRef = false;
                     if (actual.ChildNodes.Count > 5)
                     {
                         proc_index_inst = 2;
@@ -254,6 +255,7 @@ namespace Proyecto1.Analisis
                         foreach(var args in actual.ChildNodes[1].ChildNodes) 
                         {
                             int indice = 0;
+                            if (args.ChildNodes.Count == 3) eseRef = true;
                             if (args.ChildNodes.Count > 2) indice=1; 
                             string tipoparam = args.ChildNodes[indice+1].ChildNodes[0].Token.Text;
                             Tipo param_type = getTipo(tipoparam);
@@ -262,6 +264,7 @@ namespace Proyecto1.Analisis
                             foreach (var param in args.ChildNodes[indice].ChildNodes) 
                             {
                                 parametro = new Parametro(param.Token.Text, param_type);
+                                parametro.Referencia = eseRef;
                                 nuevo.Params.Add(param.Token.Text, parametro);
                                 cont++;
                             }
@@ -543,6 +546,8 @@ namespace Proyecto1.Analisis
             {
                 Console.WriteLine(ex.ToString());
             }
+            //WINGRAPHVIZLib.DOT dot = new WINGRAPHVIZLib.DOT();
+            //WINGRAPHVIZLib.BinaryImage img = dot.ToPNG(grafoDot);
             this.generarReporteAST();
         }
 
@@ -565,8 +570,24 @@ namespace Proyecto1.Analisis
 
         public void crearReporteErrores() 
         {
-            String errores = "<html>\n <body> <h2>Reporte de Errores</h2> <table style=\"width:100%\" border=\"1\"> <tr><th>Tipo</th><th>Descripcion del error</th><th>Linea</th> <th>Columna</th></tr> \n";
-            for(int i = 0; i < this.lista_errores.Count; i++) 
+            String errores = "<html>\n <head>" +
+                "<meta charset=\"utf - 8\"/>" +
+                "<title> Reporte de Errores</title>" +
+                "<meta name=\"viewport\" content=\"initial-scale=1.0; maximum-scale=1.0; width=device-width;\">" +
+                "<link rel=\"stylesheet\" href=\"style2.css\">\n" +
+                "</head>\n" +
+                "<body>" + "\n" +
+                "<div class=\"table-title\">" +
+                "<h2 style=\"text-align:center;\">Reporte de Errores</h2>\n" +
+                "</div> \n" +
+                "<table class=\"table-fill\"> " + "\n" +
+                "<thead>\n" +
+                "<tr><th class=\"text-left\">TIPO</th>" + "\n" +
+                "    <th class=\"text-left\">DESCRIPCION</th>" + "\n" +
+                "    <th class=\"text-left\">FILA</th> " + "\n" +
+                "    <th class=\"text-left\">COLUMNA</th>" + "\n" +
+                "</tr> \n</thead>\n <tbody class=\"table-hover\"> \n";
+            for (int i = 0; i < this.lista_errores.Count; i++) 
             {
                 errores += "<tr>" +
                         "<td>" + this.lista_errores.ElementAt(i).Tipo +

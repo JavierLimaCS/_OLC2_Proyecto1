@@ -16,6 +16,7 @@ namespace Proyecto1.TS
         private bool isConstant;
         private bool isParam;
         private string pos;
+        private string scope;
 
         public Simbolo(string n, Tipo ty, int l, int c)
         {
@@ -25,6 +26,7 @@ namespace Proyecto1.TS
             this.column = c;
             this.pos = "";
             this.isParam = false;
+            this.scope = "";
         }
 
         public Simbolo(String n, Tipo ty, int l, int c, bool b) {
@@ -35,6 +37,7 @@ namespace Proyecto1.TS
             this.isConstant = b;
             this.pos = "";
             this.isParam = false;
+            this.scope = "";
         }
 
         public String Id { get => id; set => id = value; }
@@ -46,5 +49,6 @@ namespace Proyecto1.TS
         public bool esConstante { get => isConstant; set => isConstant = value; }
         public bool esParametro { get => isParam; set => isParam = value; }
         public string Pos { get => pos; set => pos = value; }
+        public string Scope { get => scope; set => scope = value; }
     }
 }

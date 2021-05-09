@@ -337,7 +337,7 @@ namespace Proyecto1.TS
                             "</td>" + "\n" +
                             "<td class=\"text-left\">" + this.variables.ElementAt(i).Value.Columna +
                             "</td>" + "\n" +
-                             "<td class=\"text-left\">" + this.alias +
+                             "<td class=\"text-left\">" + this.variables.ElementAt(i).Value.Scope +
                             "</td>" + "\n";
                 }
             }

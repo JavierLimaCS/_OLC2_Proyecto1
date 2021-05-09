@@ -19,9 +19,11 @@ namespace Proyecto1
 {
     public partial class Interfaz : Form
     {
+        int cont;
         public Interfaz()
         {
             InitializeComponent();
+            cont++;
         }
 
         public int getWidth()
@@ -136,6 +138,14 @@ namespace Proyecto1
                 {
                     var proc = Process.Start(@"cmd.exe ", @"/c C:\compiladores2\ast_report.png");
                 }
+                else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte de Optimizacion"))
+                {
+                    var proc = Process.Start(@"cmd.exe ", @"/c C:\compiladores2\rep_optimizacion.html");
+                }
+                else if (this.comboBox1.SelectedItem.ToString().Equals("Reporte Errores Codigo Intermedio"))
+                {
+                    var proc = Process.Start(@"cmd.exe ", @"/c C:\compiladores2\reporteErrores_OPT.html");
+                }
             }
             else {
                 MessageBox.Show(" Advertencia: \n Seleccione una opcion de reporte", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -208,8 +218,9 @@ namespace Proyecto1
         private void button6_Click(object sender, EventArgs e)
         {
             string cadena = this.richTextBox2.Text;
-            Optimizador opt = new Optimizador(cadena);
+            Optimizador opt = new Optimizador(cadena, this.richTextBox2, cont);
             opt.Optimizacion();
+            cont++;
         }
 
         private void button7_Click(object sender, EventArgs e)

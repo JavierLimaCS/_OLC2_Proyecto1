@@ -51,11 +51,11 @@ namespace Proyecto1
             // richTextBox1
             // 
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.richTextBox1.Location = new System.Drawing.Point(57, -2);
+            this.richTextBox1.Font = new System.Drawing.Font("Constantia", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.richTextBox1.Location = new System.Drawing.Point(47, -2);
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(991, 948);
+            this.richTextBox1.Size = new System.Drawing.Size(1024, 948);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             this.richTextBox1.SelectionChanged += new System.EventHandler(this.richTextBox1_SelectionChanged);
@@ -68,20 +68,20 @@ namespace Proyecto1
             this.richTextBox2.BackColor = System.Drawing.SystemColors.MenuText;
             this.richTextBox2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.ScrollBar;
-            this.richTextBox2.Location = new System.Drawing.Point(1069, 219);
+            this.richTextBox2.Location = new System.Drawing.Point(1092, 217);
             this.richTextBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(687, 727);
+            this.richTextBox2.Size = new System.Drawing.Size(723, 727);
             this.richTextBox2.TabIndex = 2;
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
             // 
             // Abrir
             // 
-            this.Abrir.Location = new System.Drawing.Point(107, 32);
+            this.Abrir.Location = new System.Drawing.Point(143, 34);
             this.Abrir.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Abrir.Name = "Abrir";
-            this.Abrir.Size = new System.Drawing.Size(186, 38);
+            this.Abrir.Size = new System.Drawing.Size(186, 36);
             this.Abrir.TabIndex = 3;
             this.Abrir.Text = "Abrir Archivo";
             this.Abrir.UseVisualStyleBackColor = true;
@@ -111,7 +111,7 @@ namespace Proyecto1
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(301, 125);
+            this.button4.Location = new System.Drawing.Point(336, 126);
             this.button4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(201, 38);
@@ -125,13 +125,14 @@ namespace Proyecto1
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Reporte Errores",
+            "Reporte Errores Codigo Intermedio",
             "Reporte Tabla de Simbolos",
             "Reporte AST",
             "Reporte de Optimizacion"});
-            this.comboBox1.Location = new System.Drawing.Point(24, 125);
+            this.comboBox1.Location = new System.Drawing.Point(40, 126);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(269, 33);
+            this.comboBox1.Size = new System.Drawing.Size(288, 33);
             this.comboBox1.TabIndex = 7;
             // 
             // groupBox1
@@ -143,11 +144,11 @@ namespace Proyecto1
             this.groupBox1.Controls.Add(this.Abrir);
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.button4);
-            this.groupBox1.Location = new System.Drawing.Point(1069, 20);
+            this.groupBox1.Location = new System.Drawing.Point(1092, 18);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox1.Size = new System.Drawing.Size(509, 189);
+            this.groupBox1.Size = new System.Drawing.Size(545, 189);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Proyecto 2";
@@ -158,7 +159,7 @@ namespace Proyecto1
             this.button7.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaption;
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button7.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.button7.Location = new System.Drawing.Point(107, 79);
+            this.button7.Location = new System.Drawing.Point(143, 82);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(186, 34);
             this.button7.TabIndex = 13;
@@ -168,7 +169,7 @@ namespace Proyecto1
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(300, 83);
+            this.button6.Location = new System.Drawing.Point(336, 80);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(202, 34);
             this.button6.TabIndex = 12;
@@ -178,7 +179,7 @@ namespace Proyecto1
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(300, 34);
+            this.button5.Location = new System.Drawing.Point(336, 32);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(202, 34);
             this.button5.TabIndex = 11;
@@ -189,7 +190,7 @@ namespace Proyecto1
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 50);
+            this.label1.Location = new System.Drawing.Point(8, 37);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(16, 25);
@@ -218,7 +219,7 @@ namespace Proyecto1
             this.LineNumberTextBox.Name = "LineNumberTextBox";
             this.LineNumberTextBox.ReadOnly = true;
             this.LineNumberTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.LineNumberTextBox.Size = new System.Drawing.Size(39, 956);
+            this.LineNumberTextBox.Size = new System.Drawing.Size(47, 956);
             this.LineNumberTextBox.TabIndex = 9;
             this.LineNumberTextBox.Text = "";
             this.LineNumberTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LineNumberTextBox_MouseDown);
@@ -228,7 +229,7 @@ namespace Proyecto1
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.button1);
-            this.groupBox2.Location = new System.Drawing.Point(1585, 20);
+            this.groupBox2.Location = new System.Drawing.Point(1644, 20);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(171, 189);
             this.groupBox2.TabIndex = 10;
@@ -240,7 +241,7 @@ namespace Proyecto1
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(1766, 956);
+            this.ClientSize = new System.Drawing.Size(1828, 956);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.LineNumberTextBox);
             this.Controls.Add(this.groupBox1);

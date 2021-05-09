@@ -27,7 +27,7 @@ namespace Proyecto1.Interprete.Instruccion
                 this.Semanticos.Add(new Analisis.Error("Semantico", "La funcion" + this.id + "no existe.", 0, 0));
                 return "";
             }
-            TabladeSimbolos ts_funcion = new TabladeSimbolos(ts, ts.alias+funcion.Id);
+            TabladeSimbolos ts_funcion = new TabladeSimbolos(ts, funcion.Id);
             if (this.exp_list != null) 
             {
                 if (funcion.Params.Count == this.exp_list.Count)
@@ -43,6 +43,7 @@ namespace Proyecto1.Interprete.Instruccion
                 {
                     Simbolo tmp_param = new Simbolo(par.Value.Id, par.Value.Tipo, 0, 0, par.Value.Referencia);
                     tmp_param.Value = par.Value.ValorPar;
+                    tmp_param.Scope = ts_funcion.alias;
                     ts_funcion.declararVariable(par.Value.Id, tmp_param);
                 }
             } 
@@ -111,38 +112,41 @@ namespace Proyecto1.Interprete.Instruccion
                     if (!(exp is Primitivo))
                     {
                         code += exp.generar3D(ts, inter);
-                        string tmp_exp = inter.tmp.getLastTemporal();
-                        code += inter.tmp.generarTemporal() + " = " + tmp_exp + ";\n";
                         inter.param_tmp.Enqueue(inter.tmp.getLastTemporal());
                     }
                     else
                     {
-                        Simbolo tmp = exp.Evaluar(ts);
-                        if(tmp != null) 
+                        Primitivo primi = (Primitivo)exp;
+                        if (primi.tipo =='L') 
                         {
-                            switch (tmp.Tipo.tipoAuxiliar)
-                            {
-                                case "string":
-                                    code += exp.generar3D(ts, inter);
-                                    string tmp_cadena = inter.tmp.getLastTemporal();
-                                    code += inter.tmp.generarTemporal() + " = " + tmp_cadena + ";\n";
-                                    break;
-                                default:
-                                    string valor = exp.generar3D(ts, inter);
-                                    if (valor.Contains("Heap") || valor.Contains("Stack"))
-                                    {
-                                        code += valor + "\n";
-                                        string tmp_id = inter.tmp.getLastTemporal();
-                                        code += inter.tmp.generarTemporal() + " = " + tmp_id + ";\n";
-                                    }
-                                    else 
-                                    {
-                                        code += inter.tmp.generarTemporal() + " = " + valor + ";\n";
-                                    }
-                                    break;
-                            }
-                            inter.param_tmp.Enqueue(inter.tmp.getLastTemporal());
+                            
                         }
+                        else 
+                        {
+                            Simbolo tmp = exp.Evaluar(ts);
+                            if (tmp != null)
+                            {
+                                switch (tmp.Tipo.tipoAuxiliar)
+                                {
+                                    case "string":
+                                        code += exp.generar3D(ts, inter);
+                                        break;
+                                    default:
+                                        string valor = exp.generar3D(ts, inter);
+                                        if (valor.Contains("Heap") || valor.Contains("Stack"))
+                                        {
+                                            code += valor + "\n";
+                                        }
+                                        else
+                                        {
+                                            code += inter.tmp.generarTemporal() + " = " + valor + ";\n";
+                                        }
+                                        break;
+                                }
+                                inter.param_tmp.Enqueue(inter.tmp.getLastTemporal());
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -153,17 +157,18 @@ namespace Proyecto1.Interprete.Instruccion
             
             code += "SP = SP + 1;         //cambio de ambito simulado\n";
             code += "//-----> se guardan temporales\n";
-            string tmp_guardado = inter.tmp.generarTemporal();
-            for (int i = 0; i < inter.param_tmp.Count; i++) 
+            inter.tmp.generarTemporal();
+            string tmp_guardado = inter.tmp.getLastTemporal();
+            for (int i = 0; i < inter.tmp.tmpStorage.Count; i++) 
             {
                 code += tmp_guardado + " = SP + " + i + ";\n" ;
-                code += "Stack[(int)" + tmp_guardado + "] = " + inter.param_tmp.ElementAt(i)+";\n";
+                code += "Stack[(int)" + tmp_guardado + "] = " + inter.tmp.tmpStorage.ElementAt(i)+";\n";
             }
             string recuperacion_tmp = "//-----> se recuperan los temporales\n";
-            for (int i = 0; i < inter.param_tmp.Count; i++) 
+            for (int i = 0; i < inter.tmp.tmpStorage.Count; i++) 
             {
                 recuperacion_tmp += tmp_guardado + " = SP + " + i + ";\n";
-                recuperacion_tmp += inter.param_tmp.ElementAt(i) + " = Stack[(int)" + tmp_guardado + "];\n";
+                recuperacion_tmp += inter.tmp.tmpStorage.ElementAt(i) + " = Stack[(int)" + tmp_guardado + "];\n";
             }
             code += "//----------------------------- \n";
             code += "SP = SP + " + inter.getVoidSize(this.id) + ";\n";

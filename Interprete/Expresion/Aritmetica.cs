@@ -152,17 +152,23 @@ namespace Proyecto1.Interprete.Expresion
             string derechaval = "";
             if (this.derecha == null)
             {
-                code += this.izquierda.generar3D(ts, c3d);
+                code += c3d.tmp.generarTemporal() + " = 0 - " + this.izquierda.generar3D(ts, c3d); 
             }
             else 
             {
                 if (this.izquierda is Primitivo & this.derecha is Primitivo)
                 {
+                    Primitivo izq = (Primitivo)this.izquierda;
+                    Primitivo der = (Primitivo)this.derecha;
                     izquierdaval = this.izquierda.generar3D(ts, c3d);
                     if (izquierdaval.Contains("Heap") || izquierdaval.Contains("Stack"))
                     {
                         code += izquierdaval + "\n";
+                        if (der.tipo.Equals('L')) { 
+                            c3d.tmp.delete = false; 
+                        }
                         izquierdaval = c3d.tmp.getLastTemporal();
+                        c3d.tmp.delete = true;
                     }
                     derechaval = this.derecha.generar3D(ts, c3d);
                     if (derechaval.Contains("Heap") || derechaval.Contains("Stack"))

@@ -36,6 +36,7 @@ namespace Proyecto2.Optimización
             var RET = ToTerm("return");
             var HEAP = ToTerm("Heap");
             var STACK = ToTerm("Stack");
+            var PRINTF = ToTerm("printf");
             #endregion
 
             #region Terminales - SIGNOS
@@ -75,6 +76,7 @@ namespace Proyecto2.Optimización
             NonTerminal Asignacion = new NonTerminal("Asignacion");
             NonTerminal Retorno = new NonTerminal("Retorno");
             NonTerminal Tipo = new NonTerminal("Tipo");
+            NonTerminal Impresion = new NonTerminal("Impresion");
             #endregion
 
             #region GramaticaOptimizacion
@@ -95,10 +97,14 @@ namespace Proyecto2.Optimización
                 = Etiqueta
                 | Salto
                 | Asignacion + PTCOMA
+                | Impresion
                 | Retorno;
 
             Etiqueta.Rule
                 = label + BIPUNTO;
+
+            Impresion.Rule
+                = PRINTF + PAR1 + CADENA + COM + PAR1 + Tipo + PAR2 + Expresion + PAR2 + PTCOMA; 
 
             Salto.Rule
                 = GOTO + label + PTCOMA;
