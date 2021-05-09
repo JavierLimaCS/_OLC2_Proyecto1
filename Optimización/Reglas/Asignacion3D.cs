@@ -49,12 +49,15 @@ namespace Proyecto2.Optimización.Reglas
                         }
                         else if (this.exp.izquierda.Contains("t") || this.exp.derecha.Contains("t"))
                         {
-                            code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
-                            code_act = this.id + "=";
-                            if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
-                            else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
-                            code_act += ";";
-                            this.Optimizaciones.Add(new Regla("Mirilla", "Regla 10", code_ant, code_act, this.line));
+                            if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=";
+                                if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
+                                else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
+                                code_act += ";";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 10", code_ant, code_act, this.line));
+                            }
                         }
                         break;
                     case "-":
@@ -69,12 +72,15 @@ namespace Proyecto2.Optimización.Reglas
                         }
                         else if (this.exp.izquierda.Contains("t") || this.exp.derecha.Contains("t"))
                         {
-                            code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
-                            code_act = this.id + "=";
-                            if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
-                            else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
-                            code_act += ";";
-                            this.Optimizaciones.Add(new Regla("Mirilla", "Regla 11", code_ant, code_act, this.line));
+                            if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=";
+                                if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
+                                else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
+                                code_act += ";";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 11", code_ant, code_act, this.line));
+                            }   
                         }
                         break;
                     case "/":
@@ -86,6 +92,31 @@ namespace Proyecto2.Optimización.Reglas
                                 code_act = "//se elimino instruccion";
                                 this.Optimizaciones.Add(new Regla("Mirilla", "Regla 9", code_ant, code_act, this.line));
                             }
+                            else if (this.exp.derecha.Equals("0")) 
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=0;";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 16", code_ant, code_act, this.line));
+                            }
+                        }
+                        else if (this.exp.izquierda.Contains("t") || this.exp.derecha.Contains("t"))
+                        {
+                            if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=";
+                                if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
+                                else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
+                                code_act += ";";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 13", code_ant, code_act, this.line));
+                            }
+                            else if (this.exp.derecha.Equals("0"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=0;";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 16", code_ant, code_act, this.line));
+                            }
+
                         }
                         break;
                     case "*":
@@ -96,6 +127,48 @@ namespace Proyecto2.Optimización.Reglas
                                 code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
                                 code_act = "//se elimino instruccion";
                                 this.Optimizaciones.Add(new Regla("Mirilla", "Regla 8", code_ant, code_act, this.line));
+                            }
+                            else if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=0;";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 15", code_ant, code_act, this.line));
+                            }
+                            else if (this.exp.derecha.Equals("2") || this.exp.izquierda.Equals("2"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=";
+                                if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda + "+" + this.exp.izquierda;
+                                else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha + "+" + this.exp.derecha;
+                                code_act += ";";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 14", code_ant, code_act, this.line));
+                            }
+                        }
+                        else if (this.exp.izquierda.Contains("t") || this.exp.derecha.Contains("t"))
+                        {
+                            if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1")) 
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=";
+                                if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
+                                else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
+                                code_act += ";";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 12", code_ant, code_act, this.line));
+                            }
+                            else if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=0;";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 15", code_ant, code_act, this.line));
+                            }
+                            if (this.exp.derecha.Equals("2") || this.exp.izquierda.Equals("2"))
+                            {
+                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_act = this.id + "=";
+                                if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda +"+"+ this.exp.izquierda;
+                                else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha + "+" + this.exp.derecha;
+                                code_act += ";";
+                                this.Optimizaciones.Add(new Regla("Mirilla", "Regla 14", code_ant, code_act, this.line));
                             }
                         }
                         break;

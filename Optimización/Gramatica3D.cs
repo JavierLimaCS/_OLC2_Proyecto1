@@ -38,6 +38,8 @@ namespace Proyecto2.Optimización
             var STACK = ToTerm("Stack");
             var PRINTF = ToTerm("printf");
             var IFF = ToTerm("if");
+            var SP = ToTerm("SP");
+            var HP = ToTerm("HP");
             #endregion
 
             #region Terminales - SIGNOS
@@ -106,7 +108,7 @@ namespace Proyecto2.Optimización
                 | Retorno;
 
             Condicional.Rule
-                = IFF + PAR1 + Expresion + PAR2 + Salto + Salto;
+                = IFF + PAR1 + Expresion + PAR2 + Salto;
 
             Llamada.Rule
                 = ID + PAR1 + PAR2 + PTCOMA;
@@ -130,13 +132,18 @@ namespace Proyecto2.Optimización
                 = RET + PTCOMA;
 
             Expresion.Rule
-                = Expresion + MAS + Expresion
+                = MENOS + Expresion
+                | Expresion + MAS + Expresion
                 | Expresion + MENOS + Expresion
                 | Expresion + DIV + Expresion
                 | Expresion + POR + Expresion
                 | Expresion + MOD + Expresion
                 | Expresion + MAYOR + Expresion
                 | Expresion + MENOR + Expresion
+                | Expresion + IGUAL + Expresion
+                | Expresion + MAYIG + Expresion
+                | Expresion + MENIG + Expresion
+                | Expresion + DIFF + Expresion
                 | ENTERO
                 | CADENA
                 | DECIMAL
@@ -144,6 +151,8 @@ namespace Proyecto2.Optimización
                 | STACK + COR1 + Expresion + COR2
                 | temporal
                 | PAR1 + Tipo + PAR2 + temporal
+                | PAR1 + Tipo + PAR2 + SP
+                | PAR1 + Tipo + PAR2 + HP
                 | ID;
 
             Tipo.Rule

@@ -16,6 +16,7 @@ namespace Proyecto1.Codigo3D
         public Stack<string> lrecursives;
         public Dictionary<string, int> voids;
         public Queue<string> param_tmp;
+        public Queue<string> auxiliar;
         public string tmp_return;
         public Intermedio() 
         {

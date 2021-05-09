@@ -83,10 +83,27 @@ namespace Proyecto1.Interprete.Instruccion
         public override string generar3D(TabladeSimbolos ts, Intermedio inter)
         {
             string code = "//------- Sentencia Decision If \n";
+            string primi = "";
             if (inter.ls.Equals("")) inter.ls = inter.label.generarLabel();
             if (this.valor is Primitivo)
             {
-                code += inter.tmp.generarTemporal() + " = " + this.valor.generar3D(ts, inter) + ";\n";
+                primi = this.valor.generar3D(ts, inter);
+                if (primi.Contains("Heap") || primi.Contains("Stack"))
+                {
+                    code += primi + "\n";
+                }
+                else
+                {
+                    Primitivo primitibo = (Primitivo)this.valor;
+                    if (primitibo.tipo == 'L')
+                    {
+                        code += primi;
+                    }
+                    else 
+                    {
+                        code += inter.tmp.generarTemporal() + " = " + primi + ";\n";
+                    }
+                }
             }
             else 
             {

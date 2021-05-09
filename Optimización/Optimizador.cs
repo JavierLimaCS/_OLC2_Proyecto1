@@ -153,12 +153,16 @@ namespace Proyecto2.Optimización
                     }
                     return new Asignacion3D(id, ty, (Expresion3D)instruccion(actual.ChildNodes[1]),l);
                 case "expresion":
-                    if (actual.ChildNodes.Count > 1)
+                    if (actual.ChildNodes.Count == 3)
                     {
                         string izq = actual.ChildNodes[0].ChildNodes[0].Token.Text;
                         string der = actual.ChildNodes[2].ChildNodes[0].Token.Text;
                         string oper = actual.ChildNodes[1].Token.Text;
                         return new Expresion3D(izq, der, oper);
+                    }
+                    else if (actual.ChildNodes.Count>3) 
+                    {
+                        return new Expresion3D();
                     }
                     else
                     {

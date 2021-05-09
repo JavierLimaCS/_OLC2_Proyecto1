@@ -67,23 +67,56 @@ namespace Proyecto1.Interprete.Instruccion
             string code = "//------- Sentencia Decision Case\n";
             string eval = "";
             string lcase = "";
+            string primi = "";
             if (inter.ls.Equals("")) inter.ls = inter.label.generarLabel();
             if (this.cond is Primitivo)
             {
-                code += inter.tmp.generarTemporal() + " = " + this.cond.generar3D(ts, inter) + ";\n";
+                primi = this.cond.generar3D(ts,inter);
+                if (primi.Contains("Heap") || primi.Contains("Stack"))
+                {
+                    code += primi + "\n";
+                }
+                else {
+                    Primitivo primitibo = (Primitivo)this.cond;
+                    if (primitibo.tipo == 'L')
+                    {
+                        code += primi;
+                    }
+                    else
+                    {
+                        code += inter.tmp.generarTemporal() + " = " + primi + ";\n";
+                    }
+                }
             }
             else
             {
                 code += this.cond.generar3D(ts, inter);
             }
             eval = inter.tmp.getLastTemporal();
+            string primi2 = "";
             foreach (var caso in this.casos)
             {
                 foreach (var cond in caso.Condiciones) 
                 {
                     if (cond is Primitivo)
                     {
-                        code += inter.tmp.generarTemporal() + " = " + cond.generar3D(ts, inter) + ";\n";
+                        primi2 = cond.generar3D(ts, inter);
+                        if (primi2.Contains("Heap") || primi2.Contains("Stack"))
+                        {
+                            code += primi2 + "\n";
+                        }
+                        else
+                        {
+                            Primitivo primitibo2 = (Primitivo)this.cond;
+                            if (primitibo2.tipo == 'L')
+                            {
+                                code += primi2;
+                            }
+                            else
+                            {
+                                code += inter.tmp.generarTemporal() + " = " + primi2 + ";\n";
+                            }
+                        }
                     }
                     else
                     {

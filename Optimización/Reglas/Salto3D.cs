@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Proyecto2.Optimización.Reglas
 {
-    class Condicional : Instruccion3D
+    class Salto3D : Instruccion3D
     {
         public override string optimizar3d()
         {

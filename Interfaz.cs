@@ -213,7 +213,7 @@ namespace Proyecto1
             String file = this.label1.Text;
             Generador generator = new Generador();
             generator.generar(cadena, this.richTextBox2);
-            this.cont = 0;
+            this.cont = 1;
         }
 
         private void button6_Click(object sender, EventArgs e)

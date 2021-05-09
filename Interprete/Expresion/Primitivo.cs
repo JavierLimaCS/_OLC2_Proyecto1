@@ -121,7 +121,7 @@ namespace Proyecto1.Interprete.Expresion
                     {
                         code += c3d.tmp.generarTemporal() + " = SP + " + search[0] + "; //posicion de parametro " + search[2] + "\n";
                         string tmp_param = c3d.tmp.getLastTemporal();
-                        code += c3d.tmp.generarTemporal() + " = Stack[(int)" + tmp_param + "];";
+                        code += c3d.tmp.generarTemporal() + " = Stack[(int)" + tmp_param + "];\n";
                     }
                     else
                     {

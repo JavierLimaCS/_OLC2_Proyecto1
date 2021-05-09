@@ -119,7 +119,11 @@ namespace Proyecto1.Interprete.Instruccion
                         Primitivo primi = (Primitivo)exp;
                         if (primi.tipo =='L') 
                         {
-                            
+                            inter.auxiliar = inter.param_tmp;
+                            inter.param_tmp.Clear();
+                            code += exp.generar3D(ts,inter);
+                            inter.param_tmp = inter.auxiliar;
+                            inter.auxiliar.Clear();
                         }
                         else 
                         {

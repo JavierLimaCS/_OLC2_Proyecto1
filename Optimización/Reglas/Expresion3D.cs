@@ -22,6 +22,13 @@ namespace Proyecto2.Optimización.Reglas
             this.derecha = "";
         }
 
+        public Expresion3D() 
+        {
+            this.op = "";
+            this.izquierda = "";
+            this.derecha = "";
+        }
+
         public override string optimizar3d()
         {
             return this.izquierda + " " + this.op + " " + this.derecha;
