@@ -169,8 +169,6 @@ namespace Proyecto2.Optimización.Reglas
                                 code_act = this.id + "=";
                                 if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
                                 else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
-                                if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
-                                else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
                                 if (this.exp.izquierda.Contains("SP")) code_act += this.exp.izquierda;
                                 else if (this.exp.derecha.Contains("SP")) code_act += this.exp.derecha;
                                 if (this.exp.izquierda.Contains("HP")) code_act += this.exp.izquierda;
