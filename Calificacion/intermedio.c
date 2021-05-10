@@ -9,13 +9,31 @@ float t1,t2,t3,t4,t5,t6,t7,t8,t9,t10;
 
 //-----Codigo Intermedio
 void main() { 
-
+t2=t3;
+decisionesRegla34();
+comunes();
+t3=t2;
     return; 
 } 
 
-void decisiones() { 
+void decisionesRegla34() { 
 if(1==1) goto L1;
 goto L2;
+
+if(4==1) goto L3;
+goto L4;
+
+if(10>1) goto L5;
+goto L6;
+
+if(155<0) goto L7;
+goto L8;
+
+if(200>=200) goto L9;
+goto L10;
+
+if(2000<=100) goto L11;
+goto L12;
    return; 
 } 
 

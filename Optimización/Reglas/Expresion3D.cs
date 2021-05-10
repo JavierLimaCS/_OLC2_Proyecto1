@@ -29,7 +29,7 @@ namespace Proyecto2.Optimización.Reglas
             this.derecha = "";
         }
 
-        public override string optimizar3d()
+        public override string optimizar3d(Dictionary<string, int> Etiquetas, Dictionary<string, int> Saltos)
         {
             return this.izquierda + " " + this.op + " " + this.derecha;
         }

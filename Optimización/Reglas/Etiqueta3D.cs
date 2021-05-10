@@ -14,9 +14,10 @@ namespace Proyecto2.Optimización.Reglas
             this.fila = f;
             this.label = l;
         }
-        public override string optimizar3d()
+        public override string optimizar3d(Dictionary<string, int> Etiquetas, Dictionary<string, int> Saltos)
         {
-            this.Etiquetas.Add(this.label, this.fila);
+            if(!Etiquetas.ContainsKey(this.label)) 
+                Etiquetas.Add(this.label, this.fila);
             return "";
         }
     }

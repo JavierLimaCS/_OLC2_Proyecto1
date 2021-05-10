@@ -188,7 +188,7 @@ namespace Proyecto1.Interprete.Instruccion
             }
             code += void_name + "();\n";
             Simbolo_Funcion funcion = ts.getFuncion(this.id);
-            if (funcion.Tipo != null) 
+            if (funcion != null) 
             {
                 code += inter.tmp.generarTemporal() + " = Stack[(int)SP];\n";
                 inter.tmp_return = inter.tmp.getLastTemporal();

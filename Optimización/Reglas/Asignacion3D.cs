@@ -28,7 +28,7 @@ namespace Proyecto2.Optimización.Reglas
             this.line = 0;
             this.isOpt = false;
         }
-        public override string optimizar3d()
+        public override string optimizar3d(Dictionary<string, int> Etiquetas, Dictionary<string, int> Saltos)
         {
             string codigo = "";
             if (isOpt) 
@@ -42,7 +42,7 @@ namespace Proyecto2.Optimización.Reglas
                         {
                             if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas,Saltos) + ";";
                                 code_act = "//se elimino instruccion";
                                 this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 6", code_ant, code_act, this.line));
                             }
@@ -51,7 +51,7 @@ namespace Proyecto2.Optimización.Reglas
                         {
                             if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=";
                                 if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
                                 else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
@@ -65,7 +65,7 @@ namespace Proyecto2.Optimización.Reglas
                         {
                             if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = "//se elimino instruccion";
                                 this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 7", code_ant, code_act, this.line));
                             }
@@ -74,7 +74,7 @@ namespace Proyecto2.Optimización.Reglas
                         {
                             if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=";
                                 if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
                                 else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
@@ -88,13 +88,13 @@ namespace Proyecto2.Optimización.Reglas
                         {
                             if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = "//se elimino instruccion";
                                 this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 9", code_ant, code_act, this.line));
                             }
-                            else if (this.exp.derecha.Equals("0")) 
+                            else if (this.exp.izquierda.Equals("0")) 
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=0;";
                                 this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 16", code_ant, code_act, this.line));
                             }
@@ -103,16 +103,16 @@ namespace Proyecto2.Optimización.Reglas
                         {
                             if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=";
                                 if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
                                 else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
                                 code_act += ";";
                                 this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 13", code_ant, code_act, this.line));
                             }
-                            else if (this.exp.derecha.Equals("0"))
+                            else if (this.exp.izquierda.Equals("0"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=0;";
                                 this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 16", code_ant, code_act, this.line));
                             }
@@ -124,19 +124,19 @@ namespace Proyecto2.Optimización.Reglas
                         {
                             if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = "//se elimino instruccion";
                                 this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 8", code_ant, code_act, this.line));
                             }
                             else if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=0;";
                                 this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 15", code_ant, code_act, this.line));
                             }
                             else if (this.exp.derecha.Equals("2") || this.exp.izquierda.Equals("2"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=";
                                 if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda + "+" + this.exp.izquierda;
                                 else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha + "+" + this.exp.derecha;
@@ -148,7 +148,7 @@ namespace Proyecto2.Optimización.Reglas
                         {
                             if (this.exp.derecha.Equals("1") || this.exp.izquierda.Equals("1")) 
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=";
                                 if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda;
                                 else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha;
@@ -157,13 +157,13 @@ namespace Proyecto2.Optimización.Reglas
                             }
                             else if (this.exp.derecha.Equals("0") || this.exp.izquierda.Equals("0"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=0;";
                                 this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 15", code_ant, code_act, this.line));
                             }
                             if (this.exp.derecha.Equals("2") || this.exp.izquierda.Equals("2"))
                             {
-                                code_ant = this.id + "=" + this.exp.optimizar3d() + ";";
+                                code_ant = this.id + "=" + this.exp.optimizar3d(Etiquetas, Saltos) + ";";
                                 code_act = this.id + "=";
                                 if (this.exp.izquierda.Contains("t")) code_act += this.exp.izquierda +"+"+ this.exp.izquierda;
                                 else if (this.exp.derecha.Contains("t")) code_act += this.exp.derecha + "+" + this.exp.derecha;

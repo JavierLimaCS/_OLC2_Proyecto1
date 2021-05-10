@@ -7,27 +7,26 @@ namespace Proyecto2.Optimización.Reglas
 {
     class Condicional3D : Instruccion3D
     {
-        string saltov;
-        string saltof;
+        string salto;
         Expresion3D exp;
-        string azpattern = "[0-9]+";
+        int line;
 
-        public Condicional3D(string g1, string g2, Expresion3D exp) 
+        public Condicional3D(string g1, Expresion3D exp, int l) 
         {
             this.exp = exp;
-            this.saltov = g1;
-            this.saltof = g2;
+            this.salto = g1;
+            this.line = l;
         }
 
-        public override string optimizar3d()
+        public override string optimizar3d(Dictionary<string, int> Etiquetas, Dictionary<string, int> Saltos)
         {
-            string codigo ="";
+            string code_ant="", code_act="";
             bool esVerdadero = false;
-            if (Regex.Match(this.exp.izquierda,azpattern).Success && Regex.Match(this.exp.derecha, azpattern).Success) 
+            if (Regex.Match(this.exp.izquierda, @"^[0-9]+").Success && Regex.Match(this.exp.derecha, @"^[0-9]+").Success)
             {
                 int izq = int.Parse(this.exp.izquierda);
                 int der = int.Parse(this.exp.derecha);
-                switch (this.exp.op) 
+                switch (this.exp.op)
                 {
                     case "==":
                         esVerdadero = izq == der;
@@ -48,17 +47,43 @@ namespace Proyecto2.Optimización.Reglas
                         esVerdadero = izq < der;
                         break;
                 }
+                if (esVerdadero)
+                {
+                    code_ant = "if(" + this.exp.optimizar3d(Etiquetas, Saltos) + ") goto " + this.salto + ";";
+                    code_act = "goto " + this.salto + ";";
+                    this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 3", code_ant, code_act, this.line));
+                    string[] tmp = this.salto.Split('L');
+                    int next = int.Parse(tmp[1]) + 1;
+                    string nextLabel = "L" + next;
+
+                    if (Saltos.ContainsKey(nextLabel))
+                    {
+                        code_ant = "goto " + nextLabel + ";";
+                        code_act = "//se elimino salto";
+                        this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 3", code_ant, code_act, Saltos[nextLabel]));
+                    }
+                }
+                else
+                {
+                    code_ant = "if(" + this.exp.optimizar3d(Etiquetas, Saltos) + ") goto " + this.salto + ";";
+                    code_act = "//se elimina condicional";
+                    this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 4", code_ant, code_act, this.line));
+                    string[] tmp = this.salto.Split('L');
+                    int next = int.Parse(tmp[1]) + 1;
+                    string nextLabel = "L" + next;
+
+                    if (Saltos.ContainsKey(nextLabel))
+                    {
+                        code_ant = "goto " + nextLabel + ";";
+                        code_act = "goto " + nextLabel + ";";
+                        this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 4", code_ant, code_act, Saltos[nextLabel]));
+                    }
+                }
             }
-            if (esVerdadero)
-            {
+            else {
 
             }
-            else 
-            {
-            
-            }
-
-            return codigo;
+            return "";
         }
     }
 }

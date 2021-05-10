@@ -112,11 +112,8 @@ namespace Proyecto1.Interprete.Instruccion
                         string varval = ts.getVariablePos(this.id);
                         if (varval != null) 
                         {
-                            code += inter.tmp.generarTemporal() + " = "; 
                             string[] search = varval.Split(':');
-                            code += search[0] + ";\n";
                             string valu = "";
-                            string tmpasig = inter.tmp.getLastTemporal();
                             if (this.valor is Primitivo)
                             {
                                 valu = this.valor.generar3D(ts,inter);
@@ -133,6 +130,9 @@ namespace Proyecto1.Interprete.Instruccion
                             }
                             if (search[1].ToLower().Equals("global"))
                             {
+                                code += inter.tmp.generarTemporal() + " = ";
+                                code += search[0] + ";\n";
+                                string tmpasig = inter.tmp.getLastTemporal();
                                 code += "Heap[(int)" + tmpasig + "] = " + valu + ";\n";
                             }
                             else if (search[1].Equals("param"))
@@ -150,6 +150,9 @@ namespace Proyecto1.Interprete.Instruccion
                             }
                             else
                             {
+                                code += inter.tmp.generarTemporal() + " = ";
+                                code += search[0] + ";\n";
+                                string tmpasig = inter.tmp.getLastTemporal();
                                 code += "Stack[(int)" + tmpasig + "] = " + valu + ";\n";
                             }
                         }

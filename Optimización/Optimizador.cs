@@ -18,6 +18,8 @@ namespace Proyecto2.Optimización
         public LinkedList<Error> lista_errores;
         public List<ReglaM> optimizaciones;
         public List<string> optimizado;
+        public Dictionary<string, int> Etiquetas = new Dictionary<string, int>();
+        public Dictionary<string, int> Saltos = new Dictionary<string, int>();
         RichTextBox rt_;
         public Optimizador(string code, RichTextBox rt, int cont)
         {
@@ -116,9 +118,17 @@ namespace Proyecto2.Optimización
             string newcode = "";
             foreach (var instruccion in instrucciones)
             {
+                if (instruccion is Etiqueta || instruccion is Salto3D)
+                {
+                    newcode += instruccion.optimizar3d(Etiquetas,Saltos);
+                    this.optimizaciones.AddRange(instruccion.Optimizaciones);
+                }
+            }
+            foreach (var instruccion in instrucciones)
+            {
                 if (instruccion != null)
                 {
-                    newcode += instruccion.optimizar3d();
+                    newcode += instruccion.optimizar3d(Etiquetas, Saltos);
                     this.optimizaciones.AddRange(instruccion.Optimizaciones);
                 }
             }
@@ -172,13 +182,16 @@ namespace Proyecto2.Optimización
                     }
                 case "salto":
                     string etiqueta = actual.ChildNodes[1].Token.Text;
-                    return new Salto3D(etiqueta);
+                    int f = actual.ChildNodes[1].Token.Location.Line;
+                    return new Salto3D(etiqueta,f);
                 case "condicional":
-                    string g1 = "", g2 = "";
-                    g1 = actual.ChildNodes[2].ChildNodes[1].Token.Text;
-                    return new Condicional3D(g1, g2,(Expresion3D)instruccion(actual.ChildNodes[1]));
+                    string g1 = actual.ChildNodes[2].ChildNodes[1].Token.Text;
+                    int linea = actual.ChildNodes[0].Token.Location.Line;
+                    return new Condicional3D(g1,(Expresion3D)instruccion(actual.ChildNodes[1]), linea);
                 case "etiqueta":
-                    return new Etiqueta();
+                    string label = actual.ChildNodes[0].Token.Text;
+                    int line = actual.ChildNodes[0].Token.Location.Line;
+                    return new Etiqueta(label, line);
             }
             return null;
         }
