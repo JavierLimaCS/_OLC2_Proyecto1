@@ -16,7 +16,7 @@ namespace Proyecto2.Optimización
         string encabezado;
         int contador = 0;
         public LinkedList<Error> lista_errores;
-        public List<Regla> optimizaciones;
+        public List<ReglaM> optimizaciones;
         public List<string> optimizado;
         RichTextBox rt_;
         public Optimizador(string code, RichTextBox rt, int cont)
@@ -25,7 +25,7 @@ namespace Proyecto2.Optimización
             this.rt_ = rt;
             this.contador = cont;
             this.lista_errores = new LinkedList<Error>();
-            this.optimizaciones = new List<Regla>();
+            this.optimizaciones = new List<ReglaM>();
             this.optimizado = new List<string>();
         }
 
@@ -101,6 +101,7 @@ namespace Proyecto2.Optimización
                         cantidad += "// Intermedio optimizado  " + contador + " veces";
                     this.rt_.Text = this.codigo;
                     this.rt_.Text += cantidad;
+                    MessageBox.Show("Código Intermedio Optimizado Correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
@@ -169,6 +170,15 @@ namespace Proyecto2.Optimización
                         string izq = actual.ChildNodes[0].Token.Text;
                         return new Expresion3D(izq);
                     }
+                case "salto":
+                    string etiqueta = actual.ChildNodes[1].Token.Text;
+                    return new Salto3D(etiqueta);
+                case "condicional":
+                    string g1 = "", g2 = "";
+                    g1 = actual.ChildNodes[2].ChildNodes[1].Token.Text;
+                    return new Condicional3D(g1, g2,(Expresion3D)instruccion(actual.ChildNodes[1]));
+                case "etiqueta":
+                    return new Etiqueta();
             }
             return null;
         }

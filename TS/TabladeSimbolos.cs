@@ -37,6 +37,36 @@ namespace Proyecto1.TS
             return null;
         }
 
+        public bool isReferencia(string id) 
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.variables.ContainsKey(id))
+                    if (actual.variables[id].esParametro)
+                    {
+                        return actual.variables[id].isReferencia;
+                    }
+                actual = actual.padre;
+            }
+            return false;
+        }
+        public string getReferencia(string id) 
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.variables.ContainsKey(id))
+                    if (actual.variables[id].esParametro)
+                    {
+                        return actual.variables[id].Referencia;
+                    }
+                actual = actual.padre;
+            };
+            return null;
+        }
+
+
         public string getVariablePos(string id)
         {
             TabladeSimbolos actual = this;
@@ -143,6 +173,21 @@ namespace Proyecto1.TS
                 if (actual.variables.ContainsKey(id))
                 {
                     actual.variables[id].Pos = tmp;
+                    return true;
+                }
+                actual = actual.padre;
+            };
+            return false;
+        }
+
+        public bool setVariableRef(string id, string refe)
+        {
+            TabladeSimbolos actual = this;
+            while (actual != null)
+            {
+                if (actual.variables.ContainsKey(id))
+                {
+                    actual.variables[id].Referencia = refe;
                     return true;
                 }
                 actual = actual.padre;

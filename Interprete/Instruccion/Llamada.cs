@@ -127,6 +127,10 @@ namespace Proyecto1.Interprete.Instruccion
                         }
                         else 
                         {
+                            if (primi.tipo =='I') 
+                            {
+                                
+                            }
                             Simbolo tmp = exp.Evaluar(ts);
                             if (tmp != null)
                             {

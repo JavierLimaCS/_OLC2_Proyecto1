@@ -9,12 +9,24 @@ float t1,t2,t3,t4,t5,t6,t7,t8,t9,t10;
 
 //-----Codigo Intermedio
 void main() { 
-t1=t1+0; 
+
+    return; 
+} 
+
+void decisiones() { 
+if(1==1) goto L1;
+goto L2;
+   return; 
+} 
+
+void comunes(){
+t1=t1+0; 	
 t2=t2-0;
 t3=t3*1;
 t4=t4/1;
 t4=t5+0;
 t4=t5-0;
+t10=t9-t8;
 t9=t10*1;
 t10=t8/1;
 t7=t8*0;
@@ -23,19 +35,5 @@ t6=t6*0;
 t5=t5*2;
 t6=2*t7;
 t10=t9*2;
-printf("%d", (int)t1); 
-printf("%c", (char)10);
-    return; 
-} 
-
-void decisiones() { 
-t1=t1+0; 
-t2=t2-0;
-t3=t3*1;
-t4=t4/1;
-t4=t5+0;
-t4=t5-0;
-printf("%d", (int)t1); 
-printf("%c", (char)10);
-   return; 
-} 
+return;
+}

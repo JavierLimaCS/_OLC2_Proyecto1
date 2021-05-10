@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Proyecto2.Optimización
 {
-    class Regla
+    class ReglaM
     {
         string tipo;
         string _regla;
@@ -12,7 +12,7 @@ namespace Proyecto2.Optimización
         string codigo_actual;
         int fila;
        
-        public Regla(string tipo, string regla, string cod_anter, string cod_nuevo, int fila)
+        public ReglaM(string tipo, string regla, string cod_anter, string cod_nuevo, int fila)
         {
             this.tipo = tipo;
             this._regla = regla;

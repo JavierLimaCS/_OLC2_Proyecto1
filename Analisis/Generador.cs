@@ -154,9 +154,9 @@ namespace Proyecto1.Analisis
             {
                 if (instruccion != null)
                 {
-                    if (instruccion is Funcion) output = instruccion.Ejecutar(ts);
+                    if (instruccion is Declaraciones) output = instruccion.Ejecutar(ts);
                     else if (instruccion is Procedimiento) output = instruccion.Ejecutar(ts);
-                    else if (instruccion is Declaraciones) output = instruccion.Ejecutar(ts);
+                    else if (instruccion is Funcion) output = instruccion.Ejecutar(ts);
                     else if (instruccion is DeclaArreglo) output = instruccion.Ejecutar(ts);
                     else if (instruccion is DeclaArreglo) output = instruccion.Ejecutar(ts);
                 }

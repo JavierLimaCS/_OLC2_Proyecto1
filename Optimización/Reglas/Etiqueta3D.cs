@@ -4,18 +4,19 @@ using System.Text;
 
 namespace Proyecto2.Optimización.Reglas
 {
-    class Salto3D : Instruccion3D
+    class Etiqueta : Instruccion3D
     {
         string label;
         int fila;
-        public Salto3D(string l, int f) 
+
+        public Etiqueta(string l, int f) 
         {
-            this.label = l;
             this.fila = f;
+            this.label = l;
         }
         public override string optimizar3d()
         {
-            this.Saltos.Add(this.label, this.fila);
+            this.Etiquetas.Add(this.label, this.fila);
             return "";
         }
     }

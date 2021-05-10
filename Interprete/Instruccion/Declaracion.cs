@@ -162,14 +162,17 @@ namespace Proyecto1.Interprete.Instruccion
                             break;
                     }
                 }
-                
+                string referencia = "";
+                string tmpvar="";
                 if (ts.alias.ToLower().Equals("global"))
                 {
                     if (this.type.tipoAuxiliar.Equals("integer") || this.type.tipoAuxiliar.Equals("real") || this.type.tipoAuxiliar.Equals("boolean"))
                     {
                         code += inter.tmp.generarTemporal() + " = HP; //referencia a "+tipovar+ " global\n";
-                        code += "Heap[(int)" + inter.tmp.getLastTemporal() + "] = " + noval + ";\n";
+                        tmpvar = inter.tmp.getLastTemporal();
+                        code += "Heap[(int)" + tmpvar+ "] = " + noval + ";\n";
                         code += "HP = HP + 1; \n";
+                        referencia = "Heap[(int)" + tmpvar + "]";
                     }
                     else
                     {
@@ -196,9 +199,8 @@ namespace Proyecto1.Interprete.Instruccion
                     }
                     inter.size++;
                 }
-                
-                
                 ts.setVariablePos(variable, inter.tmp.getLastTemporal());
+                ts.setVariableRef(variable, referencia);
             }
 
             return code + "\n";

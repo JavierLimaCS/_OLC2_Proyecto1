@@ -137,9 +137,16 @@ namespace Proyecto1.Interprete.Instruccion
                             }
                             else if (search[1].Equals("param"))
                             {
-                                code += inter.tmp.generarTemporal() + " = SP + " + search[0] + "; //posicion de parametro " + search[2] + "\n";
-                                string tmp_param = inter.tmp.getLastTemporal();
-                                code += "Stack[(int)" + tmp_param + "] = " + valu +";";
+                                if (ts.isReferencia(search[2]))
+                                {
+                                    code += ts.getReferencia(search[2]) + " = " + valu + ";\n";
+                                }
+                                else 
+                                {
+                                    code += inter.tmp.generarTemporal() + " = SP + " + search[0] + "; //posicion de parametro " + search[2] + "\n";
+                                    string tmp_param = inter.tmp.getLastTemporal();
+                                    code += "Stack[(int)" + tmp_param + "] = " + valu + ";\n";
+                                }
                             }
                             else
                             {

@@ -57,7 +57,7 @@ namespace Proyecto1.Interprete.Instruccion
             {
                 foreach (var par in proc.Params)
                 {
-                    Simbolo tmp_param = new Simbolo(par.Value.Id, par.Value.Tipo, 0, 0, par.Value.Referencia);
+                    Simbolo tmp_param = new Simbolo(par.Value.Id, par.Value.Tipo, 0, 0, false);
                     switch (par.Value.Tipo.tipoAuxiliar.ToLower()) 
                     {
                         case "integer":
@@ -74,6 +74,7 @@ namespace Proyecto1.Interprete.Instruccion
                             break;
                     }
                     tmp_param.esParametro = true;
+                    tmp_param.isReferencia = par.Value.Referencia;
                     tmp_param.Pos =param_cont.ToString();
                     param_cont++;
                     ts_proc.declararVariable(par.Value.Id, tmp_param);

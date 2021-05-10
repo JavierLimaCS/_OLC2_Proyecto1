@@ -17,6 +17,8 @@ namespace Proyecto1.TS
         private bool isParam;
         private string pos;
         private string scope;
+        private string referencia;
+        private bool esReferencia;
 
         public Simbolo(string n, Tipo ty, int l, int c)
         {
@@ -27,6 +29,8 @@ namespace Proyecto1.TS
             this.pos = "";
             this.isParam = false;
             this.scope = "";
+            this.referencia = "";
+            this.esReferencia = false;
         }
 
         public Simbolo(String n, Tipo ty, int l, int c, bool b) {
@@ -38,6 +42,7 @@ namespace Proyecto1.TS
             this.pos = "";
             this.isParam = false;
             this.scope = "";
+            this.esReferencia = false;
         }
 
         public String Id { get => id; set => id = value; }
@@ -50,5 +55,7 @@ namespace Proyecto1.TS
         public bool esParametro { get => isParam; set => isParam = value; }
         public string Pos { get => pos; set => pos = value; }
         public string Scope { get => scope; set => scope = value; }
+        public string Referencia { get => referencia; set => referencia = value; }
+        public bool isReferencia { get => esReferencia; set => esReferencia = value; }
     }
 }
