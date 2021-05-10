@@ -81,7 +81,37 @@ namespace Proyecto2.Optimización.Reglas
                 }
             }
             else {
+                string[] tmp = this.salto.Split('L');
+                int next = int.Parse(tmp[1]) + 1;
+                string nextLabel = "L" + next;
+                if (Saltos.ContainsKey(nextLabel))
+                {
+                    if (this.line < Saltos[nextLabel] && Saltos[nextLabel] < (this.line+2)) 
+                    {
 
+                    }
+                }
+                switch (this.exp.op)
+                {
+                    case "==":
+                        this.exp.op = "!=";
+                        break;
+                    case "!=":
+                        this.exp.op = "==";
+                        break;
+                    case ">=":
+                        this.exp.op = "<=";
+                        break;
+                    case "<=":
+                        this.exp.op = ">=";
+                        break;
+                    case ">":
+                        this.exp.op = "<";
+                        break;
+                    case "<":
+                        this.exp.op = ">";
+                        break;
+                }
             }
             return "";
         }
