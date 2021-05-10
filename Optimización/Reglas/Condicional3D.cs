@@ -88,29 +88,46 @@ namespace Proyecto2.Optimización.Reglas
                 {
                     if (this.line < Saltos[nextLabel] && Saltos[nextLabel] < (this.line+2)) 
                     {
+                        if (Etiquetas.ContainsKey(this.salto)) 
+                        {
+                            if (Etiquetas[this.salto] == (this.line+2)) 
+                            {
+                                switch (this.exp.op)
+                                {
+                                    case "==":
+                                        this.exp.op = "!=";
+                                        break;
+                                    case "!=":
+                                        this.exp.op = "==";
+                                        break;
+                                    case ">=":
+                                        this.exp.op = "<=";
+                                        break;
+                                    case "<=":
+                                        this.exp.op = ">=";
+                                        break;
+                                    case ">":
+                                        this.exp.op = "<";
+                                        break;
+                                    case "<":
+                                        this.exp.op = ">";
+                                        break;
+                                }
+                                code_ant = "if(" + this.exp.optimizar3d(Etiquetas, Saltos) + ") goto "+ this.salto + ";";
+                                code_act = "if(" + this.exp.izquierda + this.exp.op + this.exp.derecha;
+                                code_act +=  ") goto " + nextLabel + ";";
+                                this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 2", code_ant, code_act, this.line));
 
+                                code_ant = "goto "+ nextLabel + ";";
+                                code_act = "// se elimino salto";
+                                this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 2", code_ant, code_act, Saltos[nextLabel]));
+
+                                code_ant = this.salto + ":";
+                                code_act = "// se elimino etiqueta";
+                                this.Optimizaciones.Add(new ReglaM("Mirilla", "Regla 2", code_ant, code_act, Etiquetas[this.salto]));
+                            }
+                        }
                     }
-                }
-                switch (this.exp.op)
-                {
-                    case "==":
-                        this.exp.op = "!=";
-                        break;
-                    case "!=":
-                        this.exp.op = "==";
-                        break;
-                    case ">=":
-                        this.exp.op = "<=";
-                        break;
-                    case "<=":
-                        this.exp.op = ">=";
-                        break;
-                    case ">":
-                        this.exp.op = "<";
-                        break;
-                    case "<":
-                        this.exp.op = ">";
-                        break;
                 }
             }
             return "";
